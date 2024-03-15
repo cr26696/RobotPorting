@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <random>
+
+
+
 const int n = 200;
 const int robot_num = 10;
 const int berth_num = 10;
@@ -11,11 +14,6 @@ struct Robot
     int x, y, goods;
     int status;
     int mbx, mby;
-    Robot() {}
-    Robot(int startX, int startY) {
-        x = startX;
-        y = startY;
-    }
 }robot[robot_num];
 
 struct Berth
@@ -24,19 +22,13 @@ struct Berth
     int y;
     int transport_time;
     int loading_speed;
-    Berth(){}
-    Berth(int x, int y, int transport_time, int loading_speed) {
-        this -> x = x;
-        this -> y = y;
-        this -> transport_time = transport_time;
-        this -> loading_speed = loading_speed;
-    }
 }berth[berth_num];
 
 struct Boat
 {
     int num, pos, status;
 }boat[boat_num];
+
 
 int money, boat_capacity, id;
 char ch[N][N];//地图 
@@ -91,7 +83,6 @@ int main()
         puts("OK");
         fflush(stdout);
     }
-
     return 0;
 }
 
