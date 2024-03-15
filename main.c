@@ -1,11 +1,98 @@
 #include <stdio.h>
-#include <windows.h>
+#include <random>
+const int n = 200;
+const int robot_num = 10;
+const int berth_num = 10;
+const int boat_num = 5;
+const int N = 200;
+
+struct Robot
+{
+    int x, y, goods;
+    int status;
+    int mbx, mby;
+    Robot() {}
+    Robot(int startX, int startY) {
+        x = startX;
+        y = startY;
+    }
+}robot[robot_num];
+
+struct Berth
+{
+    int x;
+    int y;
+    int transport_time;
+    int loading_speed;
+    Berth(){}
+    Berth(int x, int y, int transport_time, int loading_speed) {
+        this -> x = x;
+        this -> y = y;
+        this -> transport_time = transport_time;
+        this -> loading_speed = loading_speed;
+    }
+}berth[berth_num];
+
+struct Boat
+{
+    int num, pos, status;
+}boat[boat_num];
+
+int money, boat_capacity, id;
+char ch[N][N];//地图 
+int gds[N][N];
+void Init()
+{
+    for(int i = 1; i <= n; i ++)
+        scanf("%s", ch[i] + 1);
+    for(int i = 0; i < berth_num; i ++)
+    {
+        int id;
+        scanf("%d", &id);
+        scanf("%d%d%d%d", &berth[id].x, &berth[id].y, &berth[id].transport_time, &berth[id].loading_speed);
+    }
+    scanf("%d", &boat_capacity);
+    char okk[100];
+    scanf("%s", okk);
+    printf("OK\n");
+    fflush(stdout);
+}
+
+int Input()
+{
+    scanf("%d%d", &id, &money);
+    int num;
+    scanf("%d", &num);
+    for(int i = 1; i <= num; i ++)
+    {
+        int x, y, val;
+        scanf("%d%d%d", &x, &y, &val);
+    }
+    for(int i = 0; i < robot_num; i ++)
+    {
+        int sts;
+        scanf("%d%d%d%d", &robot[i].goods, &robot[i].x, &robot[i].y, &sts);
+    }
+    for(int i = 0; i < 5; i ++)
+        scanf("%d%d\n", &boat[i].status, &boat[i].pos);
+    char okk[100];
+    scanf("%s", okk);
+    return id;
+}
+
 int main()
 {
-    int v3 = 2;
-    int v1 = 100;
-    int v2 = 200;
-    printf("Hello World\n");
-    system("pause");
+    Init();
+    for(int zhen = 1; zhen <= 15000; zhen ++)
+    {
+        int id = Input();
+        for(int i = 0; i < robot_num; i ++)
+            printf("move %d %d\n", i, rand() % 4);
+        puts("OK");
+        fflush(stdout);
+    }
+
     return 0;
 }
+
+
