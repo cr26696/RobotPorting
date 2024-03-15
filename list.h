@@ -25,7 +25,7 @@ LinkList *createList(int len);
 int insertLinkList(LinkList *L, int pos, node lnode);
 int deleteLinkList(LinkList *L, int pos, node *lnode);
 void reverseLinkList(LinkList *L);
-int seachLinkList(LinkList *L, node lnode);
+node* seachLinkList(LinkList *L, node lnode);
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
@@ -107,18 +107,18 @@ void reverseLinkList(LinkList *L)
     }
 }
 //查找指定元素，返回指定元素位序
-int seachLinkList(LinkList *L, node lnode)
+node* seachLinkList(LinkList *L, node lnode)
 {
-    if(isEmpty(L)) return -1;
+    if(isEmpty(L)) return NULL;
     int pos = 1;//位序从1开始、下标从零开始
     LinkList *r = L->next;
     while(r)
     {
-        if(r->lattice.x == lnode.x && r->lattice.y == lnode.y) return pos;//找到指定元素，返回位序
+        if(r->lattice.x == lnode.x && r->lattice.y == lnode.y) return r;//找到指定元素，返回位序
         r = r->next;//尾指针后移
         pos ++;
     }
-    return -1;//遍历完成仍未找到返回-1
+    return NULL;//遍历完成仍未找到返回-1
 }
 int getLen(LinkList *L)
 {
