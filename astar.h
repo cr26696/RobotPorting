@@ -28,7 +28,13 @@ void aStarSearch(Grid src, Grid dest){/*************地图参数？？？*******
 
   Grid neighbors[4];
   Grid current = src;
+  Grid temp;
 
+  src.father = NULL;
+  {
+    /* data */
+  };
+  
   //node startNode;
   // startNode.father = &startNode;
   // startNode.F = value_inf;
@@ -53,52 +59,60 @@ void aStarSearch(Grid src, Grid dest){/*************地图参数？？？*******
     current.inClose = 1;
     current.inOpen = 0;
   
-  // for neighbors of current:
-    for(int i;i<4;i++){
-      
-      if(isValueGrid(i.x, i.y)){
-        if(i=LEFT){neighbors[i].y = current.y -1;}
-        if(i=rginth){neighbors[i].y = current.y -1;}
-        if(i=LEFT){neighbors[i].y = current.y -1;}
-        if(i=LEFT){neighbors[i].y = current.y -1;}
-
-        neighbors[i].father = &current;
-        neighbors[i].typeOfgrid = 0;
-        neighbors[i].inClose = 0;
-        neighbors[i].inOpen = 0;
+    // for neighbors of current:
+      for(int i;i<4;i++){
         
-        //   cost = g(current) + movementcost(current, neighbor)
-        //???计算G,H,F
-      }
-      else{
-      neighbors[i].typeOfgrid = 1;
-      }
-        //   if neighbor in OPEN and cost less than g(neighbor):
+        if(isValueGrid(i.x, i.y)){
+          if(i=LEFT){neighbors[i].y = current.y -1;}
+          if(i=rginth){neighbors[i].y = current.y -1;}
+          if(i=LEFT){neighbors[i].y = current.y -1;}
+          if(i=LEFT){neighbors[i].y = current.y -1;}
 
-      if(neighbors[i].inOpen == 1){
-        // remove neighbor from OPEN, because new path is better
-      }
+          neighbors[i].father = &current;
+          neighbors[i].typeOfgrid = 0;
+          neighbors[i].inClose = 0;
+          neighbors[i].inOpen = 0;
+          
+          //   cost = g(current) + movementcost(current, neighbor)
+          //???计算G,H,F
+        }
+        else{
+        neighbors[i].typeOfgrid = 1;
+        }
+          //   if neighbor in OPEN and cost less than g(neighbor):
 
-      //if neighbor in CLOSED 
-      else if(neighbors[i].inClose == 1){
-      // and cost less than g(neighbor): **
-      if(current.G + 10 < seachLinkList(closeList,neighbors[i])->grid.G){
-        Grid temp;
-      //remove neighbor from CLOSED
-        deleteLinkList(closeList,neighbors);//???
-      }
-    }
-  //   if neighbor not in OPEN and neighbor not in CLOSED:
-      else {
-  //     set g(neighbor) to cost
-        neighbors[i].G = current.G + 10;
-        //???写入H
-  //     add neighbor to OPEN
-        insertLinkList(openList,1,neighbors[i]);
-  //     set priority queue rank to g(neighbor) + h(neighbor)
+        if(neighbors[i].inOpen == 1){
+          // remove neighbor from OPEN, because new path is better
+        }
 
+        //if neighbor in CLOSED 
+        else if(neighbors[i].inClose == 1){
+        // and cost less than g(neighbor): **
+        if(current.G + 10 < seachLinkList(closeList,neighbors[i])->grid.G){
+          Grid temp;
+        //remove neighbor from CLOSED
+          deleteLinkList(closeList,neighbors);//???
+        }
       }
-    }
+    //   if neighbor not in OPEN and neighbor not in CLOSED:
+        else {
+    //     set g(neighbor) to cost
+          neighbors[i].G = current.G + 10;
+          //???写入H
+    //     add neighbor to OPEN
+          insertLinkList(openList,1,neighbors[i]);
+    //     set priority queue rank to g(neighbor) + h(neighbor)
+
+        }
+      }
+  }
+  dest.father = current;//都采用指针！！！???
+  temp = dest;
+  LinkList *path = initList(path);
+  
+  while(temp.father != NULL){
+    insertLinkList(path,1,&temp);
+    temp = temp.father;
   }
 }
 
