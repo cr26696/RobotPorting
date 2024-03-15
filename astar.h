@@ -1,24 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-typedef struct {
-    int x;
-    int y;
-} Pos;//坐标
-
-typedef struct node {
-  node* father;
-  int G, F, H;
-  bool inOpen,inClose;
-}node;//节点
-
+#include <list.h>
+#include <structs.h>
 
 Pos AstarPath[400]; 
-node openlist[]
+node openlist[];
 
 int isValid(int row, int col);//越界判断
-int calculateHValue(int row, int col, Pos dest)//H值计算函数
-void tracePath(Node nodeDetails[][COL], Pos dest)//回溯生成path
+int calculateHValue(int row, int col, Pos dest);//H值计算函数
+void tracePath(Node nodeDetails[][COL], Pos dest);//回溯生成path
 void aStarSearch(int grid[][COL], Pair src, Pair dest){
 
   OPEN = priority queue containing START
