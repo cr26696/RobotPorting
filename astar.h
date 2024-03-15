@@ -3,50 +3,48 @@
 #include <list.h>
 #include <structs.h>
 
-Pos AstarPath[400]; 
-node openlist[];
-
 #define value_inf 65535;
 
-typedef struct {
-  int x;
-  int y;
-} Pos;//坐标
+// typedef struct {
+//   int x;
+//   int y;
+// } Pos;//坐标
 
-typedef struct node {
-  node* father;
-  int G, F, H;
-  int inOpen,inClose;
-}node;//节点
-
-
-Pos AstarPath[400];
+// typedef struct node {
+//   node* father;
+//   int G, F, H;
+//   int inOpen,inClose;
+// }node;//节点
 
 
-int isValid(int row, int col);//越界判断
-int calculateHValue(int row, int col, Pos dest);//H值计算函数
-void tracePath(Node nodeDetails[][COL], Pos dest);//回溯生成path
+// Pos AstarPath[400];
 
-void aStarSearch(int map*, Pos src, Pos dest){
-int max_nodes = grid.length * grid[0].length;
 
-  nodeList openList = createList(max_nodes);
-  nodeList closeList = createList(max_nodes);
+// int isValid(int row, int col);//越界判断
+// int calculateHValue(int row, int col, Pos dest);//H值计算函数
+// void tracePath(Node nodeDetails[][COL], Pos dest);//回溯生成path
 
-  //OPEN = priority queue containing START
+void aStarSearch(int map[][], node src, node dest){
+//int max_nodes = map.length * map[0].length;
+
+  LinkList *openList = initList(openList);  //OPEN = priority queue containing START
+  LinkList *closeList = initList(closeList);//   //CLOSED = empty set
+
   node startNode;
-  startNode.father = *startNode;
+  startNode.father = &startNode;
   startNode.F = value_inf;
   startNode.G = value_inf;
   startNode.H = value_inf;
   startNode.inOpen = 0;
   startNode.inClose = 0;
 
-  openList.insert(startNode)
+  insertLinkList(openList,1,startNode);
 
-//   //CLOSED = empty set
-
-// while()lowest rank in OPEN is not the GOAL:
+  while (seachLinkList(openList,dest)!=NULL)// while()lowest rank in OPEN is not the GOAL:
+  {
+    node current = seachLinkList(openList,dest)!=NULL;
+    for ()
+  }
 
 //   current = remove lowest rank item from OPEN
 
@@ -73,5 +71,7 @@ int max_nodes = grid.length * grid[0].length;
 //       set priority queue rank to g(neighbor) + h(neighbor)
 
 //       //set neighbor's parent to current
+
+
 };
 
