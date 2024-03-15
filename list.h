@@ -7,7 +7,8 @@ typedef struct node {
     node* father;
     int G, F, H;
     int inOpen,inClose;
-}Gird;
+    int typeOfgrid;
+}Grid;
 
 typedef struct 
 {   
@@ -19,16 +20,16 @@ typedef struct
 
 typedef struct Node
 {
-    Gird grid; //格子
+    Grid grid; //格子
     struct Node *next; //指针域
 } LinkList;
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
-int insertLinkList(LinkList *L, int pos, Gird grid);
-int deleteLinkList(LinkList *L, int pos, Gird *grid);
+int insertLinkList(LinkList *L, int pos, Grid *grid);
+int deleteLinkList(LinkList *L, int pos, Grid *grid);
 void reverseLinkList(LinkList *L);
-LinkList *seachLinkList(LinkList *L, Gird grid);
+LinkList *seachLinkList(LinkList *L, Grid grid);
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
@@ -63,7 +64,7 @@ LinkList *createList(int len)
 
 
 //将元素插入指定位置
-int insertLinkList(LinkList *L, int pos, Gird grid)
+int insertLinkList(LinkList *L, int pos, Grid grid)
 {
     if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
     LinkList *r = L, *n;
@@ -79,7 +80,7 @@ int insertLinkList(LinkList *L, int pos, Gird grid)
     return 1;
 }
 //将指定位置元素删除
-int deleteLinkList(LinkList *L, int pos, Gird *grid)
+int deleteLinkList(LinkList *L, int pos, Grid *grid)
 {
     if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
     LinkList *r = L, *d;
@@ -110,7 +111,7 @@ void reverseLinkList(LinkList *L)
     }
 }
 //查找指定元素，返回指定元素位序
-LinkList *seachLinkList(LinkList *L, Gird grid)
+LinkList *seachLinkList(LinkList *L, Grid grid)
 {
     if(isEmpty(L)) return NULL;
     int pos = 1;//位序从1开始、下标从零开始
