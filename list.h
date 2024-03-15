@@ -7,26 +7,28 @@ typedef struct node {
     node* father;
     int G, F, H;
     int inOpen,inClose;
-}node;//节点
+}Gird;
 
 typedef struct 
 {   
-    /* data */
-}goods;
+    int x,y;
+    int value;
+    int isLocked;
+}Goods;
 
 
 typedef struct Node
 {
-    node grid; //格子
+    Gird grid; //格子
     struct Node *next; //指针域
 } LinkList;
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
-int insertLinkList(LinkList *L, int pos, node gnode);
-int deleteLinkList(LinkList *L, int pos, node *gnode);
+int insertLinkList(LinkList *L, int pos, Gird grid);
+int deleteLinkList(LinkList *L, int pos, Gird *grid);
 void reverseLinkList(LinkList *L);
-node* seachLinkList(LinkList *L, node lnode);
+LinkList *seachLinkList(LinkList *L, Gird grid);
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
@@ -61,12 +63,12 @@ LinkList *createList(int len)
 
 
 //将元素插入指定位置
-int insertLinkList(LinkList *L, int pos, node gnode)
+int insertLinkList(LinkList *L, int pos, Gird grid)
 {
     if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
     LinkList *r = L, *n;
     n = (LinkList *) malloc(sizeof(LinkList));
-    n->grid = gnode;
+    n->grid = grid;
     n->next = NULL;
     while(--pos > 0)
     {
@@ -77,7 +79,7 @@ int insertLinkList(LinkList *L, int pos, node gnode)
     return 1;
 }
 //将指定位置元素删除
-int deleteLinkList(LinkList *L, int pos, node *gnode)
+int deleteLinkList(LinkList *L, int pos, Gird *grid)
 {
     if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
     LinkList *r = L, *d;
@@ -86,7 +88,7 @@ int deleteLinkList(LinkList *L, int pos, node *gnode)
         r = r->next;//将尾指针移动到删除位置
     }
     d = r->next;//删除元素节点
-    *gnode = d->grid;//保存删除元素值
+    *grid = d->grid;//保存删除元素值
     r->next = d->next;//将尾指针跳过删除节点链入下一个节点
     free(d);//释放删除节点
     return 1;
@@ -108,19 +110,20 @@ void reverseLinkList(LinkList *L)
     }
 }
 //查找指定元素，返回指定元素位序
-node* seachLinkList(LinkList *L, node lnode)
+LinkList *seachLinkList(LinkList *L, Gird grid)
 {
     if(isEmpty(L)) return NULL;
     int pos = 1;//位序从1开始、下标从零开始
     LinkList *r = L->next;
     while(r)
     {
-        if(r->lattice.x == lnode.x && r->lattice.y == lnode.y) return r;//找到指定元素，返回位序
+        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，返回位序
         r = r->next;//尾指针后移
         pos ++;
     }
-    return NULL;//遍历完成仍未找到返回-1
+    return NULL;
 }
+
 int getLen(LinkList *L)
 {
     if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
@@ -133,10 +136,12 @@ int getLen(LinkList *L)
     }
     return len;
 }
+
 int isEmpty(LinkList *L)
 {
     return !L->next;//L->next == NULL亦可
 }
+
 void printLinkList(LinkList *L)
 {
     LinkList *p;
