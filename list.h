@@ -2,11 +2,6 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-typedef struct {
-    int x;
-    int y;
-} Pos;//坐标
-
 typedef struct node {
     int x,y;
     node* father;
@@ -14,18 +9,24 @@ typedef struct node {
     int inOpen,inClose;
 }node;//节点
 
+typedef struct 
+{   
+    /* data */
+}goods;
+
+
 typedef struct Node
 {
-    node lattice; //格子
+    node grid; //格子
     struct Node *next; //指针域
 } LinkList;
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
-int insertLinkList(LinkList *L, int pos, node lnode);
-int deleteLinkList(LinkList *L, int pos, node *lnode);
+int insertLinkList(LinkList *L, int pos, node gnode);
+int deleteLinkList(LinkList *L, int pos, node *gnode);
 void reverseLinkList(LinkList *L);
-int seachLinkList(LinkList *L, node lnode);
+int seachLinkList(LinkList *L, node gnode);
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
@@ -49,8 +50,8 @@ LinkList *createList(int len)
     {   
         scanf("%d %d", &x, &y);
         n = (LinkList *) malloc(sizeof(LinkList));//申请空间
-        n->lattice.x = x;
-        n->lattice.y = y;
+        n->grid.x = x;
+        n->grid.y = y;
         n->next = NULL;//新指针指针域置空
         r->next = n;//将新指针链入单链表末尾
         r = r->next;//尾指针往后移
@@ -60,12 +61,12 @@ LinkList *createList(int len)
 
 
 //将元素插入指定位置
-int insertLinkList(LinkList *L, int pos, node lnode)
+int insertLinkList(LinkList *L, int pos, node gnode)
 {
     if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
     LinkList *r = L, *n;
     n = (LinkList *) malloc(sizeof(LinkList));
-    n->lattice = lnode;
+    n->grid = gnode;
     n->next = NULL;
     while(--pos > 0)
     {
@@ -76,7 +77,7 @@ int insertLinkList(LinkList *L, int pos, node lnode)
     return 1;
 }
 //将指定位置元素删除
-int deleteLinkList(LinkList *L, int pos, node *lnode)
+int deleteLinkList(LinkList *L, int pos, node *gnode)
 {
     if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
     LinkList *r = L, *d;
@@ -85,7 +86,7 @@ int deleteLinkList(LinkList *L, int pos, node *lnode)
         r = r->next;//将尾指针移动到删除位置
     }
     d = r->next;//删除元素节点
-    *lnode = d->lattice;//保存删除元素值
+    *gnode = d->grid;//保存删除元素值
     r->next = d->next;//将尾指针跳过删除节点链入下一个节点
     free(d);//释放删除节点
     return 1;
@@ -107,14 +108,14 @@ void reverseLinkList(LinkList *L)
     }
 }
 //查找指定元素，返回指定元素位序
-int seachLinkList(LinkList *L, node lnode)
+int seachLinkList(LinkList *L, node gnode)
 {
     if(isEmpty(L)) return -1;
     int pos = 1;//位序从1开始、下标从零开始
     LinkList *r = L->next;
     while(r)
     {
-        if(r->lattice.x == lnode.x && r->lattice.y == lnode.y) return pos;//找到指定元素，返回位序
+        if(r->grid.x == gnode.x && r->grid.y == gnode.y) return pos;//找到指定元素，返回位序
         r = r->next;//尾指针后移
         pos ++;
     }
@@ -142,7 +143,7 @@ void printLinkList(LinkList *L)
     p = L->next;
     while(p)
     {
-        printf("[%d %d]\n\r",p->lattice.x, p->lattice.y);
+        printf("[%d %d]\n\r",p->grid.x, p->grid.y);
         p = p->next;
     }
 }
