@@ -6,40 +6,72 @@
 Pos AstarPath[400]; 
 node openlist[];
 
+#define value_inf 65535;
+
+typedef struct {
+  int x;
+  int y;
+} Pos;//坐标
+
+typedef struct node {
+  node* father;
+  int G, F, H;
+  int inOpen,inClose;
+}node;//节点
+
+
+Pos AstarPath[400];
+
+
 int isValid(int row, int col);//越界判断
 int calculateHValue(int row, int col, Pos dest);//H值计算函数
 void tracePath(Node nodeDetails[][COL], Pos dest);//回溯生成path
-void aStarSearch(int grid[][COL], Pair src, Pair dest){
 
-  OPEN = priority queue containing START
+void aStarSearch(int map*, Pos src, Pos dest){
+int max_nodes = grid.length * grid[0].length;
 
-CLOSED = empty set
+  nodeList openList = createList(max_nodes);
+  nodeList closeList = createList(max_nodes);
 
-while lowest rank in OPEN is not the GOAL:
+  //OPEN = priority queue containing START
+  node startNode;
+  startNode.father = *startNode;
+  startNode.F = value_inf;
+  startNode.G = value_inf;
+  startNode.H = value_inf;
+  startNode.inOpen = 0;
+  startNode.inClose = 0;
 
-  current = remove lowest rank item from OPEN
+  openList.insert(startNode)
 
-  add current to CLOSED
+//   //CLOSED = empty set
 
-  for neighbors of current:
+// while()lowest rank in OPEN is not the GOAL:
 
-    cost = g(current) + movementcost(current, neighbor)
+//   current = remove lowest rank item from OPEN
 
-    if neighbor in OPEN and cost less than g(neighbor):
+//   add current to CLOSED
 
-      remove neighbor from OPEN, because new path is better
+//   for neighbors of current:
 
-    if neighbor in CLOSED and cost less than g(neighbor): **
+//     cost = g(current) + movementcost(current, neighbor)
 
-      remove neighbor from CLOSED
+//     if neighbor in OPEN and cost less than g(neighbor):
 
-    if neighbor not in OPEN and neighbor not in CLOSED:
+//       remove neighbor from OPEN, because new path is better
 
-      set g(neighbor) to cost
+//     if neighbor in CLOSED and cost less than g(neighbor): **
 
-      add neighbor to OPEN
+//       remove neighbor from CLOSED
 
-      set priority queue rank to g(neighbor) + h(neighbor)
+//     if neighbor not in OPEN and neighbor not in CLOSED:
 
-      set neighbor's parent to current
-}
+//       set g(neighbor) to cost
+
+//       add neighbor to OPEN
+
+//       set priority queue rank to g(neighbor) + h(neighbor)
+
+//       //set neighbor's parent to current
+};
+
