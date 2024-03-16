@@ -1,0 +1,36 @@
+在C语言中，你可以通过以下步骤传入结构体数组并对数组中的每个结构体进行操作：
+
+定义结构体：
+首先，你需要定义一个结构体，描述你想要存储的数据类型。例如：
+struct Student {
+    char name[50];
+    int age;
+    float score;
+};
+
+创建结构体数组：
+在你的代码中，创建一个结构体数组来存储多个结构体变量。例如：
+struct Student students[10]; // 创建一个包含10个学生的结构体数组
+
+传入结构体数组：
+在函数中，你可以将结构体数组作为参数传递给其他函数。例如：
+void processStudents(struct Student arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        // 对每个学生进行操作，例如打印信息
+        printf("Student %d: Name: %s, Age: %d, Score: %.2f\n",
+               i + 1, arr[i].name, arr[i].age, arr[i].score);
+    }
+}
+
+调用函数：
+在主函数中，你可以调用 processStudents 函数并传入你的结构体数组：
+int main() {
+    // 假设已经初始化了结构体数组 students
+    int numStudents = 10;
+    processStudents(students, numStudents);
+    return 0;
+}
+
+这样，你就可以传入结构体数组并对其中的每个结构体进行操作了。在 processStudents 函数中，你可以根据需求执行任何操作，例如计算平均分、查找特定学生等。
+
+希望这对你有帮助！如果还有其他问题，请随时继续提问。🚀
