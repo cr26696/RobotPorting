@@ -5,21 +5,25 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+#include "geometry.h"
+
+//寻路算法所用格点，内含坐标Pos,父格点指针
 typedef struct Grid {
-    int x,y;
+    Point loc;
     Grid* father;
     int G, F, H;
     int inOpen,inClose;
-    int typeOfgrid;//格子类型？
+    // int typeOfgrid;//格子类型？
 }Grid;
 
-typedef struct 
-{   
-    int x,y;
-    int value;
-    int isLocked;
-}Goods;
+// typedef struct 
+// {   
+//     int x,y;
+//     int value;
+//     int isLocked;
+// }Goods;
 
+//链表存储类型为Grid
 typedef struct Node
 {
     Grid grid; //格子
