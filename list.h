@@ -1,3 +1,6 @@
+#ifndef LIST_H//预定义避免重复引入
+#define LIST_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -153,3 +156,5 @@ void printLinkList(LinkList *L)
         p = p->next;
     }
 }
+
+#endif

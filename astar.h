@@ -1,3 +1,6 @@
+#ifndef ASTAR_H//预定义避免重复引入
+#define ASTAR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <list.h>
@@ -120,3 +123,5 @@ void getFdistance(Grid *grid, Goods *goods){
     int hdistance;
     hdistance = abs(grid->x - goods->x) + abs(grid->y - goods->y);
 }
+
+#endif
