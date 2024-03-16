@@ -137,7 +137,7 @@ LinkList *searchLinkList(LinkList *L, Grid grid)
     LinkList *r = L->next;
     while(r)
     {
-        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，链表头
+        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，返回位序
         r = r->next;//尾指针后移
         pos ++;
     }
@@ -184,4 +184,33 @@ void printLinkList(LinkList *L)
         printf("[%d %d]\n\r",p->grid.x, p->grid.y);
         p = p->next;
     }
+}
+
+LinkList* searchMinList(LinkList *L){
+    LinkList *r = L, *minnode = NULL;//
+    int currentminF = r->grid.F;
+    int currentminG = r->grid.G;
+    while(r->next != NULL){
+        if((r->grid.F < currentminF) || (r->grid.F == currentminF && r->grid.G < currentminG)){
+            currentminF = r->grid.F;
+            currentminG = r->grid.G;
+            minnode = r;
+        }
+        else if(r->grid.F == currentminF && r->grid.G == currentminG){
+            LinkList *newnode;
+            newnode->grid = r->grid;
+            if(minnode == NULL){
+                minnode = newnode;
+            }
+            else{
+                LinkList *temp = minnode;
+                while(temp->next != NULL){
+                    temp = temp->next;
+                }
+                temp->next = newnode;
+            }
+        }
+        r = r->next;
+    }
+    return minnode;
 }
