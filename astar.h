@@ -8,9 +8,9 @@
 #include "list.h" 
 #include "struct_Map.h"
 
-int isValueGrid(int x,int y);//
-void aStarSearch(Map *map, Grid src, Grid dest);//返回一个path
-void getFdistance(Grid *grid, Goods *goods);//计算F通过指针传入grid
+int isValideGrid(Map *map, int x, int y);//返回1表示空地
+int getcostH(Grid *start, Goods *end);//传入起、止两点指针，计算H并返回
+LinkList* aStarSearch(Map *map, Grid src, Grid dest);//返回一个path
 
 //*map 结构体使用列：
 
