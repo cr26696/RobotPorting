@@ -16,7 +16,7 @@ int isValueGrid(int x,int y){
   //?????????????
 }
 
-void aStarSearch(Grid src, Grid dest){/*************地图参数？？？****************/
+void aStarSearch(Map map, Grid src, Grid dest){/*************地图参数？？？****************/
 //int max_nodes = map.length * map[0].length;
 
   LinkList *openList = initList(openList);  //OPEN = priority queue containing START

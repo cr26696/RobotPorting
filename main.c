@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <random>
 
-
+#include "struct_Map.h"
+#include "struct_Robot.h"
+#include "struct_Berth.h"
+#include "struct_Boat.h"
 
 const int n = 200;
 const int robot_num = 10;
@@ -9,34 +12,39 @@ const int berth_num = 10;
 const int boat_num = 5;
 const int N = 200;
 
-struct Robot
-{
-    int x, y, goods;
-    int status;
-    int mbx, mby;
-}robot[robot_num];
 
-struct Berth
-{
-    int x;
-    int y;
-    int transport_time;
-    int loading_speed;
-}berth[berth_num];
 
-struct Boat
-{
-    int num, pos, status;
-}boat[boat_num];
 
+// struct Robot
+// {
+//     int x, y, goods;
+//     int status;
+//     int mbx, mby;
+// }robot[robot_num];
+// struct Berth
+// {
+    // int x;
+    // int y;
+    // int transport_time;
+    // int loading_speed;
+// }berth[berth_num];
+// struct Boat
+// {
+//     int num, pos, status;
+// }boat[boat_num];
+
+Map map;
+Robot robot[robot_num];
+Berth berth[berth_num];
+Boat boat[boat_num];
 
 int money, boat_capacity, id;
-char ch[N][N];//地图 
+// char ch[N][N];//地图 
 int gds[N][N];
 void Init()
 {
     for(int i = 1; i <= n; i ++)
-        scanf("%s", ch[i] + 1);
+        scanf("%s", map.data[i] + 1);
     for(int i = 0; i < berth_num; i ++)
     {
         int id;
