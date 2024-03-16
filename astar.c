@@ -24,7 +24,7 @@ int getcostH(Grid *start, Goods *end){
     hdistance = abs(start->x - end->x) + abs(start->y - end->y);
     return hdistance;
 }
-LinkList aStarSearch(Map *map, Grid src, Grid dest){
+LinkList* aStarSearch(Map *map, Grid src, Grid dest){
 //int max_nodes = map.length * map[0].length;
 
   LinkList *openList = initList(openList);
@@ -39,68 +39,69 @@ LinkList aStarSearch(Map *map, Grid src, Grid dest){
   Grid current = src;//初始化current为起点
   Grid temp;
 
-
   insertLinkList(openList,1,&src);//初始化open链表
 
-  while (searchLinkList(openList,dest)!=NULL)// while()lowest rank in OPEN is not the GOAL:
+  while (searchLinkList(openList,dest)!=NULL)// while()lowest rank in OPEN is not the GOAL:???
   {
     // current = remove lowest rank item from OPEN  
     // add current to CLOSED
-    Grid current;
-    int currentPos = minList(openList);//???
-    deleteLinkList(openList,currentPos);
-    insertLinkList(closeList,getLen(closeList),&current);
-    current.inClose = 1;
-    current.inOpen = 0;
-  
-    // for neighbors of current:
-    for(int i;i<4;i++){
-      switch (i)
-      {
-        case NEIGHBOR_LEFT:
-          neighbors[i].y = current.y-1;break;
-        case NEIGHBOR_RIGHT:
-          neighbors[i].y = current.y+1;break;
-        case NEIGHBOR_UP:
-          neighbors[i].x = current.x-1;break;
-        case NEIGHBOR_DOWN:
-          neighbors[i].x = current.x+1;break;
-        default:break;
-      }
-      if(isValidGrid(map, neighbors[i].x, neighbors[i].y)){//返回1（可行走格）时
-        neighbors[i].father = &current;
-        neighbors[i].typeOfgrid = 0;
-        neighbors[i].inClose = 0;
-        neighbors[i].inOpen = 0;//完善结构体数据
-        
-        //计算G,便于判断
-        neighbors[i].G = current.G + MOVE_COST;
+    LinkList* current = searchMinList(openList);//找出最小F的格子，可能多个
+    while(current->next != NULL){
 
-        if(neighbors[i].inOpen == 1){//if neighbor in OPEN
-          if(neighbors[i].G < searchLinkList(openList,neighbors[i])->grid.G){//and cost less than g(neighbor):
-            // remove neighbor from OPEN, because new path is better
-            neighbors[i].inOpen = 0;
-            neighbors[i].inClose = 1;
-            deleteLinkList(openList,&neighbors[i]);
-            insertLinkList(closeList,1,&neighbors[i]);
+      deletLinkByXY(openList,current->grid);
+      insertLinkList(closeList,getLen(closeList),&current);
+      current->grid.inClose = 1;
+      current->grid.inOpen = 0;
+
+        for(int i;i<4;i++){
+          switch (i)
+          {
+            case NEIGHBOR_LEFT:
+              neighbors[i].y = current->grid.y-1;break;
+            case NEIGHBOR_RIGHT:
+              neighbors[i].y = current->grid.y+1;break;
+            case NEIGHBOR_UP:
+              neighbors[i].x = current->grid.x-1;break;
+            case NEIGHBOR_DOWN:
+              neighbors[i].x = current->grid.x+1;break;
+            default:break;
           }
-        }else if(neighbors[i].inClose == 1){//if neighbor in CLOSED 
-          if(neighbors[i].G < searchLinkList(closeList,neighbors[i])->grid.G){// and cost less than g(neighbor):
-          //remove neighbor from CLOSED
-            neighbors[i].inOpen = 1;
+          if(isValidGrid(map, neighbors[i].x, neighbors[i].y)){//返回1（可行走格）时
+            neighbors[i].father = &current;
+            neighbors[i].typeOfgrid = 0;
             neighbors[i].inClose = 0;
-            deleteLinkList(closeList,&neighbors[i]);
-            insertLinkList(openList,1,&neighbors[i]);
+            neighbors[i].inOpen = 0;//完善结构体数据
+            
+            //计算G,便于判断
+            neighbors[i].G = current->grid.G + MOVE_COST;
+
+            if(neighbors[i].inOpen == 1){//if neighbor in OPEN
+              if(neighbors[i].G < searchLinkList(openList,neighbors[i])->grid.G){//and cost less than g(neighbor):
+                // remove neighbor from OPEN, because new path is better
+                neighbors[i].inOpen = 0;
+                neighbors[i].inClose = 1;
+                deleteLinkList(openList,&neighbors[i]);
+                insertLinkList(closeList,1,&neighbors[i]);
+              }
+            }else if(neighbors[i].inClose == 1){//if neighbor in CLOSED 
+              if(neighbors[i].G < searchLinkList(closeList,neighbors[i])->grid.G){// and cost less than g(neighbor):
+              //remove neighbor from CLOSED
+                neighbors[i].inOpen = 1;
+                neighbors[i].inClose = 0;
+                deleteLinkList(closeList,&neighbors[i]);
+                insertLinkList(openList,1,&neighbors[i]);
+              }
+            }else{//neighbor 是新格子:
+              neighbors[i].H = getcostH(&neighbors[i],&dest);
+              neighbors[i].F = neighbors[i].G + neighbors[i].H;
+              insertLinkList(openList,1,&neighbors[i]);    //add neighbor to OPEN
+            }
           }
-        }else{//neighbor 是新格子:
-          neighbors[i].H = getcostH(&neighbors[i],&dest);
-          neighbors[i].F = neighbors[i].G + neighbors[i].H;
-          insertLinkList(openList,1,&neighbors[i]);    //add neighbor to OPEN
-        }
+          else{
+            neighbors[i].typeOfgrid = 1;continue;//对下一个邻居进行判断
+          }
       }
-      else{
-        neighbors[i].typeOfgrid = 1;continue;//对下一个邻居进行判断
-      }
+      current = current->next;    
     }
   }
 
@@ -110,6 +111,8 @@ LinkList aStarSearch(Map *map, Grid src, Grid dest){
     insertLinkList(path,1,&temp);
     temp = *temp.father;
   }
+  reverseLinkList(path);
+  return path;//起点到终点的路径，包含起点与终点
 }
 
 
