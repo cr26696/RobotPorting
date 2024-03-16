@@ -1,30 +1,5 @@
 #include "list.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <malloc.h>
-
-// typedef struct Grid {
-//     int x,y;
-//     Grid* father;
-//     int G, F, H;
-//     int inOpen,inClose;
-//     int typeOfgrid;//格子类型？
-// }Grid;
-
-// typedef struct 
-// {   
-//     int x,y;
-//     int value;
-//     int isLocked;
-// }Goods;
-
-// typedef struct Node
-// {
-//     Grid grid; //格子
-//     struct Node *next; //指针域
-// } LinkList;
-
 //初始化，创建头结点
 LinkList *initList(LinkList *L)
 {
