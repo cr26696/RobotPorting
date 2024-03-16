@@ -54,6 +54,21 @@ LinkList *createList(int len)
 }
 
 
+//将元素插入头部
+// int insertLinkList(LinkList *L, Grid grid)
+// {
+//     LinkList *r = L, *n;
+//     n = (LinkList *) malloc(sizeof(LinkList));
+//     n->grid = grid;
+//     n->next = L;
+//     while(--pos > 0)
+//     {
+//         r = r->next;//将尾指针移动到插入位置
+//     }
+//     n->next = r->next;//先把新指针（插入值）链入尾指针后一个节点
+//     r->next = n;//再把新指针（插入值）链入尾指针之后
+//     return 1;
+// }
 //将元素插入指定位置
 int insertLinkList(LinkList *L, int pos, Grid grid)
 {
@@ -70,8 +85,21 @@ int insertLinkList(LinkList *L, int pos, Grid grid)
     r->next = n;//再把新指针（插入值）链入尾指针之后
     return 1;
 }
-//将指定位置元素删除
-int deleteLinkList(LinkList *L, int pos, Grid *grid)
+//将指定位置元素删除,成功返回1,错误返回0
+int deleteLinkList(LinkList *L, int pos)
+{
+    if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+    LinkList *r = L, *d;
+    while(--pos > 0)
+    {
+        r = r->next;//将尾指针移动到删除位置
+    }
+    d = r->next;//删除元素节点
+    r->next = d->next;//将尾指针跳过删除节点链入下一个节点
+    free(d);//释放删除节点
+    return 1;
+}
+int deleteLinkListSave(LinkList *L, int pos, Grid *grid)
 {
     if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
     LinkList *r = L, *d;
@@ -101,19 +129,32 @@ void reverseLinkList(LinkList *L)
         p = q;//欲插入指针与遍历指针同步
     }
 }
-//查找指定元素，返回指定元素位序
-LinkList *seachLinkList(LinkList *L, Grid grid)
+//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
+LinkList *searchLinkList(LinkList *L, Grid grid)
 {
     if(isEmpty(L)) return NULL;
     int pos = 1;//位序从1开始、下标从零开始
     LinkList *r = L->next;
     while(r)
     {
-        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，返回位序
+        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，链表头
         r = r->next;//尾指针后移
         pos ++;
     }
     return NULL;
+}
+int searchLinkListPos(LinkList *L, Grid grid)
+{
+    if(isEmpty(L)) return -1;
+    int pos = 1;//位序从1开始、下标从零开始
+    LinkList *r = L->next;
+    while(r)
+    {
+        if(r->grid.x == grid.x && r->grid.y == grid.y) return pos;//找到指定元素，链表头
+        r = r->next;//尾指针后移
+        pos ++;
+    }
+    return -1;
 }
 
 int getLen(LinkList *L)

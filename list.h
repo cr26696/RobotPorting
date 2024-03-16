@@ -23,15 +23,17 @@ typedef struct
 typedef struct Node
 {
     Grid grid; //格子
-    struct Node *next; //指针域
+    struct LinkList *next; //指针域
 } LinkList;
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
+//int insertLinkList(LinkList *L, Grid *grid);
 int insertLinkList(LinkList *L, int pos, Grid *grid);
-int deleteLinkList(LinkList *L, int pos, Grid *grid);
+int deleteLinkList(LinkList *L, int pos);
+int deleteLinkListSave(LinkList *L, int pos, Grid *grid);
 void reverseLinkList(LinkList *L);
-LinkList *seachLinkList(LinkList *L, Grid grid);
+LinkList *searchLinkList(LinkList *L, Grid grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
