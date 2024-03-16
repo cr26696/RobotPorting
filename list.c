@@ -99,6 +99,16 @@ int deleteLinkList(LinkList *L, int pos)
     free(d);//释放删除节点
     return 1;
 }
+int deletLinkByXY(LinkList *L, Grid grid){
+    LinkList *r = L, *d, *temp;
+    while(r->grid.x != grid.x && r->grid.y != grid.y){
+        r = r->next;
+    }
+    d = r->next;
+    r->next = d->next;
+    free(d);
+    return 1;
+}
 int deleteLinkListSave(LinkList *L, int pos, Grid *grid)
 {
     if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误

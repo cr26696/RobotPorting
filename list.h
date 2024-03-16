@@ -38,5 +38,6 @@ int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
 LinkList* searchMinList(LinkList *L);//返回F最小(相同时G最小)的节点 返回链表
+int deletLinkByXY(LinkList *L, Grid grid);
 
 #endif
