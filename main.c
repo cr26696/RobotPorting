@@ -53,7 +53,7 @@ void Init()
 		{
 				int id;
 				scanf("%d", &id);
-				scanf("%d%d%d%d", &berth[id].x, &berth[id].y, &berth[id].transport_time, &berth[id].loading_speed);
+				scanf("%d%d%d%d", &berth[id].pos.x, &berth[id].pos.y, &berth[id].transport_time, &berth[id].loading_speed);
 		}
 		scanf("%d", &boat_capacity);
 		char okk[100];
@@ -81,7 +81,7 @@ int Input()
 		for(int i = 0; i < robot_num; i ++)
 		{
 				int sts;
-				scanf("%d%d%d%d", &robot[i].goods, &robot[i].x, &robot[i].y, &sts);
+				scanf("%d%d%d%d", &robot[i].goods, &robot[i].pos.x, &robot[i].pos.y, &sts);
 		}
 		for(int i = 0; i < 5; i ++)
 				scanf("%d%d\n", &boat[i].status, &boat[i].pos);
@@ -99,7 +99,7 @@ int main()
 				for(int i = 0; i < robot_num; i ++)//机器人控制
 				{
 					if(robot->status == ROBOT_STUCK){continue;}//机器人如果受困直接跳过
-					aStarSearch(&map,);
+					//aStarSearch(&map,);//???函数，查找并跟新机器人目标方向
 					moveRobot(&robot[i],&paths_robot[i]);//更新机器人行进方向
 					printf("move %d %d\n", i, robot[i].direct);//输出到控制台
 				}

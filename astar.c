@@ -14,14 +14,14 @@
 
 #define MOVE_COST 10
 
-int isValideGrid(Map *map, int x,int y){
-  char target = map->data[x][y];
+int isValidGrid(Map *map, Point point){
+  char target = map->data[point.x][point.y];
   if (target=="."){return 1;}
   else{return 0;}
 }
-int getcostH(Grid *start, Goods *end){
+int getcostH(Point start, Point end){//???待修改
     int hdistance;
-    hdistance = abs(start->x - end->x) + abs(start->y - end->y);
+    hdistance = abs(start.x - end.x) + abs(start.y - end.y);
     return hdistance;
 }
 LinkList* aStarSearch(Map *map, Grid src, Grid dest){
@@ -32,7 +32,7 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){
   LinkList *path = initList(path);
   src.father = NULL;
   src.G = 0;
-  src.H = getcostH(&src,&dest);
+  src.H = getcostH(src.loc,dest.loc);
   src.F = src.G + src.H;
 
   Grid neighbors[4];//存储目标邻居格
@@ -57,18 +57,18 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){
           switch (i)
           {
             case NEIGHBOR_LEFT:
-              neighbors[i].y = current->grid.y-1;break;
+              neighbors[i].loc.y = current->grid.loc.y-1;break;
             case NEIGHBOR_RIGHT:
-              neighbors[i].y = current->grid.y+1;break;
+              neighbors[i].loc.y = current->grid.loc.y+1;break;
             case NEIGHBOR_UP:
-              neighbors[i].x = current->grid.x-1;break;
+              neighbors[i].loc.x = current->grid.loc.x-1;break;
             case NEIGHBOR_DOWN:
-              neighbors[i].x = current->grid.x+1;break;
+              neighbors[i].loc.x = current->grid.loc.x+1;break;
             default:break;
           }
-          if(isValidGrid(map, neighbors[i].x, neighbors[i].y)){//返回1（可行走格）时
+          if(isValidGrid(map, neighbors->loc)){//返回1（可行走格）时
             neighbors[i].father = &current;
-            neighbors[i].typeOfgrid = 0;
+            //neighbors[i].typeOfgrid = 0;
             neighbors[i].inClose = 0;
             neighbors[i].inOpen = 0;//完善结构体数据
             
@@ -92,13 +92,14 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){
                 insertLinkList(openList,1,&neighbors[i]);
               }
             }else{//neighbor 是新格子:
-              neighbors[i].H = getcostH(&neighbors[i],&dest);
+              neighbors[i].H = getcostH(neighbors[i].loc,dest.loc);
               neighbors[i].F = neighbors[i].G + neighbors[i].H;
               insertLinkList(openList,1,&neighbors[i]);    //add neighbor to OPEN
             }
           }
           else{
-            neighbors[i].typeOfgrid = 1;continue;//对下一个邻居进行判断
+            //neighbors[i].typeOfgrid = 1;
+            continue;//对下一个邻居进行判断
           }
       }
       current = current->next;    

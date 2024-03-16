@@ -12,9 +12,11 @@
 #define MOVE_DOWN 3
 
 #include "list.h"
+#include "geometry.h"
+
 typedef struct Robot
 {
-    int x, y;//目前位置
+    Point pos;//目前位置
     int goods;//？
     int status;//状态 取货robot_getting 送货robot_sending 受困robot_stuck
     int direct;//下一步方向

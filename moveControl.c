@@ -1,13 +1,13 @@
 #include "moveControl.h"
-//输入机器人结构体指针，路径链表指针，更新机器人下一步运动方向
+//输入机器人结构体指针，路径链表指针，更新机器人下一步运动方向,并将链表向后移动
 void moveRobot(Robot *robot, LinkList *path)
 {
   int curX, curY, destX, destY;//当前XY，路径目标XY
-  int curX = robot->x;
-  int curY = robot->y;
+  int curX = robot->pos.x;
+  int curY = robot->pos.y;
   path = path->next;//链表位置移动
-  int destX = path->grid.x;
-  int destY = path->grid.x;//得到相邻两格坐标
+  int destX = path->grid.loc.x;
+  int destY = path->grid.loc.y;//得到相邻两格坐标
   if(curX==destX){//将相邻两格坐标转化为移动方向
     switch (curX-destX)
     {

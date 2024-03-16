@@ -44,8 +44,8 @@ LinkList *createList(int len)
     {   
         scanf("%d %d", &x, &y);
         n = (LinkList *) malloc(sizeof(LinkList));//申请空间
-        n->grid.x = x;
-        n->grid.y = y;
+        n->grid.loc.x = x;
+        n->grid.loc.y = y;
         n->next = NULL;//新指针指针域置空
         r->next = n;//将新指针链入单链表末尾
         r = r->next;//尾指针往后移
@@ -101,7 +101,7 @@ int deleteLinkList(LinkList *L, int pos)
 }
 int deletLinkByXY(LinkList *L, Grid grid){
     LinkList *r = L, *d, *temp;
-    while(r->grid.x != grid.x && r->grid.y != grid.y){
+    while(r->grid.loc.x != grid.loc.x && r->grid.loc.y != grid.loc.y){
         r = r->next;
     }
     d = r->next;
@@ -147,7 +147,7 @@ LinkList *searchLinkList(LinkList *L, Grid grid)
     LinkList *r = L->next;
     while(r)
     {
-        if(r->grid.x == grid.x && r->grid.y == grid.y) return r;//找到指定元素，返回位序
+        if(r->grid.loc.x == grid.loc.x && r->grid.loc.y == grid.loc.y) return r;//找到指定元素，返回位序
         r = r->next;//尾指针后移
         pos ++;
     }
@@ -160,7 +160,7 @@ int searchLinkListPos(LinkList *L, Grid grid)
     LinkList *r = L->next;
     while(r)
     {
-        if(r->grid.x == grid.x && r->grid.y == grid.y) return pos;//找到指定元素，链表头
+        if(r->grid.loc.x == grid.loc.x && r->grid.loc.y == grid.loc.y) return pos;//找到指定元素，链表头
         r = r->next;//尾指针后移
         pos ++;
     }
@@ -191,7 +191,7 @@ void printLinkList(LinkList *L)
     p = L->next;
     while(p)
     {
-        printf("[%d %d]\n\r",p->grid.x, p->grid.y);
+        printf("[%d %d]\n\r",p->grid.loc.x, p->grid.loc.y);
         p = p->next;
     }
 }
