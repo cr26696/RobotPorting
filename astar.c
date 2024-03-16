@@ -24,7 +24,7 @@ int getcostH(Grid *start, Goods *end){
     hdistance = abs(start->x - end->x) + abs(start->y - end->y);
     return hdistance;
 }
-LinkList aStarSearch(Map *map, Grid src, Grid dest){
+LinkList* aStarSearch(Map *map, Grid src, Grid dest){
 //int max_nodes = map.length * map[0].length;
 
   LinkList *openList = initList(openList);
@@ -42,7 +42,7 @@ LinkList aStarSearch(Map *map, Grid src, Grid dest){
 
   insertLinkList(openList,1,&src);//初始化open链表
 
-  while (searchLinkList(openList,dest)!=NULL)// while()lowest rank in OPEN is not the GOAL:
+  while (searchLinkList(openList,dest)!=NULL)// while()lowest rank in OPEN is not the GOAL:???
   {
     // current = remove lowest rank item from OPEN  
     // add current to CLOSED
@@ -110,6 +110,8 @@ LinkList aStarSearch(Map *map, Grid src, Grid dest){
     insertLinkList(path,1,&temp);
     temp = *temp.father;
   }
+  reverseLinkList(path);
+  return path;//起点到终点的路径，包含起点与终点
 }
 
 
