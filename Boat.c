@@ -39,6 +39,7 @@ int maxgnum = 0; // 最大货物数
              maxberth=berth[i].id;
             }
         }
+        else {continue;}
     }
     boat[num].pos=maxberth;
     berth[maxberth].status=0;    
