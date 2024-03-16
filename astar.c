@@ -24,7 +24,7 @@ int getcostH(Point start, Point end){//???待修改
     hdistance = abs(start.x - end.x) + abs(start.y - end.y);
     return hdistance;
 }
-LinkList* aStarSearch(Map *map, Grid src, Grid dest){
+LinkList* aStarSearch(Map *map, Grid src, Grid dest){//传入指针???
 //int max_nodes = map.length * map[0].length;
 
   LinkList *openList = initList(openList);
@@ -45,7 +45,7 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){
   {
     // current = remove lowest rank item from OPEN  
     // add current to CLOSED
-    LinkList* current = searchMinList(openList);//找出最小F的格子，可能多个
+    LinkList* current = searchMinList(openList);//找出最小F的格子，可能多个  //???current和内部重名，open表删除current时机调整
     while(current->next != NULL){
 
       deletLinkByXY(openList,current->grid);
@@ -102,6 +102,7 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){
             continue;//对下一个邻居进行判断
           }
       }
+      deleteLinkList(openList)
       current = current->next;    
     }
   }
