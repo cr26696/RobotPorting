@@ -9,9 +9,8 @@
 #include "geometry.h" 
 #include "struct_Map.h"
 
-int isValideGrid(Map *map, Point point);//返回1表示空地
-int getcostH(Point start, Point end);//传入起、止两点指针，计算H并返回
-LinkList* aStarSearch(Map *map, Grid src, Grid dest);//返回一个path
+int isValidGrid(Map *map, Point point);//返回1表示空地
+LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest);//返回一个path
 
 //*map 结构体使用列：
 
