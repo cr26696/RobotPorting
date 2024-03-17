@@ -36,10 +36,12 @@ const int N = 200;
 //     int num, pos, status;
 // }boat[boat_num];
 
-Map map;
+Map map;//内有200x200 char数组
+Map Goods;//同上
 Robot robot[robot_num];
 Berth berth[berth_num];
 Boat boat[boat_num];
+
 LinkList paths_robot[robot_num];
 
 
@@ -78,14 +80,16 @@ int Input()
 		for(int i = 1; i <= increase_goods; i ++)
 		{
 				int x, y, val;
-				scanf("%d%d%d", &x, &y, &val);//???读取到货物结构体
+				scanf("%d%d%d", &x, &y, &val);
+				//读取到货物结构体
+				Goods.data[i][j] = (char)val;//强制将货物价值存为char,0表示无货物
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
-            int carry,stun;//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
+				int carry,stun;//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &stun);
-                robotstatusupdate(carry, stun , robot[i]);//???机器人状态处理函数
-                
+				robotstatusupdate(carry, stun , robot[i]);//???机器人状态处理函数void robotstatusupdate(int carry,int stun ,Robot *robot)
+				
 		}
 		for(int i = 0; i < 5; i ++)
 		{
@@ -112,9 +116,9 @@ int main()
 					//aStarSearch(&map,);//???函数，查找并跟新机器人目标方向
 					moveRobot(&robot[i],&paths_robot[i]);//更新机器人行进方向
 					printf("move %d %d\n", i, robot[i].direct);//输出到控制台
-                    if(){//即将到达
-                        printf("get %d %d\n", i, robot[i].direct);//???
-				     }
+					if(){//即将到达
+							printf("get %d %d\n", i, robot[i].direct);//???
+					}
 				}
 				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
 				puts("OK");
