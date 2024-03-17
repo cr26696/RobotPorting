@@ -182,7 +182,6 @@ int* pathToDirection(LinkList* path){
 }
 
 
-<<<<<<< Updated upstream
 LinkList* sendGoods(Berth* berths, Robot rob){
 =======
 LinkList* FindPathBerth(Berth berths[], int num, Robot rob){//返回机器人到泊口的路径
