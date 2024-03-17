@@ -1,6 +1,6 @@
 #include "InitAll.h"
 
-void InitRobot(Boat *robot[],int robot_num)//机器人状态初始化???是否受困
+void InitRobot(Boat *robot[],int robot_num)//机器人状态初始化???判断是否受困
 {
     for(int i=0;i<robot_num;i++){
 		robot[i].
@@ -32,7 +32,7 @@ void Inittotal(Boat *robot[],int robot_num,Boat *boat[],int boat_num,Berth *bert
 {
     InitRobot(boat,robot_num);
     InitBerth(berth,berth_num);
-    InitRoat(boat[],boat_num);
+    InitRoat(boat,boat_num);
     controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 }
 
