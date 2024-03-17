@@ -3,15 +3,25 @@
 const int robot_num = 10;
 Robot robot[robot_num];
 
-void robotStateInit()
+void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理函数
 {
-    for (int i = 0; i < robot_num; i++)
-    {
-        // aStarSearch(&map,robot[i].)
-        if () // 没有到泊口的路
-        {robot[i].status = ROBOT_STUCK;}
-    }
+    if(carry==0 && stun==0){robot->status=;}
+    if(carry==0 && stun==0){robot->status=;}
+    if(carry==0 && stun==0){robot->status=;}
+    if(carry==0 && stun==0){robot->status=;}
+    if(carry==0 && stun==0){robot->status=;}
+    if(carry==0 && stun==0){robot->status=;}
 }
+
+// void robotStateInit()
+// {
+//     for (int i = 0; i < robot_num; i++)
+//     {
+//         // aStarSearch(&map,robot[i].)
+//         if () // 没有到泊口的路
+//         {robot[i].status = ROBOT_STUCK;}
+//     }
+// }
 
 
 
