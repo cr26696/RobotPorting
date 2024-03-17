@@ -182,10 +182,8 @@ int* pathToDirection(LinkList* path){
 }
 
 
-LinkList* sendGoods(Berth* berths, Robot rob){
-=======
-LinkList* FindPathBerth(Berth berths[], int num, Robot rob){//返回机器人到泊口的路径
->>>>>>> Stashed changes
+
+LinkList* FindPathBerth(Berth *berths,  Robot rob){//返回机器人到泊口的路径
     int disofber[10];
     Berth temp;
     LinkList* berthph[3], *tempber;
@@ -245,7 +243,7 @@ void robotGetGoodsPrint(Robot rob[], int num){
 void robotSendGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
-        path = sendGoods(berth, rob[i]);
+        path = FindPathBerth(berth, rob[i]);
         nextpath = path->next;
 
         if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
