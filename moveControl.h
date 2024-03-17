@@ -6,6 +6,6 @@
 #include "list.h"
 #include "struct_Robot.h"
 
-void moveRobot(Robot *robot, LinkList *path);
+void updateRobotDirect(Robot *robot, LinkList *path);
 
 #endif

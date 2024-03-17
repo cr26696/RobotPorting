@@ -1,31 +1,11 @@
 #include "moveControl.h"
 //输入机器人结构体指针，路径链表指针，更新机器人下一步运动方向,并将链表向后移动
-void moveRobot(Robot *robot, LinkList *path)
+void updateRobotDirect(Robot *robot, LinkList *path)
 {
-  int curX, curY, destX, destY;//当前XY，路径目标XY
-  int curX = robot->pos.x;
-  int curY = robot->pos.y;
-  path = path->next;//链表位置移动
-  int destX = path->grid.loc.x;
-  int destY = path->grid.loc.y;//得到相邻两格坐标
-  if(curX==destX){//将相邻两格坐标转化为移动方向
-    switch (curX-destX)
-    {
-    case -1:
-      robot->direct = MOVE_DOWN;break;
-    case 1:
-      robot->direct = MOVE_UP;break;
-    default:break;
-    }
-  }else if(curY==destY){
-    switch (curY-destY)
-      {
-      case -1:
-        robot->direct = MOVE_RIGHT;break;
-      case 1:
-        robot->direct = MOVE_LEFT;break;
-      default:break;
-      }
-  }else{//不应该出现这种情况(即两个格子不相邻)
-  }
+  //当前点，下一步点
+  Point Pstart = path->grid.loc;
+  path = path->next;//path链表位置移动到next
+  Point Pnext = path->grid.loc;
+
+  robot->direct = getStepDirect(Pstart,Pnext);
 }

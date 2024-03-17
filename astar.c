@@ -19,11 +19,7 @@ int isValidGrid(Map *map, Point point){
   if (target=="."){return 1;}
   else{return 0;}
 }
-int getcostH(Point start, Point end){//???待修改
-    int hdistance;
-    hdistance = abs(start.x - end.x) + abs(start.y - end.y);
-    return hdistance;
-}
+
 LinkList* aStarSearch(Map *map, Grid src, Grid dest){//传入指针???
 //int max_nodes = map.length * map[0].length;
 
@@ -92,7 +88,7 @@ LinkList* aStarSearch(Map *map, Grid src, Grid dest){//传入指针???
                 insertLinkList(openList,1,&neighbors[i]);
               }
             }else{//neighbor 是新格子:
-              neighbors[i].H = getcostH(neighbors[i].loc,dest.loc);
+              neighbors[i].H = getDistance_Manhattan(neighbors[i].loc,dest.loc);
               neighbors[i].F = neighbors[i].G + neighbors[i].H;
               insertLinkList(openList,1,&neighbors[i]);    //add neighbor to OPEN
             }

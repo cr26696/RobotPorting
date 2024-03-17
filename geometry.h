@@ -7,12 +7,11 @@ typedef struct Point
   int x;
   int y;
 }Point;
-//传入x,y 返回一个Point
-Point *createPoint(int x,int y){
-  Point *ptr = (Point *)malloc(sizeof(Point));
-  ptr->x = x;
-  ptr->x = y;
-  return ptr;
-}
+
+Point *createPoint(int x,int y);
+
+int getDistance_Manhattan(Point start, Point end);
+
+int getStepDirect(Point start,Point next);
 
 #endif
