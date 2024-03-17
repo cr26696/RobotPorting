@@ -35,3 +35,11 @@ void Inittotal(Boat *robot[],int robot_num,Boat *boat[],int boat_num,Berth *bert
     InitRoat(boat[],boat_num);
     controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 }
+
+void InitGoods(Map *Goods){
+    for(int i;i<200;i++){
+        for(int j;j<200;j++){
+            Goods->data[i][j] = '0';
+        }
+    }
+}
