@@ -4,6 +4,7 @@
 #include "struct_Robot.h"
 #include "struct_Berth.h"
 #include "astar.h"
+#include "moveControl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,11 +15,13 @@
 #define LOADING_FACTOR  15
 #define TRANS_FACTOR    5
 
-int isGoodsGrid(Map *goodsmap, Point pos);
-LinkList* searchGoods(Map *goodsmap, Robot rob);
+int isGoodsGrid(Point pos);
+LinkList* searchGoods(Robot rob);
 int* pathToDirection(LinkList* path);
 int* pathToDirection(LinkList* path);
 void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
-LinkList* sendGoods(Berth berths[], int num, Robot rob);
+LinkList* sendGoods(Berth* berths, Robot rob);
+void robotGetGoodsPrint(Robot rob[], int num);
+void robotSendGoodsPrint(Robot rob[], int num);
 
 #endif

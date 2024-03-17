@@ -2,6 +2,7 @@
 
 const int robot_num = 10;
 Robot robot[robot_num];
+Map *goodsmap;
 
 void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理函数
 {
@@ -40,8 +41,9 @@ Robot robot[robot_num];
 
 extern numofgds;
 extern map;
+extern Berth berth[];
 
-int isGoodsGrid(Map *goodsmap, Point pos){
+int isGoodsGrid(Point pos){
     if(pos.x < 0 || pos.x > 200 || pos.y < 0 || pos.y > 200){
         return 0;
     }
@@ -61,7 +63,7 @@ int isGoodsGrid(Map *goodsmap, Point pos){
 //     return 1;
 // }
 
-LinkList* searchGoods(Map *goodsmap, Robot rob){
+LinkList* searchGoods(Robot rob){
     Point curgrid;
     Point goodsloca[121] = {0};//11*11
     int n = 0;//搜索到的货物个数
@@ -81,7 +83,7 @@ LinkList* searchGoods(Map *goodsmap, Robot rob){
         for(int j = -5; j < 5; j++){
             curgrid.x = rob.pos.x + i;
             curgrid.y = rob.pos.y + j;
-            if(isGoodsGrid(goodsmap, curgrid)){
+            if(isGoodsGrid(curgrid)){
                 goodsloca[n++] = curgrid;
             }
         }
@@ -166,7 +168,7 @@ int* pathToDirection(LinkList* path){
 }
 
 
-LinkList* sendGoods(Berth berths[], int num, Robot rob){
+LinkList* sendGoods(Berth* berths, Robot rob){
     int disofber[10];
     Berth temp;
     LinkList* berthph[3], *tempber;
@@ -174,7 +176,7 @@ LinkList* sendGoods(Berth berths[], int num, Robot rob){
     int valperdisofberth[3];
     LinkList* finalberth = (LinkList *) malloc(sizeof(LinkList));
 
-    for(int i=0; i <num; i++){
+    for(int i=0; i <10; i++){
         disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);
     }
     for (int i=0; i < 3; i++){
@@ -205,4 +207,36 @@ LinkList* sendGoods(Berth berths[], int num, Robot rob){
         }
     }
     return  finalberth = berthph[2];
+}
+
+void robotGetGoodsPrint(Robot rob[], int num){
+    for(int i=0; i < num; i++){
+        LinkList* path, *nextpath;
+        path = searchGoods(rob[i]);
+        nextpath = path->next;
+
+        if(nextpath->next != NULL && rob[i].current_status == ROBOT_GETTING){
+            updateRobotDirect(&rob[i], path);
+            printf("move %d %d\n", i, rob->direct);
+        }
+        if(nextpath->next != NULL && rob[i].current_status == ROBOT_GETTING){
+            printf("get %d\n", i);
+        }
+    }
+}
+
+void robotSendGoodsPrint(Robot rob[], int num){
+    for(int i=0; i < num; i++){
+        LinkList* path, *nextpath;
+        path = sendGoods(berth, rob[i]);
+        nextpath = path->next;
+
+        if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
+            updateRobotDirect(&rob[i], path);
+            printf("move %d %d\n", i, rob->direct);
+        }
+        if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
+            printf("pull %d\n", i);
+        }       
+    }
 }

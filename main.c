@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <random>
+#include <random.h>
 
 #include "list.h"
 #include "moveControl.h"
