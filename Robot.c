@@ -116,7 +116,8 @@ LinkList* searchGoods(Map *goodsmap, Robot rob){
             temppath[i] = temppath[i]->next;
             numofph++;
         }
-        valofudis[i] = valodgs[i] / numofph;//如何保存货物价值 与位置关联起来
+        valofudis[i] = goodsmap->data[goodsloca[i].x][goodsloca[i].y] / numofph;
+        numofph = 0;
     }
     for (int i=0; i < 3; i++){
         for (int j=0; j < 3 - 1 - i; j++){
@@ -127,7 +128,7 @@ LinkList* searchGoods(Map *goodsmap, Robot rob){
             }
         }
     }
-    return finalpath = temppath[3];
+    return finalpath = temppath[2];
 }
 
 int* pathToDirection(LinkList* path){
@@ -150,6 +151,48 @@ int* pathToDirection(LinkList* path){
             *direction++ = MOVE_LEFT;
         }
     }
-*direction = NULL;
+    *direction = NULL;
     return direction;
+}
+
+
+LinkList* sendGoods(Berth berths[], int num, Robot rob){
+    int disofber[10];
+    Berth temp;
+    LinkList* berthph[3], *tempber;
+    int numofph = 0;
+    int valperdisofberth[3];
+    LinkList* finalberth = (LinkList *) malloc(sizeof(LinkList));
+
+    for(int i=0; i <num; i++){
+        disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);
+    }
+    for (int i=0; i < 3; i++){
+        for (int j=0; j < 3 - 1 - i; j++){
+            if (disofber[j] > disofber[j + 1]) {
+                    temp = berths[j];
+                    berths[j] = berths[j + 1];
+                    berths[j + 1] = temp;
+            }
+        }
+    }
+    for(int i=0; i < 3; i++){
+        berthph[i] = aStarSearch(map, rob.pos, berths[i].pos);
+        while(berthph[i]->next != NULL){
+            berthph[i] = berthph[i]->next;
+            numofph++;
+        }
+        valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
+        numofph = 0;
+    }
+    for (int i=0; i < 3; i++){
+        for (int j=0; j < 3 - 1 - i; j++){
+            if (valperdisofberth[j] > valperdisofberth[j + 1]) {
+                    tempber = berthph[j];
+                    berthph[j] = berthph[j + 1];
+                    berthph[j + 1] = tempber;
+            }
+        }
+    }
+    return  finalberth = berthph[2];
 }
