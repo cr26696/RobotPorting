@@ -17,6 +17,9 @@ void InitRobot(Robot *robot[],int robot_num)//机器人状态初始化???判断�
             robot[robotId]->current_status=ROBOT_STUCK;
             robot[robotId]->next_status=ROBOT_STUCK;
         }
+        robot[robotId]->current_status=ROBOT_FREE;
+        robot[robotId]->next_status=ROBOT_FREE;
+        robot[robotId]->direct=ROBOT_WAITING;
         //aStarSearch(&map,robot[i].)
 	}
 }

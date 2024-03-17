@@ -88,7 +88,7 @@ int Input()
 		{
 				int carry,stun;//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &stun);
-				robotstatusupdate(carry, stun , robot[i]);//???机器人状态处理函数void robotstatusupdate(int carry,int stun ,Robot *robot)
+				robotstatusupdate(carry, stun , robot[i]);//机器人状态处理函数
 				
 		}
 		for(int i = 0; i < 5; i ++)
@@ -119,6 +119,7 @@ int main()
 					if(){//即将到达
 							printf("get %d %d\n", i, robot[i].direct);//???
 					}
+					robot[i].current_status=robot[i].next_status;
 				}
 				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
 				puts("OK");

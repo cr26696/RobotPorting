@@ -2,16 +2,19 @@
 #define STRUCT_ROBOT_H
 
 #define ROBOT_STUCK -1//困住
-#define FREE 0 //空闲
+#define ROBOT_FREE 0 //空闲
 #define ROBOT_GETTING 1//取货
 #define ROBOT_SENDING 2//送货
 #define ROBOT_CRASHING 3//碰撞
 #define ROBOT_VOIDING 4//避让
 
+
 #define MOVE_RIGHT 0
 #define MOVE_LEFT 1
 #define MOVE_UP 2
 #define MOVE_DOWN 3
+#define ROBOT_WAITING 4
+
 
 #include "list.h"
 #include "geometry.h"
