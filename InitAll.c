@@ -1,10 +1,22 @@
 #include "InitAll.h"
 
-void InitRobot(Boat *robot[],int robot_num)//机器人状态初始化???判断是否受困
+#include "astar.h"
+
+void InitRobot(Robot *robot[],int robot_num)//机器人状态初始化???判断是否受困
 {
-    for(int i=0;i<robot_num;i++){
-		robot[i].
-        
+    extern Map map;
+    extern Berth berth[];
+    for(int robotId=0;robotId<robot_num;robotId++){
+        LinkList *hasPath;
+		for(int berthId;berthId<10;berthId++){//遍历泊口看能不能到
+            hasPath = aStarSearch(&map,robot[robotId]->pos,berth[berthId].pos);
+            if(hasPath){break;}
+        }
+        if(hasPath){continue;}
+        else{
+            robot[robotId]->current_status=ROBOT_STUCK;
+            robot[robotId]->next_status=ROBOT_STUCK;
+        }
         //aStarSearch(&map,robot[i].)
 	}
 }

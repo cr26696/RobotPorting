@@ -82,7 +82,7 @@ int Input()
 				int x, y, val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				Goods.data[i][j] = (char)val;//强制将货物价值存为char,0表示无货物
+				Goods.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
