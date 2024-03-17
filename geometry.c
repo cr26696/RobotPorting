@@ -16,13 +16,18 @@ Point *createPoint(int x,int y){
 Grid *createGrid(int x,int y){
   
 }
+//判断两点坐标相同，1相同，0不同
+int isSamePosition(Point A, Point B){
+  if(A.x == B.x && A.y == B.y)return 1;
+  else return 0;
+}
 //输入两个Point类型，返回曼哈顿距离(H估值)
 int getDistance_Manhattan(Point start, Point end){
     int hdistance;
     hdistance = abs(start.x - end.x) + abs(start.y - end.y);
     return hdistance;
 }
-//输入两相邻Point,返回下一步方向 左1 右2 上3 下4 输入点有误-1
+//输入两相邻Point,返回下一步方向 左1 右2 上3 下4 输入点有误-1 也可用于判断两点是否相邻
 int getStepDirect(Point Pstart, Point Pnext){
   int direct;
   if(Pstart.x==Pnext.x){//将相邻两格坐标转化为移动方向

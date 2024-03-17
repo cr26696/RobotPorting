@@ -7,14 +7,7 @@
 
 #include "geometry.h"
 
-// typedef struct 
-// {   
-//     int x,y;
-//     int value;
-//     int isLocked;
-// }Goods;
-
-//链表存储类型为Grid
+//链表节点，存储类型为Grid
 typedef struct Node
 {
     Grid grid; //格子数据类型
@@ -26,6 +19,8 @@ LinkList *createList(int len);
 void insertLinkListHead(LinkList *L, Grid grid);
 int insertLinkList(LinkList *L, int pos, Grid grid);
 int deleteLinkList(LinkList *L, int pos);
+int deletLinkListByPoint(LinkList *L, Point point);
+int deletLinkListByGrid(LinkList *L, Grid grid);
 int deleteLinkListSave(LinkList *L, int pos, Grid *grid);
 void reverseLinkList(LinkList *L);
 LinkList *searchLinkList(LinkList *L, Grid grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
@@ -33,6 +28,5 @@ int getLen(LinkList *L);
 int isEmpty(LinkList *L);
 void printLinkList(LinkList *L);
 LinkList* searchMinList(LinkList *L);//返回F最小(相同时G最小)的节点 返回链表
-int deletLinkByXY(LinkList *L, Grid grid);
-
+Grid* getMinCostGrid(LinkList *L);
 #endif

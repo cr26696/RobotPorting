@@ -20,8 +20,11 @@ Point *createPoint(int x,int y);
 
 Grid *createGrid(int x,int y);
 
+int isSamePosition(Point A, Point B);
+
 int getDistance_Manhattan(Point start, Point end);
 
 int getStepDirect(Point start,Point next);
+
 
 #endif
