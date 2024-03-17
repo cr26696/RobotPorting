@@ -2,7 +2,7 @@
 #define STRUCT_ROBOT_H
 
 #define ROBOT_STUCK -1//困住
-#define NORMAL 0 //正常
+#define FREE 0 //空闲
 #define ROBOT_GETTING 1//取货
 #define ROBOT_SENDING 2//送货
 #define ROBOT_CRASHING 3//碰撞
@@ -20,7 +20,8 @@ typedef struct Robot
 {
     Point pos;//目前位置
     int current_status;//当前状态 
-    int next_status;//下一帧状态 
+    int next_status;//下一帧状态
+    int tempstatus;//碰撞前的状态暂存 
     int direct;//下一步方向
 }Robot;
 

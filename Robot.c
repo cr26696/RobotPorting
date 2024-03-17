@@ -3,14 +3,28 @@
 const int robot_num = 10;
 Robot robot[robot_num];
 
+#define ROBOT_STUCK -1//困住
+#define FREE 0 //空闲
+#define ROBOT_GETTING 1//取货
+#define ROBOT_SENDING 2//送货
+#define ROBOT_CRASHING 3//碰撞
+#define ROBOT_VOIDING 4//避让
+
+//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理函数
 {
-    if(carry==0 && stun==0){robot->status=;}
-    if(carry==0 && stun==0){robot->status=;}
-    if(carry==0 && stun==0){robot->status=;}
-    if(carry==0 && stun==0){robot->status=;}
-    if(carry==0 && stun==0){robot->status=;}
-    if(carry==0 && stun==0){robot->status=;}
+    if (carry == 0 && robot->current_status != ROBOT_CRASHING && robot->current_status != ROBOT_STUCK) // 当前状态眩晕
+    {
+        robot->tempstatus = robot->current_status;
+        robot->current_status=ROBOT_CRASHING;
+        robot->next_status=ROBOT_CRASHING;
+    }
+    if (carry != 0 && robot->current_status == ROBOT_CRASHING ) // 上一个状态眩晕
+    {
+        robot->current_status=robot->tempstatus;
+    }
+    if(carry==1 && stun==1)
+    {robot->current_status=ROBOT_SENDING;}
 }
 
 // void robotStateInit()
@@ -161,7 +175,7 @@ int* pathToDirection(LinkList* path){
             *direction++ = MOVE_LEFT;
         }
     }
-    *direction = NULL;
+*direction = NULL;
     return direction;
 }
 
