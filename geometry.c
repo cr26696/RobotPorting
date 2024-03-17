@@ -5,12 +5,16 @@
 #define MOVE_UP 3
 #define MOVE_DOWN 4
 
-//输入x,y 返回一个Point类型
+//分配内存，输入x,y 返回一个Point类型指针
 Point *createPoint(int x,int y){
   Point *ptr = (Point *)malloc(sizeof(Point));
   ptr->x = x;
   ptr->x = y;
   return ptr;
+}
+//分配内存，输入相关参数，返回一个Grid类型指针
+Grid *createGrid(int x,int y){
+  
 }
 //输入两个Point类型，返回曼哈顿距离(H估值)
 int getDistance_Manhattan(Point start, Point end){

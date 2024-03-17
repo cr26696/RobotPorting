@@ -7,15 +7,6 @@
 
 #include "geometry.h"
 
-//寻路算法所用格点，内含坐标Pos,父格点指针
-typedef struct Grid {
-    Point loc;
-    Grid* father;
-    int G, F, H;
-    int inOpen,inClose;
-    // int typeOfgrid;//格子类型？
-}Grid;
-
 // typedef struct 
 // {   
 //     int x,y;
@@ -26,14 +17,14 @@ typedef struct Grid {
 //链表存储类型为Grid
 typedef struct Node
 {
-    Grid grid; //格子
-    struct LinkList *next; //指针域
+    Grid grid; //格子数据类型
+    struct LinkList *next; //下一个链表节点的地址
 } LinkList;
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
-//int insertLinkList(LinkList *L, Grid *grid);
-int insertLinkList(LinkList *L, int pos, Grid *grid);
+void insertLinkListHead(LinkList *L, Grid grid);
+int insertLinkList(LinkList *L, int pos, Grid grid);
 int deleteLinkList(LinkList *L, int pos);
 int deleteLinkListSave(LinkList *L, int pos, Grid *grid);
 void reverseLinkList(LinkList *L);

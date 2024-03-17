@@ -1,6 +1,6 @@
 #include "list.h"
 
-//初始化，创建头结点
+//分配内存，链表创建头结点
 LinkList *initList(LinkList *L)
 {
     L = (LinkList *) malloc(sizeof(LinkList));//为头结点分配空间
@@ -29,21 +29,18 @@ LinkList *createList(int len)
 }
 
 
-//将元素插入头部
-// int insertLinkList(LinkList *L, Grid grid)
-// {
-//     LinkList *r = L, *n;
-//     n = (LinkList *) malloc(sizeof(LinkList));
-//     n->grid = grid;
-//     n->next = L;
-//     while(--pos > 0)
-//     {
-//         r = r->next;//将尾指针移动到插入位置
-//     }
-//     n->next = r->next;//先把新指针（插入值）链入尾指针后一个节点
-//     r->next = n;//再把新指针（插入值）链入尾指针之后
-//     return 1;
-// }
+//输入链表头，格子的拷贝，在对应链表头插入格子
+void insertLinkListHead(LinkList *L, Grid grid)
+{
+    LinkList *N;//新节点 地址指针
+    N = (LinkList *) malloc(sizeof(LinkList));//N请求一片空内存区域
+    N->grid = grid;
+    N->next = L;//新增格子数据存于N，next指向原链表头
+    L = N;//L存储新的链表头地址
+    //N T在函数调用结束即被释放。
+    return;
+}
+
 //将元素插入指定位置
 int insertLinkList(LinkList *L, int pos, Grid grid)
 {
