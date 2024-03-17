@@ -18,5 +18,6 @@ int isGoodsGrid(Map *goodsmap, Point pos);
 LinkList* searchGoods(Map *goodsmap, Robot rob);
 int* pathToDirection(LinkList* path);
 int* pathToDirection(LinkList* path);
+void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
 
 #endif

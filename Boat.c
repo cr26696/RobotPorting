@@ -1,9 +1,6 @@
 #include "struct_Boat.h"
 #include "struct_Berth.h"
 
-#define NOLOADING 5//到泊口，空闲
-#define LOADING 6//到泊口，装载
-#define FINISHLOADING 7//到泊口，装载完
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +12,7 @@ void boatStatusupdate(int backstatu,int aimId,Boat *boat)//船的状态判断
     if(backstatu==0 && aimId==-1){boat->status=TRANSPORT;}//从泊口到虚拟点途中
     if(backstatu==1 && aimId==-1){boat->status=ATVIRTUAL;}//到达虚拟点
     if(backstatu==0 && aimId!=1){boat->status=GOBACKBERTH;}//从虚拟点到泊口途中
-    if(backstatu==1 && aimId!=1 && boat->priorstatus== ){boat->status=ATBERTH;}//刚到泊口???
+    if(backstatu==1 && aimId!=1 ){boat->status=ATBERTH;}//到泊口，装载
     if(backstatu==2 && aimId!=1){boat->status=WAITING;}//到泊口等待(前面还有其他船)
     boat->aimId=aimId;
 }
@@ -32,7 +29,7 @@ void countgoodsnum(Berth *berth,Boat *boat){//计算泊口的货物数量和船�
      berth->goodsnum=berth->goodsnum-berth->loading_speed;
 }
 
-void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity ) //结构体数组调用 
+void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity) //结构体数组调用 
 {
     for (int i = 0; i < boat_num; i++)
     {
@@ -58,6 +55,7 @@ void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat
             {
                 boat[i]->aimId = maxberth;
                 printf("ship %d %d\n", i, boat[i]->aimId);
+                boat[i]->status = GOBACKBERTH;
                 berth[maxberth]->status = 0; // 对应港口锁定
             }
             else
@@ -76,35 +74,25 @@ void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat
                 }
                 boat[i]->aimId = mintastime;
                 printf("ship %d %d\n", i, boat[i]->aimId);
+                boat[i]->status = GOBACKBERTH;
                 berth[mintastime_berth]->status = 0; // 对应港口锁定
             }
         }
         
         //船在泊口，开始装货
-        if( boat[i]->status==ATBERTH)//???没有装货的执行操作
+        if (boat[i]->status == ATBERTH)
         {
-        if(boat[i]->goodsnum<boat_capacity && berth[i]->goodsnum>0)//船上货物未满,泊口有货
-        {
-            countgoodsnum(boat[i], berth[boat[i]->aimId]);//装载货物
+            if (boat[i]->goodsnum < boat_capacity && berth[i]->goodsnum > 0) // 船上货物未满,泊口有货
+            {
+                countgoodsnum(boat[i], berth[boat[i]->aimId]); // 装载货物
+            }
+            else if (boat[i]->goodsnum = boat_capacity || berth[i]->goodsnum == 0) // 船在码头装载完成，去虚拟点//???优化等还有几步的机器人
+            {
+                printf("go %d\n", i);
+                boat[i]->status = 0;               // 船在运输状态
+                berth[boat[i]->aimId]->status = 1; // 对应港口空闲
+                boat[i]->aimId = -1;               // 船目标泊位虚拟点
+            }
         }
-        else if (boat[i]->goodsnum=boat_capacity || berth[i]->goodsnum==0)//???优化等还有几步的机器人
-        {
-            boat[i]->status==FINISHLOADING;//???要不要让他装完货立即去虚拟点
-        }
-
-        printf("go %d\n", i);
-        boat[i]->status=0;//船在运输状态
-        boat[i]->aimId=-1;//船目标泊位虚拟点
-        }
-       
-        //船在码头装载完成，去虚拟点
-        if( boat[i]->status==FINISHLOADING)//???
-        {
-        printf("go %d\n", i);
-        boat[i]->status=0;//船在运输状态
-        berth[boat[i]->aimId]->status = 1;//对应港口空闲
-        boat[i]->aimId=-1;//船目标泊位虚拟点
-        }
-   
     }
 }

@@ -4,11 +4,9 @@
 #define TRANSPORT 0//从泊口到虚拟点途中
 #define ATVIRTUAL 1//到达虚拟点
 #define GOBACKBERTH 2//从虚拟点到泊口途中
-#define ATBERTH 3//到泊口
+#define ATBERTH 3//到泊口，装载
 #define WAITING 4//到泊口等待(前面还有其他船)
-#define NOLOADING 5//到泊口，空闲
-#define LOADING 6//到泊口，装载
-#define FINISHLOADING 7//到泊口，装载完
+
 typedef struct Boat
 {
     //int num;//标号
@@ -18,4 +16,7 @@ typedef struct Boat
     int goodsnum;//船上货物数量
 }Boat;
 
+void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity);
+void countgoodsnum(Berth *berth,Boat *boat);//计算泊口的货物数量和船上的货物数量
+void boatStatusupdate(int backstatu,int aimId,Boat *boat);//更新船的状态
 #endif
