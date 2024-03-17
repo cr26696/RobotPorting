@@ -88,7 +88,11 @@ int Input()
                 
 		}
 		for(int i = 0; i < 5; i ++)
-				scanf("%d%d\n", &boat[i].status, &boat[i].aimId);
+		{
+			int backstatus,aimId;//判决器返回状态,目标泊口
+			scanf("%d%d\n", &backstatus, &aimId);
+			boatStatusupdate(backstatus,aimId,boat[i]);//船状态处理函数
+		}
 		char okk[100];
 		scanf("%s", okk);
 		return frame;
@@ -111,8 +115,8 @@ int main()
                     if(){//即将到达
                         printf("get %d %d\n", i, robot[i].direct);//???
 				     }
-
-
+				}
+				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
 				puts("OK");
 				fflush(stdout);
 		}
