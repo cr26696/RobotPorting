@@ -18,4 +18,6 @@ typedef struct Boat
     int goodsnum;//船上货物数量
 }Boat;
 
+void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity);
+void countgoodsnum(Berth *berth,Boat *boat);//计算泊口的货物数量和船上的货物数量
 #endif

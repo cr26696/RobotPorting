@@ -32,7 +32,7 @@ void countgoodsnum(Berth *berth,Boat *boat){//计算泊口的货物数量和船�
      berth->goodsnum=berth->goodsnum-berth->loading_speed;
 }
 
-void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity ) //结构体数组调用 
+void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity) //结构体数组调用 
 {
     for (int i = 0; i < boat_num; i++)
     {
@@ -58,6 +58,7 @@ void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat
             {
                 boat[i]->aimId = maxberth;
                 printf("ship %d %d\n", i, boat[i]->aimId);
+                boat[i]->status = GOBACKBERTH;
                 berth[maxberth]->status = 0; // 对应港口锁定
             }
             else
@@ -76,6 +77,7 @@ void controlBoat(Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat
                 }
                 boat[i]->aimId = mintastime;
                 printf("ship %d %d\n", i, boat[i]->aimId);
+                boat[i]->status = GOBACKBERTH;
                 berth[mintastime_berth]->status = 0; // 对应港口锁定
             }
         }
