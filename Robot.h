@@ -15,11 +15,10 @@
 #define LOADING_FACTOR  15
 #define TRANS_FACTOR    5
 
+void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
 int isGoodsGrid(Point pos);
 LinkList* findPathToGoods(Robot rob);
 int* pathToDirection(LinkList* path);
-int* pathToDirection(LinkList* path);
-void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
 LinkList* findPathToBerth(Berth* berths, Robot rob);
 void robotGetGoodsPrint(Robot rob[], int num);
 void robotSendGoodsPrint(Robot rob[], int num);

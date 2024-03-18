@@ -11,7 +11,19 @@ Map *goodsmap;
 #define ROBOT_CRASHING 3//碰撞
 #define ROBOT_VOIDING 4//避让
 
+/*状态机分状态的转移维护
+以及根据状态进行活动
+*/
 //carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
+
+const int robot_num = 10;
+Robot robot[robot_num];
+
+
+extern numofgds;
+extern map;
+extern Berth berth[];
+
 void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理函数
 {
     if (carry == 0 && robot->current_status != ROBOT_CRASHING && robot->current_status != ROBOT_STUCK) // 当前状态眩晕
@@ -27,42 +39,15 @@ void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理�
     if(carry==1 && stun==1)
     {robot->current_status=ROBOT_SENDING;}
 }
-
-// void robotStateInit()
-// {
-//     for (int i = 0; i < robot_num; i++)
-//     {
-//         // aStarSearch(&map,robot[i].)
-//         if () // 没有到泊口的路
-//         {robot[i].status = ROBOT_STUCK;}
-//     }
-// }
-
-
-
-const int robot_num = 10;
-Robot robot[robot_num];
-
-// void robotStateInit()
-// {
-//     for (int i = 0; i < robot_num; i++)
-//     {
-//         // aStarSearch(&map,robot[i].)
-//         if () // 没有到泊口的路
-//         {robot[i].status = ROBOT_STUCK;}
-//     }
-// }
-
-extern numofgds;
-extern map;
-extern Berth berth[];
-
+//判断某点是否为货物
 int isGoodsGrid(Point pos){
     if(pos.x < 0 || pos.x > 200 || pos.y < 0 || pos.y > 200){
+        //界外
         return 0;
     }
     else{
-        if(goodsmap->data[pos.x][pos.y] != NULL){
+        if(goodsmap->data[pos.x][pos.y] != '0'){
+            //货物非空 不为'0'
             return 1;
         }
     }
@@ -77,6 +62,7 @@ int isGoodsGrid(Point pos){
 //     return 1;
 // }
 
+//根据计算返回可能是目前去往货物最优的路径
 LinkList* findPathToGoods(Robot rob){
     Point curgrid;
     Point goodsloca[121] = {0};//11*11
@@ -156,7 +142,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     return finalpath = temppath[2];
 }
-
+//将路径转为direction （int指针
 int* pathToDirection(LinkList* path){
     LinkList* temp;
     int *direction;
@@ -181,9 +167,8 @@ int* pathToDirection(LinkList* path){
     return direction;
 }
 
-
-
-LinkList* findPathToBerth(Berth *berths,  Robot rob){//返回机器人到泊口的路径
+//返回机器人到泊口的路径
+LinkList* findPathToBerth(Berth *berths,  Robot rob){
     int disofber[10];
     Berth temp;
     LinkList* berthph[3], *tempber;
@@ -224,6 +209,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){//返回机器人到泊口�
     return  finalberth = berthph[2];
 }
 
+//将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开 num为路径长？调用函数就确定中途不会被打断？
 void robotGetGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
@@ -239,7 +225,7 @@ void robotGetGoodsPrint(Robot rob[], int num){
         }
     }
 }
-
+//将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
 void robotSendGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
@@ -256,6 +242,7 @@ void robotSendGoodsPrint(Robot rob[], int num){
     }
 }
 
+//机器人避让，未完成
 int judgeCoincidentGrids(Robot* rob){
     for(int i=0; i < 10; i++){
         if(rob[i].current_status != ROBOT_VOIDING){
