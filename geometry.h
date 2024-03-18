@@ -20,7 +20,7 @@ typedef struct Grid {
 
 Point *createPoint(int x,int y);
 
-Grid *createGrid(int x,int y);
+//Grid *createGrid(int x,int y);
 
 int isSamePosition(Point A, Point B);
 

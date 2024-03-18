@@ -13,9 +13,9 @@ Point *createPoint(int x,int y){
   return ptr;
 }
 //分配内存，输入相关参数，返回一个Grid类型指针
-Grid *createGrid(int x,int y){
+// Grid *createGrid(int x,int y){
   
-}
+// }
 //判断两点坐标相同，1相同，0不同
 int isSamePosition(Point A, Point B){
   if(A.x == B.x && A.y == B.y)return 1;

@@ -1,20 +1,14 @@
-#include "struct_Boat.h"
-#include "struct_Berth.h"
-
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <list.h>
-#include <math.h>
+#include "Boat.h"
 
 void boatStatusupdate(int backstatu,int aimId,Boat *boat)//船的状态判断
 {
-    if(backstatu==0 && aimId==-1){boat->status=TRANSPORT;}//从泊口到虚拟点途中
-    if(backstatu==1 && aimId==-1){boat->status=ATVIRTUAL;}//到达虚拟点
-    if(backstatu==0 && aimId!=1){boat->status=GOBACKBERTH;}//从虚拟点到泊口途中
-    if(backstatu==1 && aimId!=1 ){boat->status=ATBERTH;}//到泊口，装载
-    if(backstatu==2 && aimId!=1){boat->status=WAITING;}//到泊口等待(前面还有其他船)
-    boat->aimId=aimId;
+    // if(backstatu==0 && aimId==-1){boat->status=TRANSPORT;}//从泊口到虚拟点途中
+    // if(backstatu==1 && aimId==-1){boat->status=ATVIRTUAL;}//到达虚拟点
+    // if(backstatu==0 && aimId!=1){boat->status=GOBACKBERTH;}//从虚拟点到泊口途中
+    // if(backstatu==1 && aimId!=1 ){boat->status=ATBERTH;}//到泊口，装载
+    // if(backstatu==2 && aimId!=1){boat->status=WAITING;}//到泊口等待(前面还有其他船)
+    // boat->aimId=aimId;
+    return ;
 }
 
 // int leaveberth (Boat *boat ,Berth *berth){//???泊口的货物数
@@ -84,7 +78,7 @@ void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_c
         {
             if (boat[i].goodsnum < boat_capacity && berth[i].goodsnum > 0) // 船上货物未满,泊口有货
             {
-                countgoodsnum(berth[boat[i].aimId],&boat[i]); // 装载货物
+                countgoodsnum(&berth[boat[i].aimId],&boat[i]); // 装载货物
             }
             else if (boat[i].goodsnum = boat_capacity || berth[i].goodsnum == 0) // 船在码头装载完成，去虚拟点//???优化等还有几步的机器人
             {

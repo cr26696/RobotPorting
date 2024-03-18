@@ -13,7 +13,7 @@ LinkParcel *LinkCreate_Parcel(int len)
 {
     int i;
     int x,y;
-    LinkParcel *L = initList(L), *r, *n;//分别定义头指针、尾指针、新指针
+    LinkParcel *L = LinkInit_Parcel(L), *r, *n;//分别定义头指针、尾指针、新指针
     r = L;//尾指针初始化为头指针
     for(i = 0;i < len;i ++)
     {   
@@ -43,7 +43,7 @@ LinkParcel *LinkCreate_Parcel(int len)
 //输入表头，位置，货物拷贝，插入位置后并返回1成功 0失败
 int LinkInsertByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel)
 {
-    if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
+    if(pos < 1 || pos > LinkGetLen_Parcel(L)+1) return 0;//插入位置错误
     LinkParcel *r = L, *n;
     n = (LinkParcel *) malloc(sizeof(LinkParcel));
     n->parcel = parcel;
@@ -59,7 +59,7 @@ int LinkInsertByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel)
 //删除指定位置处链表元素,成功返回1,错误返回0
 int LinkDeleteByIndex_Parcel(LinkParcel *L, int pos)
 {
-    if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+    if(pos < 1 || pos > LinkGetLen_Parcel(L)) return 0;//删除位置错误
     LinkParcel *r = L, *d;
     while(--pos > 0)
     {
@@ -97,7 +97,7 @@ int LinkDeleteByObj_Parcel(LinkParcel *L, Parcel parcel){
 }
 int LinkDeleteSave_Parcel(LinkParcel *L, int pos, Parcel *parcel)
 {
-    if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+    if(pos < 1 || pos > LinkGetLen_Parcel(L)) return 0;//删除位置错误
     LinkParcel *r = L, *d;
     while(--pos > 0)
     {
@@ -112,7 +112,7 @@ int LinkDeleteSave_Parcel(LinkParcel *L, int pos, Parcel *parcel)
 //查找其实是按parcel的xy匹配查找的，返回位置链头，否则返回NULL
 LinkParcel *LinksearchByObj_Parcel(LinkParcel *L, Parcel parcel)
 {
-    if(isEmpty(L)) return NULL;
+    if(LinkIsEmpty_Parcel(L)) return NULL;
     int pos = 1;//位序从1开始、下标从零开始
     LinkParcel *r = L->next;
     while(r)
@@ -126,7 +126,7 @@ LinkParcel *LinksearchByObj_Parcel(LinkParcel *L, Parcel parcel)
 //按对象查找在链表中的位置
 int LinksearchPosByObj_Parcel(LinkParcel *L, Parcel parcel)
 {
-    if(isEmpty(L)) return -1;
+    if(LinkIsEmpty_Parcel(L)) return -1;
     int pos = 1;//位序从1开始、下标从零开始
     LinkParcel *r = L->next;
     while(r)

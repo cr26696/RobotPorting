@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <list.h>
 #include <math.h>
 
+#include "list.h"
 
 #define VALUE_INF 65535
 #define NEIGHBOR_LEFT 0
@@ -16,7 +16,7 @@
 //传入地图，目标点，返回1可走 0不可走
 int isValidGrid(Map *map, Point point){
   char target = map->data[point.x][point.y];
-  if (target=="." || target=="A"){return 1;}
+  if (target=='.' || target=='A'){return 1;}
   else{return 0;}
 }
 //输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL
@@ -69,7 +69,7 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
           default:break;
         }
         if(isValidGrid(map, neighbors->loc)){//返回1（可行走格）时
-          neighbors[i].father = &current;
+          neighbors[i].father = current;
           //neighbors[i].typeOfgrid = 0;
           neighbors[i].inClose = 0;
           neighbors[i].inOpen = 0;//完善结构体数据
@@ -128,7 +128,7 @@ LinkList* getGrids_minF(LinkList *L){
             minnode = r;
         }
         else if(r->grid.F == currentminF && r->grid.G == currentminG){
-            LinkList *newnode = malloc(sizeof(LinkList));
+            LinkList *newnode = (LinkList *)malloc(sizeof(LinkList));
             newnode->grid = r->grid;
             if(minnode == NULL){
                 minnode = newnode;
