@@ -21,6 +21,15 @@ int isSamePosition(Point A, Point B){
   if(A.x == B.x && A.y == B.y)return 1;
   else return 0;
 }
+//相邻返回1，相等或不相邻返回0
+int isNeighbor(Point A, Point B){
+  if(abs(A.x - B.x) == 1){
+    if(A.y == B.y) return 1;//x相差1且y相等
+  }else if(abs(A.y - B.y) == 1){
+    if(A.x == B.x) return 1;//y相差1且x相等
+  }
+  return 0;
+}
 //输入两个Point类型，返回曼哈顿距离(H估值)
 int getDistance_Manhattan(Point start, Point end){
     int hdistance;

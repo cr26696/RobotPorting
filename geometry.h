@@ -1,5 +1,7 @@
 #ifndef GEOMETRY_H//预定义避免重复引入
 #define GEOMETRY_H
+
+#include <math.h>
 #include <malloc.h>
 //int型内含x,y
 typedef struct Point
@@ -21,6 +23,8 @@ Point *createPoint(int x,int y);
 Grid *createGrid(int x,int y);
 
 int isSamePosition(Point A, Point B);
+
+int isNeighbor(Point A, Point B);
 
 int getDistance_Manhattan(Point start, Point end);
 
