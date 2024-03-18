@@ -5,8 +5,8 @@ Robot robot[num];
 
 /******************仅定义未写初始化******************/
 Map *goodsmap;
-LinkList* aLLParcelList;
-LinkList* lockedParcelList;
+LinkParcel* aLLParcelList;
+LinkParcel* lockedParcelList;
 /**************************************************/
 
 
@@ -75,9 +75,12 @@ LinkList* findPathToGoods(Robot rob){
     Point temp;
     Point finalgdsloca[3];
 
+    Parcel tempparcel;
+
     LinkList* temppath[3];
     LinkList* tempph;
     LinkList* finalpath = (LinkList *) malloc(sizeof(LinkList));
+    LinkParcel* nearParcel;
 
     int numofph = 0;
     float valofudis[3];
@@ -87,6 +90,8 @@ LinkList* findPathToGoods(Robot rob){
             curgrid.x = rob.pos.x + i;
             curgrid.y = rob.pos.y + j;
             if(isGoodsGrid(curgrid)){
+                tempparcel.
+                LinkInsertByIndex_Parcel(nearParcel, 1, );
                 goodsloca[n++] = curgrid;
             }
         }
