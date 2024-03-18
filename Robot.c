@@ -2,7 +2,13 @@
 
 const int num = 10;
 Robot robot[num];
+
+/******************仅定义未写初始化******************/
 Map *goodsmap;
+LinkList* aLLParcelList;
+LinkList* lockedParcelList;
+/**************************************************/
+
 
 // #define STUCK -1//困住// 已更换为枚举变量在 robot.h中
 // #define FREE 0 //空闲
@@ -86,12 +92,10 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     if(n < 3){
-        while(){
-        }
         int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
         for(n; n <= 3; ){
-            rangds = goodsmap[rand() % numofgds];
+            //rangds.x = goodsmap[rand() % numofgds];
             for(int j=0; j < n; j++){
                 if(goodsloca[j].x == rangds.x && goodsloca[j].y == rangds.y)
                     exflag = 1;
@@ -186,7 +190,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
         }
     }
     for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
-        berthph[i] = aStarSearch(map, rob.pos, berths[i].pos);
+        berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
         while(berthph[i]->next != NULL){
             berthph[i] = berthph[i]->next;
             numofph++;

@@ -5,6 +5,7 @@
 #include "struct_Berth.h"
 #include "astar.h"
 #include "moveControl.h"
+#include "LinkParcel.h"
 
 #include <stdio.h>
 #include <stdlib.h>
