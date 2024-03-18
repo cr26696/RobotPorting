@@ -16,11 +16,17 @@
 #define TRANS_FACTOR    5
 
 void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
-int isGoodsGrid(Point pos);
+
 LinkList* findPathToGoods(Robot rob);
-int* pathToDirection(LinkList* path);
 LinkList* findPathToBerth(Berth* berths, Robot rob);
-void robotGetGoodsPrint(Robot rob[], int num);
-void robotSendGoodsPrint(Robot rob[], int num);
+int* pathToDirection(LinkList* path);
+int isGoodsGrid(Point pos);
+
+//下方为实际机器人进行动作的函数
+
+void robotsGetGoodsPrint(Robot rob[], int num);
+void robotGetGoodsPrint(Robot *pRob, int id);
+void robotsSendGoodsPrint(Robot rob[], int num);
+void robotSendGoodsPrint(Robot *pRob, int id);
 
 #endif

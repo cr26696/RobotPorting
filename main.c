@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <random.h>
+//#include <random>
 
 #include "list.h"
 #include "moveControl.h"
@@ -9,6 +9,8 @@
 #include "struct_Robot.h"
 #include "struct_Berth.h"
 #include "struct_Boat.h"
+
+#include "Robot.h"
 
 const int n = 200;
 const int robot_num = 10;
@@ -86,14 +88,14 @@ int Input()
 		{
 				int carry,stun;//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &stun);
-				robotstatusupdate(carry, stun , robot[i]);//机器人状态处理函数
+				robotstatusupdate(carry, stun , &robot[i]);//机器人状态处理函数
 				
 		}
 		for(int i = 0; i < 5; i ++)
 		{
 			int backstatus,aimId;//判决器返回状态,目标泊口
 			scanf("%d%d\n", &backstatus, &aimId);
-			boatStatusupdate(backstatus,aimId,boat[i]);//船状态处理函数
+			boatStatusupdate(backstatus,aimId,&boat[i]);//船状态处理函数
 		}
 		char okk[100];
 		scanf("%s", okk);
@@ -108,16 +110,21 @@ int main()
 				int frame = Input();//返回当前帧数
 				for(int i = 0; i < robot_num; i ++)//机器人控制
 				{
-					//写在stuct_Robot和ROBOT里面
-                    if(robot->status == ROBOT_STUCK){continue;}//机器人如果受困直接跳过
-
-					//aStarSearch(&map,);//???函数，查找并跟新机器人目标方向
-					moveRobot(&robot[i],&paths_robot[i]);//更新机器人行进方向
-					printf("move %d %d\n", i, robot[i].direct);//输出到控制台
-					if(){//即将到达
-							printf("get %d %d\n", i, robot[i].direct);//???
+					switch (robot[i].current_status)
+					{
+					case IDLE:
+						robotGetGoodsPrint(&robot[i],i);
+						robot[i].next_status = GETTING;
+						break;
+					case GETTING:
+						robotGetGoodsPrint(&robot[i],i);
+						break;
+					case SENDING:
+						robotSendGoodsPrint(&robot[i],i);
+						break;
+					default:break;
 					}
-					robot[i].current_status=robot[i].next_status;
+					robot[i].current_status = robot[i].next_status;
 				}
 				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
 				puts("OK");

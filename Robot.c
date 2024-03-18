@@ -1,45 +1,46 @@
 #include "Robot.h"
 
-const int robot_num = 10;
-Robot robot[robot_num];
+const int num = 10;
+Robot robot[num];
 Map *goodsmap;
 
-#define ROBOT_STUCK -1//困住
-#define FREE 0 //空闲
-#define ROBOT_GETTING 1//取货
-#define ROBOT_SENDING 2//送货
-#define ROBOT_CRASHING 3//碰撞
-#define ROBOT_VOIDING 4//避让
+// #define STUCK -1//困住// 已更换为枚举变量在 robot.h中
+// #define FREE 0 //空闲
+// #define GETTING 1//取货
+// #define SENDING 2//送货
+// #define CRASHING 3//碰撞
+// #define VOIDING 4//避让
 
 /*状态机分状态的转移维护
 以及根据状态进行活动
 */
 //carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 
-const int robot_num = 10;
-Robot robot[robot_num];
+const int num = 10;
+Robot robot[num];
 
 
 extern numofgds;
 extern map;
 extern Berth berth[];
 
-void robotstatusupdate(int carry,int stun ,Robot *robot)//机器人状态处理函数
+//机器人状态处理函数
+void robotstatusupdate(int carry,int stun ,Robot *robot)
 {
-    if (carry == 0 && robot->current_status != ROBOT_CRASHING && robot->current_status != ROBOT_STUCK) // 当前状态眩晕
+    if (carry == 0 && robot->current_status != CRASHING && robot->current_status != STUCK) // 当前状态眩晕
     {
         robot->tempstatus = robot->current_status;
-        robot->current_status=ROBOT_CRASHING;
-        robot->next_status=ROBOT_CRASHING;
+        robot->current_status=CRASHING;
+        robot->next_status=CRASHING;
     }
-    if (carry != 0 && robot->current_status == ROBOT_CRASHING ) // 上一个状态眩晕
+    if (carry != 0 && robot->current_status == CRASHING ) // 上一个状态眩晕
     {
         robot->current_status=robot->tempstatus;
     }
     if(carry==1 && stun==1)
-    {robot->current_status=ROBOT_SENDING;}
+    {robot->current_status=SENDING;}
 }
-//判断某点是否为货物
+//判断某点是否为货物 不在main中调用
 int isGoodsGrid(Point pos){
     if(pos.x < 0 || pos.x > 200 || pos.y < 0 || pos.y > 200){
         //界外
@@ -62,7 +63,7 @@ int isGoodsGrid(Point pos){
 //     return 1;
 // }
 
-//根据计算返回可能是目前去往货物最优的路径
+//根据计算返回可能是目前去往货物最优的路径 不在main中调用
 LinkList* findPathToGoods(Robot rob){
     Point curgrid;
     Point goodsloca[121] = {0};//11*11
@@ -142,7 +143,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     return finalpath = temppath[2];
 }
-//将路径转为direction （int指针
+//将路径转为direction （int指针 不在main中调用
 int* pathToDirection(LinkList* path){
     LinkList* temp;
     int *direction;
@@ -167,7 +168,7 @@ int* pathToDirection(LinkList* path){
     return direction;
 }
 
-//返回机器人到泊口的路径
+//返回机器人到泊口的路径 不在main中调用
 LinkList* findPathToBerth(Berth *berths,  Robot rob){
     int disofber[10];
     Berth temp;
@@ -210,42 +211,71 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
 }
 
 //将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开 num为路径长？调用函数就确定中途不会被打断？
-void robotGetGoodsPrint(Robot rob[], int num){
+void robotsGetGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
         path = findPathToGoods(rob[i]);
         nextpath = path->next;
 
-        if(nextpath->next != NULL && rob[i].current_status == ROBOT_GETTING){
+        if(nextpath->next != NULL && rob[i].current_status == GETTING){
             updateRobotDirect(&rob[i], path);
             printf("move %d %d\n", i, rob->direct);
         }
-        if(nextpath->next != NULL && rob[i].current_status == ROBOT_GETTING){
+        if(nextpath->next != NULL && rob[i].current_status == GETTING){
             printf("get %d\n", i);
         }
     }
 }
+//控制单个机器人取货并进行控制台输出
+void robotGetGoodsPrint(Robot *pRob, int id){
+    LinkList* path, *nextpath;
+    path = findPathToGoods(*pRob);
+    nextpath = path->next;
+
+    if(nextpath->next != NULL && pRob->current_status == GETTING){
+        updateRobotDirect(pRob, path);
+        printf("move %d %d\n", id, pRob->direct);
+    }
+    if(nextpath->next != NULL && pRob->current_status == GETTING){
+        printf("get %d\n", id);
+        pRob->next_status = SENDING;
+    }
+}
 //将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
-void robotSendGoodsPrint(Robot rob[], int num){
+void robotsSendGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
         path = findPathToBerth(berth, rob[i]);
         nextpath = path->next;
 
-        if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
+        if(nextpath->next != NULL && rob[i].current_status == SENDING){
             updateRobotDirect(&rob[i], path);
             printf("move %d %d\n", i, rob->direct);
         }
-        if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
+        if(nextpath->next != NULL && rob[i].current_status == SENDING){
             printf("pull %d\n", i);
         }
     }
 }
+//控制单个机器人送货并进行控制台输出
+void robotSendGoodsPrint(Robot *pRob, int id){
+    LinkList* path, *nextpath;
+    path = findPathToBerth(berth, *pRob);
+    nextpath = path->next;
 
+    if(nextpath->next != NULL && pRob->current_status == SENDING){
+        updateRobotDirect(pRob, path);
+        printf("move %d %d\n", id, pRob->direct);
+    }
+    if(nextpath->next != NULL && pRob->current_status == SENDING){
+        printf("pull %d\n", id);
+        pRob->next_status = SENDING;
+    }
+}
 //机器人避让，未完成
 int judgeCoincidentGrids(Robot* rob){
     for(int i=0; i < 10; i++){
-        if(rob[i].current_status != ROBOT_VOIDING){
+        if(rob[i].current_status != VOIDING){
 
         }
 
