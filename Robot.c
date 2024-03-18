@@ -2,7 +2,12 @@
 
 // #define num 10
 // Robot robot[num];
+
 Map *goodsmap;
+LinkList* aLLParcelList;
+LinkList* lockedParcelList;
+/**************************************************/
+
 
 // #define STUCK -1//困住// 已更换为枚举变量在 robot.h中
 // #define FREE 0 //空闲
@@ -86,12 +91,19 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     if(n < 3){
+<<<<<<< HEAD
         // while(){
         // }
         int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
         for(n; n <= 3; ){
             rangds = goodsmap[rand() % numofgds];//???
+=======
+        int exflag = 0;//是否和之前的周围货物重复标志
+        Point rangds;
+        for(n; n <= 3; ){
+            //rangds.x = goodsmap[rand() % numofgds];
+>>>>>>> 9fb895a1d9b4bd996e338601b53b06d6bd75b991
             for(int j=0; j < n; j++){
                 if(goodsloca[j].x == rangds.x && goodsloca[j].y == rangds.y)
                     exflag = 1;
@@ -176,7 +188,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
     for(int i=0; i <10; i++){
         disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);//计算机器人到泊口的折线距离
     }
-    for (int i=0; i < 10; i++){//???十个折线距离进行排序？3？
+    for (int i=0; i < 10; i++){//按照disofber[]离泊口步数排序berths[]，粗略距离
         for (int j=0; j < 10 - 1 - i; j++){
             if (disofber[j] > disofber[j + 1]) {
                     temp = berths[j];
@@ -185,12 +197,17 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
             }
         }
     }
+<<<<<<< HEAD
     for(int i=0; i < 3; i++){
+=======
+    for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
+>>>>>>> 9fb895a1d9b4bd996e338601b53b06d6bd75b991
         berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
         while(berthph[i]->next != NULL){
             berthph[i] = berthph[i]->next;
             numofph++;
         }
+        /*计算泊口价值 */
         valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
         numofph = 0;
     }
