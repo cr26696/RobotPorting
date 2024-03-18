@@ -42,13 +42,13 @@ void robotstatusupdate(int carry,int stun ,Robot *robot)
     {robot->current_status=SENDING;}
 }
 //判断某点是否为货物 不在main中调用
-int isGoodsGrid(Point pos){
-    if(pos.x < 0 || pos.x > 200 || pos.y < 0 || pos.y > 200){
+int isParcelsGrid(Parcel pos){
+    if(pos.loc.x < 0 || pos.loc.x > 200 || pos.loc.y < 0 || pos.loc.y > 200){
         //界外
         return 0;
     }
     else{
-        if(goodsmap->data[pos.x][pos.y] != '0'){
+        if(goodsmap->data[pos.loc.x][pos.loc.y] != '0'){
             //货物非空 不为'0'
             return 1;
         }
@@ -66,77 +66,99 @@ int isGoodsGrid(Point pos){
 
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
 LinkList* findPathToGoods(Robot rob){
-    Point curgrid;
-    Point goodsloca[121] = {0};//11*11???机器人要找的货物列表只存坐标
-    int n = 0;//搜索到的货物个数
+    Parcel curgrid;
+    Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
+    int n = 0;//附近货物个数
 
-    int disofgds[121];
-    Point temp;
-    Point finalgdsloca[3];
+    int disofgds[120];//11*11 - 1 减去机器人所在位置
+    Parcel temp;
+    Parcel finalgdsloca[3];
 
     Parcel tempparcel;
+    LinkParcel* templist;
 
     LinkList* temppath[3];
     LinkList* tempph;
     LinkList* finalpath = (LinkList *) malloc(sizeof(LinkList));
-    LinkParcel* nearParcel;
+    LinkParcel* nearParcels;
 
     int numofph = 0;
     float valofudis[3];
 
     for(int i = -5; i < 5; i++){//在机器人附近的格子搜索
         for(int j = -5; j < 5; j++){
-            curgrid.x = rob.pos.x + i;
-            curgrid.y = rob.pos.y + j;
+            curgrid.loc.x = rob.pos.x + i;
+            curgrid.loc.y = rob.pos.y + j;
             if(isGoodsGrid(curgrid)){
-                tempparcel.
-                LinkInsertByIndex_Parcel(nearParcel, 1, );
-                goodsloca[n++] = curgrid;
+                tempparcel.loc.x = curgrid.loc.x;
+                tempparcel.loc.y = curgrid.loc.y;
+                LinkInsertByIndex_Parcel(nearParcels, 1, tempparcel);
+                //goodsloca[n++] = curgrid;
             }
         }
     }
+    n = LinkGetLen_Parcel(nearParcels);
     if(n < 3){
-        int exflag = 0;//是否和之前的周围货物重复标志
-        Point rangds;
+        int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
+        Parcel rangds;
         for(n; n <= 3; ){
+            rangds = LinksearchParcelByPos(aLLParcelList, rand() % LinkGetLen_Parcel(aLLParcelList));
             //rangds.x = goodsmap[rand() % numofgds];
-            for(int j=0; j < n; j++){
-                if(goodsloca[j].x == rangds.x && goodsloca[j].y == rangds.y)
+            templist = nearParcels;
+            while(templist->next != NULL){
+                templist = templist->next;
+                if(templist->parcel.loc.x == rangds.loc.x && templist->parcel.loc.y == rangds.loc.y){
                     exflag = 1;
                     break;
+                }
             }
             if(exflag){
                 exflag = 0;
             }
             else{
-                goodsloca[n++] = rangds;
+                LinkInsertByIndex_Parcel(nearParcels, 1, rangds);
+                n++;
             }
-            
         }
     }
-    for(int i=0; i < n; i++){//算机器人到物品的折线距离
-        disofgds[i] = abs(rob.pos.x - goodsloca[i].x) + abs(rob.pos.y - goodsloca[i].y);
+
+    templist = nearParcels;
+    while(templist->next != NULL){//算机器人到物品的折线距离
+        int i = 0;
+        templist = templist->next;
+        disofgds[i++] = abs(rob.pos.x - templist->parcel.loc.x) + abs(rob.pos.y - templist->parcel.loc.y);
     }
-    for (int i=0; i < n; i++){//根据估计出来的粗略距离，对货物数进行排序，距离小的排前面
+    n = LinkGetLen_Parcel(nearParcels);//更新需要被计算货物数量
+
+    templist = nearParcels;
+    while(templist->next != NULL){//将节点存入数组便于排序 或请写一个链表排序
+        int i = 0;
+        templist = templist->next;
+        tempparcelarry[i++] = templist->parcel;
+    }
+    for (int i=0; i < n - 1; i++){//根据估计出来的粗略距离，对货物数进行排序，距离小的排前面
         for (int j=0; j < n - 1 - i; j++){
             if (disofgds[j] > disofgds[j + 1]) {
-                    temp = goodsloca[j];
-                    goodsloca[j] = goodsloca[j + 1];
-                    goodsloca[j + 1] = temp;
+                    temp = tempparcelarry[j];
+                    tempparcelarry[j] = tempparcelarry[j + 1];
+                    tempparcelarry[j + 1] = temp;
             }
         }
     }
     for(int i=0; i < 3; i++){
-        finalgdsloca[i] = goodsloca[i];//取出三个待选货物
-        temppath[i] = aStarSearch(&map, rob.pos, finalgdsloca[i]);//根据A*算法计算路径长度
-        while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，
+        Point temppoint;
+        finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
+        temppoint.x = finalgdsloca[i].loc.x;//aStarSearch()中要传入Point类型 需要temppoint保存 或请修改aStarSearch()形参
+        temppoint.y = finalgdsloca[i].loc.y;
+        temppath[i] = aStarSearch(&map, rob.pos, temppoint);//根据A*算法计算路径长度
+        while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，<----没有
             temppath[i] = temppath[i]->next;
             numofph++;
         }
-        valofudis[i] = goodsmap->data[goodsloca[i].x][goodsloca[i].y] / numofph;
+        valofudis[i] = goodsmap->data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;
         numofph = 0;
     }
-    for (int i=0; i < 3; i++){
+    for (int i=0; i < 3 - 1; i++){
         for (int j=0; j < 3 - 1 - i; j++){
             if (valofudis[j] > valofudis[j + 1]) {
                     tempph = temppath[j];
@@ -145,7 +167,7 @@ LinkList* findPathToGoods(Robot rob){
             }
         }
     }
-    return finalpath = temppath[2];//???2?
+    return finalpath = temppath[2];//???2?  <-------最大下标为2
 }
 //将路径转为direction （int指针 不在main中调用,出错返回-1
 int* pathToDirection(LinkList* path){

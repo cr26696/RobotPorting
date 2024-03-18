@@ -171,3 +171,7 @@ int LinkIsEmpty_Parcel(LinkParcel *L)
 {
     return !L->next;//L->next == NULL亦可
 }
+
+Parcel LinksearchParcelByPos(LinkParcel *L, int pos){
+    /*按照pos返回节点*/
+}
