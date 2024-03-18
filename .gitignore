@@ -2,3 +2,5 @@
 /build/
 /.vscode/
 main.exe
+/replay/
+PreliminaryJudge.exe

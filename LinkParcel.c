@@ -175,3 +175,25 @@ int LinkIsEmpty_Parcel(LinkParcel *L)
 Parcel LinksearchParcelByPos(LinkParcel *L, int pos){
     /*按照pos返回节点*/
 }
+
+Parcel LinksearchParcelByPos(LinkParcel *L, int pos){
+    /*按照pos返回节点*/
+}
+
+Parcel* createParcel(int x,int y, int time, int value){
+  Parcel *obj = (Parcel *)malloc(sizeof(Parcel));
+  obj->loc.x = x;
+  obj->loc.y = y;
+  obj->addedFrame = time;
+  //obj->locked = 0;
+}
+
+void ParcelTimedDelete(LinkParcel *Link,int frame){
+    LinkParcel *r = Link;
+
+    r = r->next;
+    while(r->parcel.addedFrame+1000 <= frame){
+        LinkDeleteByIndex_Parcel(r,1);
+    }
+    Link = r;
+}
