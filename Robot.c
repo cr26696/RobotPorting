@@ -65,7 +65,7 @@ int isGoodsGrid(Point pos){
 //根据计算返回可能是目前去往货物最优的路径
 LinkList* findPathToGoods(Robot rob){
     Point curgrid;
-    Point goodsloca[121] = {0};//11*11
+    Point goodsloca[121] = {0};//11*11???机器人要找的货物列表只存坐标
     int n = 0;//搜索到的货物个数
 
     int disofgds[121];
@@ -79,7 +79,7 @@ LinkList* findPathToGoods(Robot rob){
     int numofph = 0;
     float valofudis[3];
 
-    for(int i = -5; i < 5; i++){
+    for(int i = -5; i < 5; i++){//在机器人附近的格子搜索
         for(int j = -5; j < 5; j++){
             curgrid.x = rob.pos.x + i;
             curgrid.y = rob.pos.y + j;
@@ -91,7 +91,7 @@ LinkList* findPathToGoods(Robot rob){
     if(n < 3){
         while(goodsmap){
         }
-        int exflag = 0;
+        int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
         for(n; n <= 3; ){
             rangds = goodsmap[rand() % numofgds];
@@ -109,10 +109,10 @@ LinkList* findPathToGoods(Robot rob){
             
         }
     }
-    for(int i=0; i < n; i++){
+    for(int i=0; i < n; i++){//算机器人到物品的折线距离
         disofgds[i] = abs(rob.pos.x - goodsloca[i].x) + abs(rob.pos.y - goodsloca[i].y);
     }
-    for (int i=0; i < n; i++){
+    for (int i=0; i < n; i++){//根据估计出来的粗略距离，对货物数进行排序，距离小的排前面
         for (int j=0; j < n - 1 - i; j++){
             if (disofgds[j] > disofgds[j + 1]) {
                     temp = goodsloca[j];
@@ -122,9 +122,9 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     for(int i=0; i < 3; i++){
-        finalgdsloca[i] = goodsloca[i];
-        temppath[i] = aStarSearch(map, rob.pos, finalgdsloca[i]);//获取最新函数定义
-        while(temppath[i]->next != NULL){
+        finalgdsloca[i] = goodsloca[i];//取出三个待选货物
+        temppath[i] = aStarSearch(map, rob.pos, finalgdsloca[i]);//根据A*算法计算路径长度
+        while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，
             temppath[i] = temppath[i]->next;
             numofph++;
         }
@@ -140,7 +140,7 @@ LinkList* findPathToGoods(Robot rob){
             }
         }
     }
-    return finalpath = temppath[2];
+    return finalpath = temppath[2];//???2?
 }
 //将路径转为direction （int指针
 int* pathToDirection(LinkList* path){
@@ -177,10 +177,10 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
     LinkList* finalberth = (LinkList *) malloc(sizeof(LinkList));
 
     for(int i=0; i <10; i++){
-        disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);
+        disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);//计算机器人到泊口的折线距离
     }
-    for (int i=0; i < 3; i++){
-        for (int j=0; j < 3 - 1 - i; j++){
+    for (int i=0; i < 10; i++){//???十个折线距离进行排序？3？
+        for (int j=0; j < 10 - 1 - i; j++){
             if (disofber[j] > disofber[j + 1]) {
                     temp = berths[j];
                     berths[j] = berths[j + 1];
