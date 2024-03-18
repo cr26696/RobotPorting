@@ -10,5 +10,5 @@
 void InitRobot(Boat *boat[],int robot_num);
 void InitBerth(Berth *berth[],int berth_num);
 void InitRoat(Boat *boat[],int boat_num);
-void InitGoods(Map *Good);
+void InitGoods(Map *Parcel);
 
