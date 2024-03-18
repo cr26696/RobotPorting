@@ -1,6 +1,7 @@
 #include "InitAll.h"
 
 #include "astar.h"
+#include "Boat.h"
 
 void Inittotal(Robot robot[],int robot_num,Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_capacity )
 {

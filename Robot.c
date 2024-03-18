@@ -16,12 +16,8 @@ Map *goodsmap;
 */
 //carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
 
-const int num = 10;
-Robot robot[num];
-
-
-extern numofgds;
-extern map;
+extern int numofgds;
+extern Map map;
 extern Berth berth[];
 
 //机器人状态处理函数
@@ -90,7 +86,7 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     if(n < 3){
-        while(goodsmap){
+        while(){
         }
         int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
@@ -124,7 +120,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     for(int i=0; i < 3; i++){
         finalgdsloca[i] = goodsloca[i];//取出三个待选货物
-        temppath[i] = aStarSearch(map, rob.pos, finalgdsloca[i]);//根据A*算法计算路径长度
+        temppath[i] = aStarSearch(&map, rob.pos, finalgdsloca[i]);//根据A*算法计算路径长度
         while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，
             temppath[i] = temppath[i]->next;
             numofph++;
@@ -274,11 +270,11 @@ void robotSendGoodsPrint(Robot *pRob, int id){
     }
 }
 //机器人避让，未完成
-int judgeCoincidentGrids(Robot* rob){
-    for(int i=0; i < 10; i++){
-        if(rob[i].current_status != VOIDING){
+// int judgeCoincidentGrids(Robot* rob){
+//     for(int i=0; i < 10; i++){
+//         if(rob[i].current_status != VOIDING){
 
-        }
+//         }
 
-    }
-}
+//     }
+// }

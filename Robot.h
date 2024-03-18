@@ -8,8 +8,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "list.h"
 #include <math.h>
+
+#include "list.h"
 
 #define PATH_FACTOR     80
 #define LOADING_FACTOR  15
