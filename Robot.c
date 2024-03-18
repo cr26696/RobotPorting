@@ -1,7 +1,7 @@
 #include "Robot.h"
 
-const int num = 10;
-Robot robot[num];
+// #define num 10
+// Robot robot[num];
 Map *goodsmap;
 
 // #define STUCK -1//困住// 已更换为枚举变量在 robot.h中
@@ -86,12 +86,12 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     if(n < 3){
-        while(){
-        }
+        // while(){
+        // }
         int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
         for(n; n <= 3; ){
-            rangds = goodsmap[rand() % numofgds];
+            rangds = goodsmap[rand() % numofgds];//???
             for(int j=0; j < n; j++){
                 if(goodsloca[j].x == rangds.x && goodsloca[j].y == rangds.y)
                     exflag = 1;
@@ -139,7 +139,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     return finalpath = temppath[2];//???2?
 }
-//将路径转为direction （int指针 不在main中调用
+//将路径转为direction （int指针 不在main中调用,出错返回-1
 int* pathToDirection(LinkList* path){
     LinkList* temp;
     int *direction;
@@ -160,7 +160,7 @@ int* pathToDirection(LinkList* path){
             *direction++ = MOVE_LEFT;
         }
     }
-    *direction = NULL;
+    *direction = -1;
     return direction;
 }
 
@@ -186,7 +186,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
         }
     }
     for(int i=0; i < 3; i++){
-        berthph[i] = aStarSearch(map, rob.pos, berths[i].pos);
+        berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
         while(berthph[i]->next != NULL){
             berthph[i] = berthph[i]->next;
             numofph++;
