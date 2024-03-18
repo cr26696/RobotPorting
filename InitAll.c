@@ -2,6 +2,14 @@
 
 #include "astar.h"
 
+void Inittotal(Boat *robot[],int robot_num,Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity )
+{
+    InitRobot(boat,robot_num);
+    InitBerth(berth,berth_num);
+    InitRoat(boat,boat_num);
+    controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
+}
+
 void InitRobot(Robot *robot[],int robot_num)//机器人状态初始化???判断是否受困
 {
     extern Map map;
@@ -42,19 +50,15 @@ void InitRoat(Boat *boat[],int boat_num)//船状态初试化让他从虚拟点�
     boat[i]->goodsnum=0;
  }
 }
-
-void Inittotal(Boat *robot[],int robot_num,Boat *boat[],int boat_num,Berth *berth[],int berth_num,int boat_capacity )
-{
-    InitRobot(boat,robot_num);
-    InitBerth(berth,berth_num);
-    InitRoat(boat,boat_num);
-    controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
-}
-
-void InitGoods(Map *Goods){
+//为货物地图赋值0，为货物计时链表赋值
+void InitParcel(Map *ParcelMap, LinkParcel *linkParcel){
+    //货物分布地图初始化
     for(int i;i<200;i++){
         for(int j;j<200;j++){
-            Goods->data[i][j] = '0';
+            ParcelMap->data[i][j] = '0';
         }
     }
+
+    //货物计时链表初始化(分配内存空间)
+    linkParcel = LinkInit_Parcel(linkParcel);
 }

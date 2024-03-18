@@ -37,7 +37,7 @@ const int N = 200;
 // }boat[boat_num];
 
 Map map;//内有200x200 char数组
-Map Goods;//同上
+Map ParcelMap;//同上
 Robot robot[robot_num];
 Berth berth[berth_num];
 Boat boat[boat_num];
@@ -47,9 +47,7 @@ LinkList paths_robot[robot_num];
 
 int money, boat_capacity, frame;
 // char ch[N][N];//地图 
-int gds[N][N];
-
-void robotStateInit();
+//int gds[N][N];
 
 void Init()
 {
@@ -75,14 +73,14 @@ void Init()
 int Input()
 {
 		scanf("%d%d", &frame, &money);//帧数和当前金额
-		int increase_goods;//新增货物数量
-		scanf("%d", &increase_goods);//???
-		for(int i = 1; i <= increase_goods; i ++)
+		int newParcels;//新增货物数量
+		scanf("%d", &newParcels);//???
+		for(int i = 1; i <= newParcels; i ++)
 		{
 				int x, y, val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				Goods.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
+				ParcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
@@ -126,12 +124,4 @@ int main()
 				fflush(stdout);
 		}
 		return 0;
-}
-
-
-
-void robotStateInit(){//机器人状态
-	for(int i=0;i<robot_num;i++){
-		//aStarSearch(&map,robot[i].)
-	}
 }
