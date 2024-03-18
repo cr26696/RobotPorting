@@ -91,19 +91,10 @@ LinkList* findPathToGoods(Robot rob){
         }
     }
     if(n < 3){
-<<<<<<< HEAD
-        // while(){
-        // }
-        int exflag = 0;//是否和之前的周围货物重复标志
-        Point rangds;
-        for(n; n <= 3; ){
-            rangds = goodsmap[rand() % numofgds];//???
-=======
         int exflag = 0;//是否和之前的周围货物重复标志
         Point rangds;
         for(n; n <= 3; ){
             //rangds.x = goodsmap[rand() % numofgds];
->>>>>>> 9fb895a1d9b4bd996e338601b53b06d6bd75b991
             for(int j=0; j < n; j++){
                 if(goodsloca[j].x == rangds.x && goodsloca[j].y == rangds.y)
                     exflag = 1;
@@ -197,11 +188,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
             }
         }
     }
-<<<<<<< HEAD
-    for(int i=0; i < 3; i++){
-=======
     for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
->>>>>>> 9fb895a1d9b4bd996e338601b53b06d6bd75b991
         berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
         while(berthph[i]->next != NULL){
             berthph[i] = berthph[i]->next;
