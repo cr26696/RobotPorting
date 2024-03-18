@@ -77,7 +77,7 @@ int isGoodsGrid(Point pos){
 //     return 1;
 // }
 
-LinkList* searchGoods(Robot rob){
+LinkList* findPathToGoods(Robot rob){
     Point curgrid;
     Point goodsloca[121] = {0};//11*11
     int n = 0;//搜索到的货物个数
@@ -177,13 +177,13 @@ int* pathToDirection(LinkList* path){
             *direction++ = MOVE_LEFT;
         }
     }
-*direction = NULL;
+    *direction = NULL;
     return direction;
 }
 
 
 
-LinkList* FindPathBerth(Berth *berths,  Robot rob){//返回机器人到泊口的路径
+LinkList* findPathToBerth(Berth *berths,  Robot rob){//返回机器人到泊口的路径
     int disofber[10];
     Berth temp;
     LinkList* berthph[3], *tempber;
@@ -227,7 +227,7 @@ LinkList* FindPathBerth(Berth *berths,  Robot rob){//返回机器人到泊口的
 void robotGetGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
-        path = searchGoods(rob[i]);
+        path = findPathToGoods(rob[i]);
         nextpath = path->next;
 
         if(nextpath->next != NULL && rob[i].current_status == ROBOT_GETTING){
@@ -243,7 +243,7 @@ void robotGetGoodsPrint(Robot rob[], int num){
 void robotSendGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
-        path = FindPathBerth(berth, rob[i]);
+        path = findPathToBerth(berth, rob[i]);
         nextpath = path->next;
 
         if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
@@ -252,6 +252,15 @@ void robotSendGoodsPrint(Robot rob[], int num){
         }
         if(nextpath->next != NULL && rob[i].current_status == ROBOT_SENDING){
             printf("pull %d\n", i);
-        }       
+        }
+    }
+}
+
+int judgeCoincidentGrids(Robot* rob){
+    for(int i=0; i < 10; i++){
+        if(rob[i].current_status != ROBOT_VOIDING){
+
+        }
+
     }
 }

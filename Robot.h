@@ -16,11 +16,11 @@
 #define TRANS_FACTOR    5
 
 int isGoodsGrid(Point pos);
-LinkList* searchGoods(Robot rob);
+LinkList* findPathToGoods(Robot rob);
 int* pathToDirection(LinkList* path);
 int* pathToDirection(LinkList* path);
 void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
-LinkList* FindPathBerth(Berth* berths, Robot rob);
+LinkList* findPathToBerth(Berth* berths, Robot rob);
 void robotGetGoodsPrint(Robot rob[], int num);
 void robotSendGoodsPrint(Robot rob[], int num);
 
