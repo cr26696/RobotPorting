@@ -14,16 +14,17 @@ typedef struct LinkParcel
     struct LinkParcel *next; //下一个链表节点的地址
 } LinkParcel;
 
-LinkParcel *initList(LinkParcel *L);
-LinkParcel *createList(int len);
-void insertLinkListHead(LinkParcel *L, Parcel parcel);
-int insertLinkList(LinkParcel *L, int pos, Parcel parcel);
-int deleteLinkList(LinkParcel *L, int pos);
-int deletLinkListByPoint(LinkParcel *L, Point point);
-int deletLinkListByParcel(LinkParcel *L, Parcel parcel);
-int deleteLinkListSave(LinkParcel *L, int pos, Parcel *parcel);
-void reverseLinkList(LinkParcel *L);
-LinkParcel *searchLinkList(LinkParcel *L, Parcel parcel);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-int getLen(LinkParcel *L);
-int isEmpty(LinkParcel *L);
+LinkParcel *LinkInit_Parcel(LinkParcel *L);
+LinkParcel *LinkCreate_Parcel(int len);
+void LinkInsertHead_Parcel(LinkParcel *L, Parcel parcel);
+int LinkInsertByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel);
+int LinkDeleteByIndex_Parcel(LinkParcel *L, int pos);
+int LinkDeleteByPoint_Parcel(LinkParcel *L, Point point);
+int LinkDeleteByObj_Parcel(LinkParcel *L, Parcel parcel);
+int LinkDeleteSave_Parcel(LinkParcel *L, int pos, Parcel *parcel);
+LinkParcel *LinksearchByObj_Parcel(LinkParcel *L, Parcel parcel);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
+int LinksearchPosByObj_Parcel(LinkParcel *L, Parcel parcel);
+void LinkReverse_Parcel(LinkParcel *L);
+int LinkGetLen_Parcel(LinkParcel *L);
+int LinkIsEmpty_Parcel(LinkParcel *L);
 #endif
