@@ -8,7 +8,7 @@
 #include "geometry.h"
 
 //链表节点，存储类型为Grid
-typedef struct Node
+typedef struct LinkList
 {
     Grid grid; //格子数据类型
     struct LinkList *next; //下一个链表节点的地址
