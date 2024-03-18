@@ -1,9 +1,8 @@
 #include "Robot.h"
 
-const int num = 10;
-Robot robot[num];
+// #define num 10
+// Robot robot[num];
 
-/******************仅定义未写初始化******************/
 Map *goodsmap;
 LinkParcel* aLLParcelList;
 LinkParcel* lockedParcelList;
@@ -148,7 +147,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     return finalpath = temppath[2];//???2?
 }
-//将路径转为direction （int指针 不在main中调用
+//将路径转为direction （int指针 不在main中调用,出错返回-1
 int* pathToDirection(LinkList* path){
     LinkList* temp;
     int *direction;
@@ -169,7 +168,7 @@ int* pathToDirection(LinkList* path){
             *direction++ = MOVE_LEFT;
         }
     }
-    *direction = NULL;
+    *direction = -1;
     return direction;
 }
 

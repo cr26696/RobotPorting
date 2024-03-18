@@ -9,7 +9,7 @@
 
 #include "LinkParcel.h"
 
-void Inittotal(Boat robot[],int robot_num,Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_capacity );
+void Inittotal(Robot robot[],int robot_num,Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_capacity );
 void InitRobot(Robot robot[],int robot_num);
 void InitBerth(Berth berth[],int berth_num);
 void InitRoat(Boat boat[],int boat_num);

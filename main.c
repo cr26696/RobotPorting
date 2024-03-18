@@ -15,11 +15,11 @@
 
 #include "test.h"
 
-const int n = 200;
-const int robot_num = 10;
-const int berth_num = 10;
-const int boat_num = 5;
-const int N = 200;
+#define n 200
+#define robot_num 10
+#define berth_num 10
+#define boat_num 5
+#define N 200
 
 int numofgds = 0;
 

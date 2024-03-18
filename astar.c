@@ -48,7 +48,7 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
       path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
     }else if(getStepDirect(current->loc,Pdest)!=-1){
-      dest.father = &current;//让目标格指向当前格
+      dest.father = current;//让目标格指向当前格
       path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
     }
