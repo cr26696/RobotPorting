@@ -57,34 +57,39 @@ LinkList paths_robot[robot_num];
 
 
 int money, boat_capacity, frame;
-// char ch[N][N];//地图 
+char ch[N][N];//地图 
 //int gds[N][N];
 
 void Init()
 {
-		for(int i = 1; i <= n; i ++)
-				scanf("%s", map.data[i] + 1);
+	char tempC;
+		for(int i = 0; i < n; i ++)
+		{
+			scanf("%s",map.data[i]);
+		}
+		// for(int i = 0; i < n; i ++)
+		// {
+		// 	scanf("%s",ch[i]);
+		// }
 		for(int i = 0; i < berth_num; i ++)
 		{
 				int id;
 				scanf("%d", &id);
-                berth[id].id=id;
+						berth[id].id=id;
 				scanf("%d%d%d%d", &berth[id].pos.x, &berth[id].pos.y, &berth[id].transport_time, &berth[id].loading_speed);
 		}
 		scanf("%d", &boat_capacity);//???
 		char okk[100];
 		scanf("%s", okk);
-        //???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
-		InitRobot(robot,robot_num);
-		InitBerth(berth,berth_num);
-		InitRoat(boat,boat_num);
-		InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
-		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
+				//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
+		// InitRobot(robot,robot_num);
+		// InitBerth(berth,berth_num);
+		// InitRoat(boat,boat_num);
+		// InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
+		// controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
 }
-
-
 
 int Input()
 {
@@ -97,7 +102,7 @@ int Input()
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
 				ParcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
-				LinkInsertByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),*createParcel(x,y,frame,val));\
+				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),*createParcel(x,y,frame,val));\
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{

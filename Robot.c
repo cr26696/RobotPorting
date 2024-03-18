@@ -24,6 +24,7 @@ LinkParcel* lockedParcelList;
 extern int numofgds;
 extern Map map;
 extern Berth berth[];
+extern Map ParcelMap;
 
 //机器人状态处理函数
 void robotstatusupdate(int carry,int stun ,Robot *robot)
@@ -42,10 +43,9 @@ void robotstatusupdate(int carry,int stun ,Robot *robot)
     {robot->current_status=SENDING;}
 }
 //判断某点是否为货物 不在main中调用
-int isParcelsGrid(Parcel pos){
+int isParcelGrid(Parcel pos){
     if(pos.loc.x < 0 || pos.loc.x > 200 || pos.loc.y < 0 || pos.loc.y > 200){
         //界外
-        return 0;
     }
     else{
         if(goodsmap->data[pos.loc.x][pos.loc.y] != '0'){
@@ -53,6 +53,7 @@ int isParcelsGrid(Parcel pos){
             return 1;
         }
     }
+    return 0;
 }
 
 // int isGoodsExists(Point* gdsloc, Point gds){
@@ -65,7 +66,7 @@ int isParcelsGrid(Parcel pos){
 // }
 
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkList* findPathToGoods(Robot rob){
+LinkList* findPathToGoods(Robot rob, Map MapOfParcels){
     Parcel curgrid;
     Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
     int n = 0;//附近货物个数
@@ -89,10 +90,10 @@ LinkList* findPathToGoods(Robot rob){
         for(int j = -5; j < 5; j++){
             curgrid.loc.x = rob.pos.x + i;
             curgrid.loc.y = rob.pos.y + j;
-            if(isGoodsGrid(curgrid)){
+            if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!='0'){
                 tempparcel.loc.x = curgrid.loc.x;
                 tempparcel.loc.y = curgrid.loc.y;
-                LinkInsertByIndex_Parcel(nearParcels, 1, tempparcel);
+                LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
                 //goodsloca[n++] = curgrid;
             }
         }
@@ -102,7 +103,7 @@ LinkList* findPathToGoods(Robot rob){
         int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
         Parcel rangds;
         for(n; n <= 3; ){
-            rangds = LinksearchParcelByPos(aLLParcelList, rand() % LinkGetLen_Parcel(aLLParcelList));
+            rangds = LinksearchObj_ByPos_Parcel(aLLParcelList, rand() % LinkGetLen_Parcel(aLLParcelList));
             //rangds.x = goodsmap[rand() % numofgds];
             templist = nearParcels;
             while(templist->next != NULL){
@@ -116,7 +117,7 @@ LinkList* findPathToGoods(Robot rob){
                 exflag = 0;
             }
             else{
-                LinkInsertByIndex_Parcel(nearParcels, 1, rangds);
+                LinkInsert_ByIndex_Parcel(nearParcels, 1, rangds);
                 n++;
             }
         }
@@ -237,11 +238,11 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
     return  finalberth = berthph[2];
 }
 
-//将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开 num为路径长？调用函数就确定中途不会被打断？
+//将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开
 void robotsGetGoodsPrint(Robot rob[], int num){
     for(int i=0; i < num; i++){
         LinkList* path, *nextpath;
-        path = findPathToGoods(rob[i]);
+        path = findPathToGoods(rob[i], ParcelMap);
         nextpath = path->next;
 
         if(nextpath->next != NULL && rob[i].current_status == GETTING){
@@ -256,7 +257,7 @@ void robotsGetGoodsPrint(Robot rob[], int num){
 //控制单个机器人取货并进行控制台输出
 void robotGetGoodsPrint(Robot *pRob, int id){
     LinkList* path, *nextpath;
-    path = findPathToGoods(*pRob);
+    path = findPathToGoods(*pRob,ParcelMap);
     nextpath = path->next;
 
     if(nextpath->next != NULL && pRob->current_status == GETTING){

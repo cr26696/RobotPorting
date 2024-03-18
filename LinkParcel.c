@@ -192,6 +192,7 @@ Parcel* createParcel(int x,int y, int time, int value){
   obj->loc.y = y;
   obj->addedFrame = time;
   //obj->locked = 0;
+  return obj;
 }
 
 //删除当前帧消失的货物。
@@ -200,7 +201,7 @@ void ParcelTimedDelete(LinkParcel *Link,int frame){
 
     r = r->next;
     while(r->parcel.addedFrame+1000 <= frame){
-        LinkDeleteByIndex_Parcel(r,1);
+        LinkDelete_ByIndex_Parcel(r,1);
     }
     Link = r;
 }
