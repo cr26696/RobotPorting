@@ -81,12 +81,12 @@ void Init()
 		scanf("%d", &boat_capacity);//???
 		char okk[100];
 		scanf("%s", okk);
-				//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
-		// InitRobot(robot,robot_num);
-		// InitBerth(berth,berth_num);
-		// InitRoat(boat,boat_num);
-		// InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
-		// controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
+		//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
+		InitBerth(berth,berth_num);
+		InitBoat(boat,boat_num);
+		InitRobot(map,berth,berth_num,robot,robot_num);
+		InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
+		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
 }
@@ -102,7 +102,7 @@ int Input()
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
 				ParcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
-				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),*createParcel(x,y,frame,val));\
+				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),createParcel(x,y,frame,val));\
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
@@ -124,34 +124,34 @@ int Input()
 
 int main()
 {
-		Init();
-		for(int zhen = 1; zhen <= 15000; zhen ++)
+	Init();
+	for(int zhen = 1; zhen <= 15000; zhen ++)
+	{
+		int frame = Input();//返回当前帧数
+		for(int i = 0; i < robot_num; i ++)//机器人控制
 		{
-				int frame = Input();//返回当前帧数
-				for(int i = 0; i < robot_num; i ++)//机器人控制
-				{
-					switch (robot[i].current_status)
-					{
-					case IDLE:
-						robotGetGoodsPrint(&robot[i],i);
-						robot[i].next_status = GETTING;
-						break;
-					case GETTING:
-						robotGetGoodsPrint(&robot[i],i);
-						break;
-					case SENDING:
-						robotSendGoodsPrint(&robot[i],i);
-						break;
-					default:break;
-					}
-					robot[i].current_status = robot[i].next_status;
-				}
-				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
-				//消失货物列表维护
-				if(frame>1000)ParcelTimedDelete(&LockedParcels,frame);
-				puts("OK");
-				fflush(stdout);
+			switch (robot[i].current_status)
+			{
+			case IDLE:
+				robotGetGoodsPrint(&robot[i],i);
+				robot[i].next_status = GETTING;
+				break;
+			case GETTING:
+				robotGetGoodsPrint(&robot[i],i);
+				break;
+			case SENDING:
+				robotSendGoodsPrint(&robot[i],i);
+				break;
+			default:break;
+			}
+			robot[i].current_status = robot[i].next_status;
 		}
+		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
+		//消失货物列表维护
+		if(frame>1000)ParcelTimedDelete(&LockedParcels,frame);
+		puts("OK");
+		fflush(stdout);
+	}
 
-		return 0;
+	return 0;
 }
