@@ -29,8 +29,9 @@ LinkParcel *LinksearchLink_ByObj_Parcel(LinkParcel *L, Parcel parcel);//查找�
 void LinkReverse_Parcel(LinkParcel *L);
 int LinkGetLen_Parcel(LinkParcel *L);
 int LinkIsEmpty_Parcel(LinkParcel *L);
+Parcel LinksearchParcelByPos(LinkParcel *L, int pos);
 void deleteLink_Parcel(LinkParcel *L);
-
 Parcel createParcel(int x,int y, int time, int value);
 void ParcelTimedDelete(LinkParcel *Link,int frame);
+
 #endif
