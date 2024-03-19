@@ -33,9 +33,9 @@ typedef enum {
 typedef struct Robot
 {
     Point pos;//目前位置
-    robot_state current_status;//当前状态 
+    robot_state current_status;//当前状态
     robot_state next_status;//下一帧状态
-    robot_state tempstatus;//碰撞前的状态暂存 
+    robot_state tempstatus;//碰撞前的状态暂存
     int direct;//下一步方向
 }Robot;
 
