@@ -29,12 +29,15 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
   
   Grid src,dest;//起始、目标格
   Grid *current;//当前格 指针
-  Grid tempGrid;//暂存
-  Grid neighbors[4];//存储当前邻居格
+  LinkList* tempLink;//暂存
+  Grid neighbor;//存储当前邻居格
+  Grid neighborAgain;
+  int neighborIsAgain;//0新 1在open 2在close
 
   //current = src;//初始化current为起点
-  src.loc = Psrc;
   dest.loc = Pdest;
+  src.loc = Psrc;
+  src.father = NULL;
   src.G = 0;
   src.H = getDistance_Manhattan(src.loc,dest.loc);
   src.F = src.G + src.H;
@@ -55,60 +58,68 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
 
     //tempMinCost = *searchMinGrid(openList);
 
-      for(int i;i<4;i++){
+      for(int i=0;i<4;i++){
+        neighbor.loc = current->loc;
         switch (i)
         {
           case NEIGHBOR_LEFT:
-            neighbors[i].loc.y = current->loc.y-1;break;
+            neighbor.loc.y -= 1;break;
           case NEIGHBOR_RIGHT:
-            neighbors[i].loc.y = current->loc.y+1;break;
+            neighbor.loc.y += 1;break;
           case NEIGHBOR_UP:
-            neighbors[i].loc.x = current->loc.x-1;break;
+            neighbor.loc.x -= 1;break;
           case NEIGHBOR_DOWN:
-            neighbors[i].loc.x = current->loc.x+1;break;
+            neighbor.loc.x += 1;break;
           default:break;
         }
-        if(isValidGrid(map, neighbors->loc)){//返回1（可行走格）时
-          neighbors[i].father = current;
-          //neighbors[i].typeOfgrid = 0;
-          neighbors[i].inClose = 0;
-          neighbors[i].inOpen = 0;//完善结构体数据
-          
-          //计算G,便于判断
-          neighbors[i].G = current->G + MOVE_COST;
-
-          if(neighbors[i].inOpen == 1){//if neighbor in OPEN
-            if(neighbors[i].G < searchLinkList(openList,neighbors[i])->grid.G){//and cost less than g(neighbor):
-              // remove neighbor from OPEN, because new path is better
-              neighbors[i].inOpen = 0;
-              neighbors[i].inClose = 1;
-              deletLinkListByGrid(openList,neighbors[i]);
-              insertLinkList(closeList,1,neighbors[i]);
+        if(isValidGrid(map, neighbor.loc)){//返回1（可行走格）时
+          neighborIsAgain = 0;
+          neighbor.father = current;
+          tempLink = searchLinkList(openList,neighbor);
+          if(!(tempLink==NULL)) {//已经在open表
+            neighborIsAgain = 1;
+            neighborAgain = tempLink->grid;
+            neighbor.G = current->G + MOVE_COST;//计算G,便于判断
+          }else{
+            tempLink = searchLinkList(closeList,neighbor);
+            if(!(tempLink==NULL)){//已经在close表
+              neighborIsAgain = 2;
+              neighborAgain =tempLink->grid;
+              neighbor.G = current->G + MOVE_COST;//计算G,便于判断
             }
-          }else if(neighbors[i].inClose == 1){//if neighbor in CLOSED 
-            if(neighbors[i].G < searchLinkList(closeList,neighbors[i])->grid.G){// and cost less than g(neighbor):
-            //remove neighbor from CLOSED
-              neighbors[i].inOpen = 1;
-              neighbors[i].inClose = 0;
-              deletLinkListByGrid(openList,neighbors[i]);
-              insertLinkList(openList,1,neighbors[i]);
+          }
+          switch (neighborIsAgain)
+          {
+          case 0://neighbor 是新格子:
+            neighbor.G = current->G + MOVE_COST;//计算G,便于判断
+            neighbor.H = getDistance_Manhattan(neighbor.loc,dest.loc);
+            neighbor.F = neighbor.G + neighbor.H;
+            insertLinkList(openList,1,neighbor);//加入新邻居到open
+            break;
+          case 1://
+            if(neighbor.G < neighborAgain.G){//新路线比原open表内格点好
+              insertLinkList(closeList,1,neighbor);
+              deletLinkListByGrid(openList,neighborAgain);
             }
-          }else{//neighbor 是新格子:
-            neighbors[i].H = getDistance_Manhattan(neighbors[i].loc,dest.loc);
-            neighbors[i].F = neighbors[i].G + neighbors[i].H;
-            insertLinkList(openList,1,neighbors[i]);    //add neighbor to OPEN
+            break;
+          case 2:
+            if(neighbor.G < neighborAgain.G){// 新路线比原close表内格点好
+              insertLinkList(openList,1,neighbor);
+              deletLinkListByGrid(openList,neighborAgain);
+            } 
+            break;
+          default:
+            break;
           }
         }
         else{
-          //neighbors[i].typeOfgrid = 1;
+          //该邻居不可用
           continue;//对下一个邻居进行判断
         }
       }
       
+      insertLinkList(closeList,1,*current);
       deletLinkListByPoint(openList,current->loc);
-      insertLinkList(closeList,getLen(closeList),*current);
-      current->inClose = 1;
-      current->inOpen = 0;
   };//跳出循环说明已经遍历完open表也到达不了目标点
   // free(openList);
   // free(closeList);释放空表
@@ -119,7 +130,7 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
 
 //返回F最小值链表(最短为1，并且按G排序)
 LinkList* getGrids_minF(LinkList *L){
-    LinkList *r = L, *minnode = NULL;//
+    LinkList *r = L, *minnode = NULL;
     LinkList *path = initList(path);
     int currentminF = L->grid.F;
     int currentminG = L->grid.G;

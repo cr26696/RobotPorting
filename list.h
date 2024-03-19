@@ -16,7 +16,8 @@ typedef struct LinkList
 
 LinkList *initList(LinkList *L);
 LinkList *createList(int len);
-void insertLinkListHead(LinkList *L, Grid grid);
+// void insertLinkListHead(LinkList *L, Grid grid);
+
 int insertLinkList(LinkList *L, int pos, Grid grid);
 int deleteLinkList(LinkList *L, int pos);
 int deletLinkListByPoint(LinkList *L, Point point);

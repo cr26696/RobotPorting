@@ -13,7 +13,7 @@ typedef struct Grid {
     Point loc;
     struct Grid* father;//父格点地址
     int G, F, H;
-    int inOpen,inClose;
+    // int inOpen,inClose;
     // int typeOfgrid;//格子类型？
 }Grid;
 

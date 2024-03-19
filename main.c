@@ -80,6 +80,7 @@ void Init()
 		}
 		scanf("%d", &boat_capacity);//???
 		char okk[100];
+
 		scanf("%s", okk);
 		//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
 		InitBerth(berth,berth_num);
