@@ -27,4 +27,6 @@ int LinksearchPosByObj_Parcel(LinkParcel *L, Parcel parcel);
 void LinkReverse_Parcel(LinkParcel *L);
 int LinkGetLen_Parcel(LinkParcel *L);
 int LinkIsEmpty_Parcel(LinkParcel *L);
+Parcel LinksearchParcelByPos(LinkParcel *L, int pos);
+
 #endif

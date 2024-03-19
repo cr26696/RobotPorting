@@ -155,7 +155,8 @@ LinkList* findPathToGoods(Robot rob){
             temppath[i] = temppath[i]->next;
             numofph++;
         }
-        valofudis[i] = goodsmap->data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;
+        //判断numofph是否为0(是否被困) 为0则valofudis = 0
+        valofudis[i] = numofph==0? 0: goodsmap->data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;
         numofph = 0;
     }
     for (int i=0; i < 3 - 1; i++){
@@ -169,7 +170,7 @@ LinkList* findPathToGoods(Robot rob){
     }
     return finalpath = temppath[2];//???2?  <-------最大下标为2
 }
-//将路径转为direction （int指针 不在main中调用,出错返回-1
+//将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
 int* pathToDirection(LinkList* path){
     LinkList* temp;
     int *direction;
