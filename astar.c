@@ -169,6 +169,6 @@ LinkList* generatePath(Grid temp){//传入current的拷贝
     if(temp.father != NULL)temp = *temp.father;
     else break;
   }while(1);
-  reverseLinkList(path);
+  //reverseLinkList(path);
   return path;//起点到终点的路径，包含起点与终点
 }
