@@ -19,7 +19,7 @@ int isValidGrid(Map *map, Point point){
   if (target=='.' || target=='A'){return 1;}
   else{return 0;}
 }
-//输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL
+//输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL 注意调用后需要清理不用的链表!
 LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
 //int max_nodes = map.length * map[0].length;
 
@@ -110,8 +110,10 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
       current->inClose = 1;
       current->inOpen = 0;
   };//跳出循环说明已经遍历完open表也到达不了目标点
-  free(openList);
-  free(closeList);
+  // free(openList);
+  // free(closeList);释放空表
+  deleteLink_Grid(openList);
+  deleteLink_Grid(closeList);
   return path;
 }
 
@@ -143,6 +145,8 @@ LinkList* getGrids_minF(LinkList *L){
         }
         r = r->next;
     }
+    free(path);
+    deleteLink_Grid(path);
     return minnode;
 }
 //默认current已经是到目标点上了，迭代father,返回一条新的路径，此函数只在astar.c使用

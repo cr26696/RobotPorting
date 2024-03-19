@@ -1,5 +1,6 @@
 #include "LinkParcel.h"
 
+#include <malloc.h>
 //分配内存，链表创建头结点
 LinkParcel *LinkInit_Parcel(LinkParcel *L)
 {
@@ -27,18 +28,6 @@ LinkParcel *LinkCreate_Parcel(int len)
     }
     return L;
 }
-
-// //输入链表头，货物的拷贝，在对应链表头插入货物 暂时不要用
-// void insertLinkListHead(LinkParcel *L, Parcel parcel)
-// {
-//     LinkParcel *N;//新节点 地址指针
-//     N = (LinkParcel *) malloc(sizeof(LinkParcel));//N请求一片空内存区域
-//     N->parcel = parcel;
-//     N->next = L;//新增货物数据存于N，next指向原链表头
-//     L = N;//L存储新的链表头地址
-//     //N T在函数调用结束即被释放。
-//     return;
-// }
 
 //输入表头，位置，货物拷贝，插入位置后并返回1成功 0失败
 int LinkInsert_ByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel)
@@ -183,6 +172,22 @@ int LinkGetLen_Parcel(LinkParcel *L)
 int LinkIsEmpty_Parcel(LinkParcel *L)
 {
     return !L->next;//L->next == NULL亦可
+}
+//清除链表每一个结点（包括头结点）
+void deleteLink_Parcel(LinkParcel *L){
+	LinkParcel* r = L;
+	LinkParcel* t;
+	r = r->next;
+	if(r!=NULL){
+		do
+		{
+			t = r;
+			r = r->next;
+			free(t);
+		} while (r!=NULL);
+	}
+	free(L);
+	return;
 }
 
 //货物对象创建

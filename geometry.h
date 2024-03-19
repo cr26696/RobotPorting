@@ -17,7 +17,7 @@ typedef struct Grid {
     // int typeOfgrid;//格子类型？
 }Grid;
 
-Point *createPoint(int x,int y);
+Point createPoint(int x,int y);
 
 //Grid *createGrid(int x,int y);
 
