@@ -310,12 +310,39 @@ void robotSendGoodsPrint(Robot *pRob, int id){
 	}
 	deleteLink_Grid(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
+
 //机器人避让，未完成
-// int judgeCoincidentGrids(Robot* rob){
-//     for(int i=0; i < 10; i++){
-//         if(rob[i].current_status != VOIDING){
+/*
+int idofrob 机器人编号
+return ：1避让 0不避让
+*/
+int judgeCoincidentGrids(Robot* rob, LinkList pathsofrobot[], int pathnum, int idofrob){//机器人编号请使用0-9
+    static LinkList temprobotpaths[10] = {0};
 
-//         }
+    for(int i=0; i < 10; i++){
+        if(temprobotpaths[0].grid.loc.x != pathsofrobot[0].grid.loc.x){//传入新path时重新赋值
+                temprobotpaths[i] = pathsofrobot[i];
+                temprobotpaths[i] = *temprobotpaths[i].next;
+        }
+    }
 
-//     }
-// }
+    if(rob[idofrob].current_status != VOIDING){
+        for(int i=0; i < 10; i++){
+            if(i != idofrob){
+                if(temprobotpaths[i].next == NULL /*|| rob[i].current_status != */ ){//其他机器人没有下一步了 或<------需要添加其他条件
+                    break;
+                }
+                /*自身下一步与别人下一步是否重合
+                  自身下一步与别人当前是否重合*/ 
+                else if((temprobotpaths[idofrob].next->grid.loc.x == temprobotpaths[i].next->grid.loc.x && temprobotpaths[idofrob].grid.loc.y == temprobotpaths[i].next->grid.loc.y) ||
+                        (temprobotpaths[idofrob].next->grid.loc.x == temprobotpaths[i].grid.loc.x && temprobotpaths[idofrob].next->grid.loc.y == temprobotpaths[i].grid.loc.y)){
+                        rob[idofrob].current_status = VOIDING;
+                        return 1;
+                }
+            }
+        }
+    }
+    else{
+        return 0;
+    }
+}

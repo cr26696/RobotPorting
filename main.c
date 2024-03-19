@@ -46,7 +46,7 @@ int numofgds = 0;
 Map map;//内有200x200 char数组
 Map ParcelMap;//同上
 
-Robot robot[robot_num];
+Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
 Berth berth[berth_num];
 Boat boat[boat_num];
 
