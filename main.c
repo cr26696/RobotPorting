@@ -13,7 +13,8 @@
 #include "Robot.h"
 #include "Boat.h"
 
-#include "test.h"
+#include "InitAll.h"
+
 
 #define n 200
 #define robot_num 10
@@ -44,37 +45,51 @@ int numofgds = 0;
 
 Map map;//内有200x200 char数组
 Map ParcelMap;//同上
+
 Robot robot[robot_num];
 Berth berth[berth_num];
 Boat boat[boat_num];
+
+LinkParcel LinkParcels;
+LinkParcel LockedParcels;
 
 LinkList paths_robot[robot_num];
 
 
 int money, boat_capacity, frame;
-// char ch[N][N];//地图 
+char ch[N][N];//地图 
 //int gds[N][N];
 
 void Init()
 {
-		for(int i = 1; i <= n; i ++)
-				scanf("%s", map.data[i] + 1);
+	char tempC;
+		for(int i = 0; i < n; i ++)
+		{
+			scanf("%s",map.data[i]);
+		}
+		// for(int i = 0; i < n; i ++)
+		// {
+		// 	scanf("%s",ch[i]);
+		// }
 		for(int i = 0; i < berth_num; i ++)
 		{
 				int id;
 				scanf("%d", &id);
-                berth[id].id=id;
+						berth[id].id=id;
 				scanf("%d%d%d%d", &berth[id].pos.x, &berth[id].pos.y, &berth[id].transport_time, &berth[id].loading_speed);
 		}
 		scanf("%d", &boat_capacity);//???
 		char okk[100];
 		scanf("%s", okk);
-        //???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
+				//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
+		// InitRobot(robot,robot_num);
+		// InitBerth(berth,berth_num);
+		// InitRoat(boat,boat_num);
+		// InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
+		// controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
 }
-
-
 
 int Input()
 {
@@ -87,6 +102,7 @@ int Input()
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
 				ParcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
+				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),*createParcel(x,y,frame,val));\
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
@@ -99,7 +115,7 @@ int Input()
 		{
 			int backstatus,aimId;//判决器返回状态,目标泊口
 			scanf("%d%d\n", &backstatus, &aimId);
-			//boatStatusupdate(backstatus,aimId,&boat[i]);//船状态处理函数
+			boatStatusupdate(backstatus,aimId,&boat[i]);//船状态处理函数
 		}
 		char okk[100];
 		scanf("%s", okk);
@@ -109,29 +125,30 @@ int Input()
 int main()
 {
 		Init();
-		testFunction();
 		for(int zhen = 1; zhen <= 15000; zhen ++)
 		{
 				int frame = Input();//返回当前帧数
 				for(int i = 0; i < robot_num; i ++)//机器人控制
 				{
-					// switch (robot[i].current_status)
-					// {
-					// case IDLE:
-					// 	robotGetGoodsPrint(&robot[i],i);
-					// 	robot[i].next_status = GETTING;
-					// 	break;
-					// case GETTING:
-					// 	robotGetGoodsPrint(&robot[i],i);
-					// 	break;
-					// case SENDING:
-					// 	robotSendGoodsPrint(&robot[i],i);
-					// 	break;
-					// default:break;
-					// }
+					switch (robot[i].current_status)
+					{
+					case IDLE:
+						robotGetGoodsPrint(&robot[i],i);
+						robot[i].next_status = GETTING;
+						break;
+					case GETTING:
+						robotGetGoodsPrint(&robot[i],i);
+						break;
+					case SENDING:
+						robotSendGoodsPrint(&robot[i],i);
+						break;
+					default:break;
+					}
 					robot[i].current_status = robot[i].next_status;
 				}
-				//controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
+				controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
+				//消失货物列表维护
+				if(frame>1000)ParcelTimedDelete(&LockedParcels,frame);
 				puts("OK");
 				fflush(stdout);
 		}

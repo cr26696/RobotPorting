@@ -16,17 +16,24 @@ typedef struct LinkParcel
 
 LinkParcel *LinkInit_Parcel(LinkParcel *L);
 LinkParcel *LinkCreate_Parcel(int len);
-void LinkInsertHead_Parcel(LinkParcel *L, Parcel parcel);
-int LinkInsertByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel);
-int LinkDeleteByIndex_Parcel(LinkParcel *L, int pos);
-int LinkDeleteByPoint_Parcel(LinkParcel *L, Point point);
-int LinkDeleteByObj_Parcel(LinkParcel *L, Parcel parcel);
-int LinkDeleteSave_Parcel(LinkParcel *L, int pos, Parcel *parcel);
-LinkParcel *LinksearchByObj_Parcel(LinkParcel *L, Parcel parcel);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-int LinksearchPosByObj_Parcel(LinkParcel *L, Parcel parcel);
+//void LinkInsert_Head_Parcel(LinkParcel *L, Parcel parcel);
+int LinkInsert_ByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel);
+int LinkDelete_ByIndex_Parcel(LinkParcel *L, int pos);
+int LinkDelete_ByPoint_Parcel(LinkParcel *L, Point point);
+int LinkDelete_ByObj_Parcel(LinkParcel *L, Parcel parcel);
+int LinkDelete_Save_Parcel(LinkParcel *L, int pos, Parcel *parcel);
+int LinksearchPos_ByObj_Parcel(LinkParcel *L, Parcel parcel);
+Parcel LinksearchObj_ByPos_Parcel(LinkParcel *L, int pos);
+LinkParcel *LinksearchLink_ByObj_Parcel(LinkParcel *L, Parcel parcel);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
 void LinkReverse_Parcel(LinkParcel *L);
 int LinkGetLen_Parcel(LinkParcel *L);
 int LinkIsEmpty_Parcel(LinkParcel *L);
+<<<<<<< HEAD
 Parcel LinksearchParcelByPos(LinkParcel *L, int pos);
 
+=======
+
+Parcel createParcel(int x,int y, int time, int value);
+void ParcelTimedDelete(LinkParcel *Link,int frame);
+>>>>>>> 755aea08930819d403bd766d1cc2ca0a4fbeb8a2
 #endif
