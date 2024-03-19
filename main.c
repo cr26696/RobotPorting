@@ -24,7 +24,6 @@
 
 int numofgds = 0;
 
-
 // struct Robot
 // {
 //     int x, y, goods;
