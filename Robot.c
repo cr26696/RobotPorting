@@ -345,4 +345,5 @@ int judgeCoincidentGrids(Robot* rob, LinkList pathsofrobot[], int pathnum, int i
     else{
         return 0;
     }
+		return 0;
 }
