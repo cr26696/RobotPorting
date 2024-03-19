@@ -7,11 +7,11 @@
 #define MOVE_UP 3
 #define MOVE_DOWN 4
 
-//分配内存，输入x,y 返回一个Point类型指针
+//返回一个Point类型引用
 Point createPoint(int x,int y){
   Point ptr;
   ptr.x = x;
-  ptr.x = y;
+  ptr.y = y;
   return ptr;
 }
 //分配内存，输入相关参数，返回一个Grid类型指针

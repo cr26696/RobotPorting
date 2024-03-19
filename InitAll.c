@@ -12,7 +12,17 @@ void Inittotal(Map map,Robot robots[],int robotCount,Boat boats[],int boatCount,
 }
 
 void InitRobot(Map map,Berth berths[],int berthCount,Robot robots[],int robotCount)//机器人状态初始化???判断是否受困
-{
+{//默认地图大小200;
+	int tRobotID=0;//读地图机器人序号
+	for(int mx=0;mx<200 && tRobotID<10;mx++){
+		for(int my=0;my<200 && tRobotID<10;my++){
+			if(map.data[mx][my] =='A'){
+				robots[tRobotID].pos = createPoint(mx,my);
+				tRobotID++;
+			}
+		}
+		if(tRobotID>=10) break;
+	}
 	LinkList *hasPath;
 	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
 		for(int berthId;berthId<berthCount;berthId++){//遍历泊口看能不能到
