@@ -186,11 +186,11 @@ int LinkIsEmpty_Parcel(LinkParcel *L)
 }
 
 //货物对象创建
-Parcel* createParcel(int x,int y, int time, int value){
-  Parcel *obj = (Parcel *)malloc(sizeof(Parcel));
-  obj->loc.x = x;
-  obj->loc.y = y;
-  obj->addedFrame = time;
+Parcel createParcel(int x,int y, int time, int value){
+  Parcel obj;
+  obj.loc.x = x;
+  obj.loc.y = y;
+  obj.addedFrame = time;
   //obj->locked = 0;
   return obj;
 }

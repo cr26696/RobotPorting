@@ -1,6 +1,6 @@
 #include "list.h"
 
-//分配内存，链表创建头结点
+//分配内存，创建链表头结点,下一节点为NULL
 LinkList *initList(LinkList *L)
 {
     L = (LinkList *) malloc(sizeof(LinkList));//为头结点分配空间

@@ -29,6 +29,6 @@ void LinkReverse_Parcel(LinkParcel *L);
 int LinkGetLen_Parcel(LinkParcel *L);
 int LinkIsEmpty_Parcel(LinkParcel *L);
 
-Parcel* createParcel(int x,int y, int time, int value);
+Parcel createParcel(int x,int y, int time, int value);
 void ParcelTimedDelete(LinkParcel *Link,int frame);
 #endif
