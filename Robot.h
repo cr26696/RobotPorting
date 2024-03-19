@@ -22,12 +22,7 @@ void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理
 LinkList* findPathToGoods(Robot rob, Map MapOfParcels);
 LinkList* findPathToBerth(Berth* berths, Robot rob);
 int* pathToDirection(LinkList* path);
-<<<<<<< HEAD
-int isParcelsGrid(Parcel pos);
-=======
 int isParcelGrid(Parcel pos);
->>>>>>> 755aea08930819d403bd766d1cc2ca0a4fbeb8a2
-
 //下方为实际机器人进行动作的函数
 
 void robotsGetGoodsPrint(Robot rob[], int num);
