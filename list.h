@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <malloc.h>
+
 
 #include "geometry.h"
 
@@ -26,6 +26,7 @@ void reverseLinkList(LinkList *L);
 LinkList *searchLinkList(LinkList *L, Grid grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
 int getLen(LinkList *L);
 int isEmpty(LinkList *L);
+void deleteLink_Grid(LinkList *L);
 void printLinkList(LinkList *L);
 LinkList* searchMinList(LinkList *L);//返回F最小(相同时G最小)的节点 返回链表
 Grid* getMinCostGrid(LinkList *L);

@@ -1,5 +1,7 @@
 #include "geometry.h"
 
+#include<math.h>
+
 #define MOVE_LEFT 1
 #define MOVE_RIGHT 2
 #define MOVE_UP 3
