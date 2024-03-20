@@ -17,6 +17,7 @@ typedef struct LinkGrid
 
 LinkGrid *LinkInit_Grid(LinkGrid *L);
 LinkGrid *LinkCreate_Grid(int len);
+void LinkDelete_Grid(LinkGrid *L);
 //void LinkInsert_Head_Grid(LinkGrid *L, Parcel parcel);
 int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid);
 int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
@@ -29,6 +30,6 @@ LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* grid);//查找其实是�
 void LinkReverse_Grid(LinkGrid *L);
 int LinkGetLen_Grid(LinkGrid *L);
 int LinkIsEmpty_Grid(LinkGrid *L);
-void deleteLink_Grid(LinkGrid *L);
 
+Grid* getMinCostGrid(LinkGrid *L);
 #endif
