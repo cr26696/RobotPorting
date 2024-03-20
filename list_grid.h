@@ -17,6 +17,7 @@ typedef struct LinkGrid
 
 LinkGrid *LinkInit_Grid(LinkGrid *L);
 LinkGrid *LinkCreate_Grid(int len);
+void LinkDelete_Grid(LinkGrid *L);
 //void LinkInsert_Head_Grid(LinkGrid *L, Parcel parcel);
 int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid);
 int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
