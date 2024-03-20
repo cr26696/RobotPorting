@@ -53,7 +53,7 @@ Boat boat[boat_num];
 LinkParcel LinkParcels;
 LinkParcel LockedParcels;
 
-LinkList paths_robot[robot_num];
+LinkPath paths_robot[robot_num];
 
 int money, boat_capacity, frame;
 char ch[N][N];//地图 

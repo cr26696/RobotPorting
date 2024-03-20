@@ -1,3 +1,6 @@
+#ifndef INITALL_H//预定义避免重复引入
+#define INITALL_H
+
 #include <stdio.h>
 #include <stdlib.h>
 

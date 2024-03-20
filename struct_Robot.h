@@ -15,8 +15,6 @@
 #define MOVE_DOWN 3
 #define ROBOT_WAITING 4
 
-
-#include "list.h"
 #include "geometry.h"
 
 typedef enum {

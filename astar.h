@@ -5,13 +5,14 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "list_grid.h" 
 #include "geometry.h" 
 #include "struct_Map.h"
+#include "LinkGrid.h" 
+#include "LinkPath.h"
 
 int isValidGrid(Map *map, Point point);//返回1表示空地
-Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest);//返回一个path
+LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest);//返回一个path
 
-Path* generatePath(Grid *temp);//传入current的拷贝
+LinkPath* generatePath(Grid *temp);//传入current的拷贝
 
 #endif

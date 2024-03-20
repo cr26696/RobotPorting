@@ -1,11 +1,5 @@
 #include "astar.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-
-#include "list_grid.h"
-
 #define VALUE_INF 65535
 #define NEIGHBOR_LEFT 0
 #define NEIGHBOR_RIGHT 1
@@ -20,12 +14,12 @@ int isValidGrid(Map *map, Point point){
   else{return 0;}
 }
 //输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL 注意调用后需要清理不用的链表!
-Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
+LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
 //int max_nodes = map.length * map[0].length;
 
   LinkGrid *openList = LinkInit_Grid(openList);
   LinkGrid *closeList = LinkInit_Grid(closeList);
-  path = NULL;//指针，对应的内存空间在generatePath中生成
+  LinkPath* path= initList_Path_Path(path);//指针，对应的内存空间在generatePath中生成
   
   Grid *src=&gridMap[Psrc.x][Psrc.y],*dest=&gridMap[Pdest.x][Pdest.y];//起始、目标格
   Grid *current;//当前格
@@ -42,17 +36,17 @@ Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
   src->H = getDistance_Manhattan(src->loc,dest->loc);
   src->F = src->G + src->H;
 
-  LinkInsert_ByIndex_Grid(openList,1,&src);//open链表放入起始点
+  LinkInsert_ByIndex_Grid(openList,1,src);//open链表放入起始点
   //此时open应当不空
   while (!LinkIsEmpty_Grid(openList)){
-    current = getMinCostGrid(openList);//取当前openlist中代价最小格
+    current = ListgetMinCostGrid_Grid(openList);//取当前openlist中代价最小格
     if(isSamePosition(current->loc,dest->loc))//当前格就是目标格，返回目标格链表
     {
-      path = generatePath(&dest);//生成路径并将地址传给path
+      path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
     }else if(getStepDirect(current->loc,Pdest)!=-1){
       dest->father = current->loc;//让目标格指向当前格
-      path = generatePath(&dest);//生成路径并将地址传给path
+      path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
     }
 
@@ -104,7 +98,7 @@ Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
               pTempGrid->G = tempGrid.G;
               pTempGrid->G = pTempGrid->G + pTempGrid->H;
               // LinkInsert_ByIndex_Grid(closeList,1,neighbor);
-              // deletLinkListByGrid(openList,pAgainGrid);
+              // deletLinkPathByGrid(openList,pAgainGrid);
             }
             break;
           case 2:
@@ -113,7 +107,7 @@ Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
               pTempGrid->G = tempGrid.G;
               pTempGrid->G = pTempGrid->G + pTempGrid->H;
               LinkInsert_ByIndex_Grid(openList,1,pTempGrid);
-              deletLinkListByGrid(openList,pTempGrid);
+              LinkDelete_ByObj_Grid(openList,pTempGrid);
             } 
             break;
           default:
@@ -136,48 +130,48 @@ Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
   return path;
 }
 
-// //返回F最小值链表(最短为1，并且按G排序)
-// LinkList* getGrids_minF(LinkList *L){
-//     LinkList *r = L, *minnode = NULL;
-//     LinkList *path = initList(path);
-//     int currentminF = L->grid.F;
-//     int currentminG = L->grid.G;
-//     while(r->next != NULL){
-//         if((r->grid.F < currentminF) || (r->grid.F == currentminF && r->grid.G < currentminG)){
-//             currentminF = r->grid.F;
-//             currentminG = r->grid.G;
-//             minnode = r;
-//         }
-//         else if(r->grid.F == currentminF && r->grid.G == currentminG){
-//             LinkList *newnode = (LinkList *)malloc(sizeof(LinkList));
-//             newnode->grid = r->grid;
-//             if(minnode == NULL){
-//                 minnode = newnode;
-//             }
-//             else{
-//                 LinkList *temp = minnode;
-//                 while(temp->next != NULL){
-//                     temp = temp->next;
-//                 }
-//                 temp->next = newnode;
-//             }
-//         }
-//         r = r->next;
-//     }
-//     free(path);
-//     deleteLink_Grid(path);
-//     return minnode;
-// }
+//返回F最小值链表(最短为1，并且按G排序)
+LinkPath* getGrids_minF(LinkPath *L){
+    LinkPath *r = L, *minnode = NULL;
+    LinkPath *path = initList_Path(path);
+    int currentminF = L->grid.F;
+    int currentminG = L->grid.G;
+    while(r->next != NULL){
+        if((r->grid.F < currentminF) || (r->grid.F == currentminF && r->grid.G < currentminG)){
+            currentminF = r->grid.F;
+            currentminG = r->grid.G;
+            minnode = r;
+        }
+        else if(r->grid.F == currentminF && r->grid.G == currentminG){
+            LinkPath *newnode = (LinkPath *)malloc(sizeof(LinkPath));
+            newnode->grid = r->grid;
+            if(minnode == NULL){
+                minnode = newnode;
+            }
+            else{
+                LinkPath *temp = minnode;
+                while(temp->next != NULL){
+                    temp = temp->next;
+                }
+                temp->next = newnode;
+            }
+        }
+        r = r->next;
+    }
+    free(path);
+    deleteLink_Grid(path);
+    return minnode;
+}
 
 //默认current已经是到目标点上了，迭代father,返回一条新的路径
-// LinkGrid* generatePath(Grid *aim){
-//   LinkGrid *path = initList(path);
-//   do
-//   {
-//     LinkInsert_ByIndex_Grid(path,1,*aim);
-//     if(aim->father)aim = aim->father;
-//     else break;
-//   }while(1);
-//   //reverseLinkList(path);
-//   return path;//起点到终点的路径，包含起点与终点
-// }
+LinkPath* generatePath(Grid *aim){
+  LinkGrid *path = initList_Path(path);
+  do
+  {
+    LinkInsert_ByIndex_Grid(path,1,*aim);
+    if(aim->father)aim = aim->father;
+    else break;
+  }while(1);
+  //reverseLinkPath(path);
+  return path;//起点到终点的路径，包含起点与终点
+}

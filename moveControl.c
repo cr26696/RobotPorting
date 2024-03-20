@@ -1,6 +1,6 @@
 #include "moveControl.h"
 //输入机器人结构体指针，路径链表指针，更新机器人下一步运动方向,并将链表向后移动
-void updateRobotDirect(Robot *robot, LinkList *path)
+void updateRobotDirect(Robot *robot, LinkPath *path)
 {
   //当前点，下一步点
   Point Pstart = path->grid.loc;
@@ -10,7 +10,7 @@ void updateRobotDirect(Robot *robot, LinkList *path)
   robot->direct = getStepDirect(Pstart,Pnext);
 }
 
-// Point getRobotNextPathPoint(Robot *rob, LinkList *path){
-//   LinkList *temppath = path;
+// Point getRobotNextPathPoint(Robot *rob, LinkPath *path){
+//   LinkPath *temppath = path;
 //   temppath->next->grid.loc;
 // }

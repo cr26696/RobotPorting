@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "list.h"
+#include "LinkPath.h"
 
 #define PATH_FACTOR     80
 #define LOADING_FACTOR  15
@@ -19,7 +19,7 @@
 
 void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
 
-LinkList* findPathToGoods(Robot rob, Map MapOfParcels);
+LinkPath* findPathToGoods(Robot rob, Map MapOfParcels);
 LinkList* findPathToBerth(Berth* berths, Robot rob);
 int* pathToDirection(LinkList* path);
 int isParcelGrid(Parcel pos);

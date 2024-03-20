@@ -8,7 +8,6 @@
 
 #include "struct_Boat.h"
 #include "struct_Berth.h"
-#include "list.h"
 
 void boatStatusupdate(int backstatu,int aimId,Boat *boat);//更新船的状态
 void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_capacity);

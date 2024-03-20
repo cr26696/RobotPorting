@@ -1,15 +1,15 @@
-#include "ListPath.h"
+#include "LinkPath.h"
 
-ListPath *initList(ListPath *L){
-	L = (ListPath *) malloc(sizeof(ListPath));//为头结点分配空间
+LinkPath *initList_Path(LinkPath *L){
+	L = (LinkPath *) malloc(sizeof(LinkPath));//为头结点分配空间
 	L->next = NULL;//头结点指针域置空
 	return L;
 }
 
-int insertListPath(ListPath *L, int pos, Point point){
+int insertListPath(LinkPath *L, int pos, Point point){
 	if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
-	ListPath *r = L, *n;
-	n = (ListPath *) malloc(sizeof(ListPath));
+	LinkPath *r = L, *n;
+	n = (LinkPath *) malloc(sizeof(LinkPath));
 	n->pos = point;
 	n->next = NULL;
 	while(--pos > 0)
@@ -21,9 +21,9 @@ int insertListPath(ListPath *L, int pos, Point point){
 	return 1;
 }
 
-int deleteListPath(ListPath *L, int pos){
+int deleteListPath(LinkPath *L, int pos){
 	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
-	ListPath *r = L, *d;
+	LinkPath *r = L, *d;
 	while(--pos > 0)
 	{
 		r = r->next;//将尾指针移动到删除位置
@@ -34,8 +34,8 @@ int deleteListPath(ListPath *L, int pos){
 	return 1;
 }
 
-int deletListPathByPoint(ListPath *L, Point point){
-	ListPath *r = L, *d;
+int deletListPathByPoint(LinkPath *L, Point point){
+	LinkPath *r = L, *d;
 	while(r->next)//r != NULL 
 		if(isSamePosition(r->pos, point)){
 			d = r->next;
@@ -48,8 +48,8 @@ int deletListPathByPoint(ListPath *L, Point point){
 	return 0;
 }
 
-void reverseListPath(ListPath *L){
-	ListPath *r, *p, *q;//定义尾指针（紧贴头指针）、欲插入指针、遍历指针
+void reverseListPath(LinkPath *L){
+	LinkPath *r, *p, *q;//定义尾指针（紧贴头指针）、欲插入指针、遍历指针
 	r = L->next;//尾指针紧贴头指针
 	p = q = r->next;//从第二个元素开始
 	r->next = NULL;//尾指针置空
@@ -63,10 +63,10 @@ void reverseListPath(ListPath *L){
 	}
 }
 
-ListPath *searchListPath(ListPath *L, Point point){//返回无头节点的链表
+LinkPath *searchListPath(LinkPath *L, Point point){//返回无头节点的链表
 	if(isEmpty(L)) return NULL;
 	int pos = 1;//位序从1开始、下标从零开始
-	ListPath *r = L->next;
+	LinkPath *r = L->next;
 	while(r)
 	{
 		if(r->pos.x == point.x && r->pos.y == point.y) return r;//找到指定元素，返回位序
@@ -76,10 +76,10 @@ ListPath *searchListPath(ListPath *L, Point point){//返回无头节点的链表
 	return NULL;    
 }
 
-int getLen(ListPath *L){
+int LinkGetLen_Grid(LinkPath *L){
 	if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
 	int len = 0;
-	ListPath *r = L->next;
+	LinkPath *r = L->next;
 	while(r)
 	{
 		r = r->next;//尾指针后移
@@ -88,13 +88,13 @@ int getLen(ListPath *L){
 	return len;
 }
 
-int isEmpty(ListPath *L){
+int isEmpty(LinkPath *L){
     return !L->next;
 }
 
-void freeWholeListPath(ListPath *L){
-	ListPath* r = L;
-	ListPath* t;
+void freeWholeListPath(LinkPath *L){
+	LinkPath* r = L;
+	LinkPath* t;
 	r = r->next;
 	if(r!=NULL){
 		do
@@ -108,8 +108,8 @@ void freeWholeListPath(ListPath *L){
 	return;
 }
 
-void printLinkList(ListPath *L){
-	ListPath *p;
+void printLinkList(LinkPath *L){
+	LinkPath *p;
 	p = L->next;
 	while(p){
 		printf("[%d %d]\n\r",p->pos.x, p->pos.y);

@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
-#include "list.h"
+#include "LinkPath.h"
 #include "struct_Robot.h"
 
-void updateRobotDirect(Robot *robot, LinkList *path);
+void updateRobotDirect(Robot *robot, LinkPath *path);
 
 #endif

@@ -1,5 +1,5 @@
-#ifndef LIST_GRID_H//预定义避免重复引入
-#define LIST_GRID_H
+#ifndef LINKGRID_H//预定义避免重复引入
+#define LINKGRID_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,6 +32,8 @@ void LinkReverse_Grid(LinkGrid *L);//444
 int LinkGetLen_Grid(LinkGrid *L);//111
 int LinkIsEmpty_Grid(LinkGrid *L);//222
 void deleteLink_Grid(LinkGrid *L);//333
+
+int LinkGetLen_Grid(LinkGrid* L);
 LinkGrid* ListsearchMin_Grid(LinkGrid *L);
 Grid* ListgetMinCostGrid_Grid(LinkGrid *L);
 

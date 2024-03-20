@@ -66,7 +66,7 @@ int isParcelGrid(Parcel pos){
 // }
 
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkList* findPathToGoods(Robot rob, Map MapOfParcels){
+LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 	Parcel curgrid;
 	Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
 	int n = 0;//附近货物个数
@@ -78,9 +78,9 @@ LinkList* findPathToGoods(Robot rob, Map MapOfParcels){
 	Parcel tempparcel;
 	LinkParcel* templist;
 
-	LinkList* temppath[3];
-	LinkList* tempph;
-	LinkList* finalpath;
+	LinkPath* temppath[3];
+	LinkPath* tempph;
+	LinkPath* finalpath;
 	LinkParcel* nearParcels;
 
 	int numofph = 0;
@@ -174,8 +174,8 @@ LinkList* findPathToGoods(Robot rob, Map MapOfParcels){
 	return finalpath;
 }
 //将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
-int* pathToDirection(LinkList* path){
-	LinkList* temp;
+int* pathToDirection(LinkPath* path){
+	LinkPath* temp;
 	int *direction;
 	temp = path->next;
 	while(temp->next != NULL){
@@ -199,13 +199,13 @@ int* pathToDirection(LinkList* path){
 }
 
 //返回机器人到泊口的路径 不在main中调用
-LinkList* findPathToBerth(Berth *berths,  Robot rob){
+LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 	int disofber[10];
 	Berth temp;
-	LinkList* berthph[3], *tempber;
+	LinkPath* berthph[3], *tempber;
 	int numofph = 0;
 	int valperdisofberth[3];
-	LinkList* finalberth;
+	LinkPath* finalberth;
 
 	for(int i=0; i <10; i++){
 		disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);//计算机器人到泊口的折线距离
@@ -226,8 +226,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
 			numofph++;
 		}
 		/*计算泊口价值 */
-		// valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
-		valperdisofberth[i] = evaluateBerth(berths[i].loading_speed,0.1,berths[i].transport_time,1,numofph ,0.2);
+		valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
 		numofph = 0;
 	}
 	for (int i=0; i < 3; i++){//三选一最近泊口路径 存于berthph[2]
@@ -248,7 +247,7 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
 //将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开
 void robotsGetGoodsPrint(Robot rob[], int num){
 	for(int i=0; i < num; i++){
-		LinkList* path, *nextpath;
+		LinkPath* path, *nextpath;
 		path = findPathToGoods(rob[i], ParcelMap);
 		nextpath = path->next;
 
@@ -264,7 +263,7 @@ void robotsGetGoodsPrint(Robot rob[], int num){
 }
 //控制单个机器人取货并进行控制台输出
 void robotGetGoodsPrint(Robot *pRob, int id){
-	LinkList* path, *nextpath;
+	LinkPath* path, *nextpath;
 	path = findPathToGoods(*pRob,ParcelMap);
 	nextpath = path->next;
 
@@ -281,7 +280,7 @@ void robotGetGoodsPrint(Robot *pRob, int id){
 //将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
 void robotsSendGoodsPrint(Robot rob[], int num){
 	for(int i=0; i < num; i++){
-		LinkList* path, *nextpath;
+		LinkPath* path, *nextpath;
 		path = findPathToBerth(berth, rob[i]);
 		nextpath = path->next;
 
@@ -297,7 +296,7 @@ void robotsSendGoodsPrint(Robot rob[], int num){
 }
 //控制单个机器人送货并进行控制台输出
 void robotSendGoodsPrint(Robot *pRob, int id){
-	LinkList* path, *nextpath;
+	LinkPath* path, *nextpath;
 	path = findPathToBerth(berth, *pRob);
 	nextpath = path->next;
 
@@ -317,7 +316,7 @@ void robotSendGoodsPrint(Robot *pRob, int id){
 int idofrob 机器人编号
 return ：1避让 0不避让
 */
-void judgeCoincidentGrids(Robot* rob, LinkList *robotpaths){//机器人编号请使用0-9
+void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请使用0-9
 	Point robpos[20] = {0};
 	int index = 0;//robpos[]中元素个数
 	Point temppos;
@@ -337,8 +336,8 @@ void judgeCoincidentGrids(Robot* rob, LinkList *robotpaths){//机器人编号请
 		}
 	}
 }
-//void judgeCoincidentGrids(Robot* rob, LinkList *robotpaths){//机器人编号请使用0-9
-    // static LinkList temprobotpaths[10] = {0};
+//void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请使用0-9
+    // static LinkPath temprobotpaths[10] = {0};
 
     // // for(int i=0; i < 10; i++){
     // //     if(temprobotpaths[0].grid.loc.x != pathsofrobot[0].grid.loc.x){//传入新path时重新赋值
