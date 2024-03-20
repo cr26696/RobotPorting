@@ -76,7 +76,7 @@ int deleteLinkList(LinkGrid *L, int pos)
 int deletLinkListByPoint(LinkGrid *L, Point point){
 	LinkGrid *r = L, *d;
 	while(r->next)//r != NULL 
-		if(isSamePosition(r->next->grid.loc,point)){
+		if(isSamePosition(r->next->grid->loc,point)){
 			d = r->next;
 			r->next = d->next;
 			free(d);//释放链表节点和对应的Grid
@@ -86,10 +86,10 @@ int deletLinkListByPoint(LinkGrid *L, Point point){
 		}
 	return 0;
 }
-int deletLinkListByGrid(LinkGrid *L, Grid grid){
+int deletLinkListByGrid(LinkGrid *L, Grid *grid){
 	LinkGrid *r = L, *d;
 	do{
-		if(r->grid.loc.x == grid.loc.x && r->grid.loc.y == grid.loc.y){
+		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y){
 			d = r;//r坐标位置完全对应
 			r->next = d->next;
 			free(d);
@@ -107,7 +107,7 @@ int deleteLinkListSave(LinkGrid *L, int pos, Grid *grid)
 		r = r->next;//将尾指针移动到删除位置
 	}
 	d = r->next;//删除元素节点
-	*grid = d->grid;//保存删除元素值
+	grid = d->grid;//保存删除元素值
 	r->next = d->next;//将尾指针跳过删除节点链入下一个节点
 	free(d);//释放删除节点
 	return 1;
@@ -129,20 +129,20 @@ void reverseLinkList(LinkGrid *L)
 	}
 }
 //查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-LinkGrid *searchLinkList(LinkGrid *L, Grid grid)
+LinkGrid *searchLinkList(LinkGrid *L, Grid *grid)
 {
 	if(isEmpty(L)) return NULL;
 	int pos = 1;//位序从1开始、下标从零开始
 	LinkGrid *r = L->next;
 	while(r)
 	{
-		if(r->grid.loc.x == grid.loc.x && r->grid.loc.y == grid.loc.y) return r;//找到指定元素，返回位序
+		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y) return r;//找到指定元素，返回位序
 		r = r->next;//尾指针后移
 		pos ++;
 	}
 	return NULL;
 }
-int searchLinkListPos(LinkGrid *L, Grid grid)
+int searchLinkListPos(LinkGrid *L, Grid *grid)
 {
 	if(isEmpty(L)) return -1;
 	int pos = 1;//位序从1开始、下标从零开始
@@ -236,21 +236,21 @@ Grid* getMinCostGrid(LinkGrid *L){
 	int minF,minG;
 	if(r->next){//链表至少有一个格点
 		r = r->next;
-		grid = &r->grid;
+		grid = r->grid;
 		minF = grid->F;
 		minG = grid->G;
 	}
 	else return NULL;//链表为空，返回NULL
 	while(r->next){
 		r = r->next;
-		if(r->grid.F < minF){
-			grid = &r->grid;
+		if(r->grid->F < minF){
+			grid = r->grid;
 			minF = grid->F;
 			minG = grid->G;
 			continue;
-		}else if(r->grid.F == minF){
-			if(r->grid.G < minG){
-				grid = &r->grid;
+		}else if(r->grid->F == minF){
+			if(r->grid->G < minG){
+				grid = r->grid;
 				minG = grid->G;
 				continue;
 			}
