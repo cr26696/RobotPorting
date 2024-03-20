@@ -25,5 +25,7 @@ int isEmpty(ListPath *L);
 void freeWholeListPath(ListPath *L);
 void printLinkList(ListPath *L);
 
+int LinkInsertEnd_Path(ListPath *endNode, Point point);//输入尾链表，在其后新建并插入点 返回值1成功0失败
+
 #endif
 
