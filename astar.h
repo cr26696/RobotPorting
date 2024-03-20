@@ -11,7 +11,8 @@
 #include "LinkPath.h"
 
 int isValidGrid(Map *map, Point point);//返回1表示空地
-LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest);//返回一个path
+//LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest);//返回一个path
+LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest);
 
 LinkPath* generatePath(Grid *temp);//传入current的拷贝
 

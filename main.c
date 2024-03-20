@@ -44,7 +44,7 @@ int numofgds = 0;
 
 Map map;//内有200x200 char数组
 Map parcelMap;//同上
-Grid gridMap[MAPSIZE][MAPSIZE];
+Grid gridMap[200][200];
 
 Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
 Berth berth[berth_num];

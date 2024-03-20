@@ -104,14 +104,15 @@ int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point){
 }
 int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid){
 	LinkGrid *r = L, *d;
-	do{
-		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y){
-			d = r;//r坐标位置完全对应
+	while(r->next)//r != NULL 
+		if(isSamePosition(r->next->grid->loc,grid->loc)){
+			d = r->next;
 			r->next = d->next;
-			free(d);
+			free(d);//释放链表节点和对应的Grid
 			return 1;//找到，跳出循环
+		}else{
+			r = r->next;
 		}
-	}while(r->next);
 	return 0;
 }
 

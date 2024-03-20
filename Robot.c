@@ -150,7 +150,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 		Point temppoint;
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
 		temppoint = finalgdsloca[i].loc;//aStarSearch()中要传入Point类型 需要temppoint保存 或请修改aStarSearch()形参
-		temppath[i] = aStarSearch(&map, gridmap, rob.pos, temppoint);//根据A*算法计算路径长度
+		temppath[i] = aStarSearch(&map, rob.pos, temppoint);//根据A*算法计算路径长度
 		while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，<----没有
 			temppath[i] = temppath[i]->next;
 			numofph++;
@@ -220,7 +220,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
 		}
 	}
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
-		berthph[i] = aStarSearch(&map, girdmap, rob.pos, berths[i].pos);
+		berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
 		while(berthph[i]->next != NULL){
 			berthph[i] = berthph[i]->next;
 			numofph++;

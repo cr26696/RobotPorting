@@ -6,6 +6,8 @@
 #define NEIGHBOR_UP 2
 #define NEIGHBOR_DOWN 3
 
+extern Grid gridMap[200][200];
+
 #define MOVE_COST 10
 //传入地图，目标点，返回1可走 0不可走
 int isValidGrid(Map *map, Point point){
@@ -14,7 +16,7 @@ int isValidGrid(Map *map, Point point){
   else{return 0;}
 }
 //输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL 注意调用后需要清理不用的链表!
-LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
+LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
 //int max_nodes = map.length * map[0].length;
 
   LinkGrid *openList = LinkInit_Grid(openList);
@@ -30,8 +32,11 @@ LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
 
   //current = src;//初始化current为起点
   src->loc = Psrc;
+
   dest->loc = Pdest;
+//  dest->loc.y = Pdest.y;
   src->father = src->loc;
+//  src->father.y = src->loc.y;
   src->G = 0;
   src->H = getDistance_Manhattan(src->loc,dest->loc);
   src->F = src->G + src->H;
@@ -86,6 +91,7 @@ LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
           case 0://neighbor 是新格子:
             //不在open close表，从总表查出
             pTempGrid = &gridMap[tempGrid.loc.x][tempGrid.loc.y];
+            pTempGrid->loc = tempGrid.loc;
             pTempGrid->G = current->G + MOVE_COST;
             pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest);
             pTempGrid->F = pTempGrid->G + pTempGrid->H;
@@ -94,6 +100,7 @@ LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
             break;
           case 1://
             if(tempGrid.G < pTempGrid->G){//新路线比原open表内格点好
+              pTempGrid->loc = tempGrid.loc;
               pTempGrid->father = tempGrid.father;
               pTempGrid->G = tempGrid.G;
               pTempGrid->G = pTempGrid->G + pTempGrid->H;
@@ -103,6 +110,7 @@ LinkPath* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest){
             break;
           case 2:
             if(tempGrid.G < pTempGrid->G){// 新路线比原close表内格点好
+              pTempGrid->loc = tempGrid.loc;
               pTempGrid->father = tempGrid.father;
               pTempGrid->G = tempGrid.G;
               pTempGrid->G = pTempGrid->G + pTempGrid->H;

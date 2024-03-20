@@ -30,7 +30,7 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 	LinkPath *hasPath;
 	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
 		for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到
-			hasPath = aStarSearch(&map,gridMap,robots[robotId].pos,berths[berthId].pos);
+			hasPath = aStarSearch(&map,robots[robotId].pos,berths[berthId].pos);
 			if(hasPath){break;}
 		}
 		if(hasPath){//机器人不受困
