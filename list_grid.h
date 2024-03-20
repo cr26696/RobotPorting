@@ -6,6 +6,7 @@
 
 
 #include "geometry.h"
+#include "struct_Grid.h"
 
 //链表节点，存储类型为Grid
 typedef struct LinkGrid
