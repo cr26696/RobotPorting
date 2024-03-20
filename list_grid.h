@@ -34,4 +34,5 @@ int LinkIsEmpty_Grid(LinkGrid *L);//222
 void deleteLink_Grid(LinkGrid *L);//333
 LinkGrid* ListsearchMin_Grid(LinkGrid *L);
 Grid* ListgetMinCostGrid_Grid(LinkGrid *L);
+
 #endif
