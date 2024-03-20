@@ -15,23 +15,20 @@ typedef struct LinkGrid
     struct LinkGrid *next; //下一个链表节点的地址
 } LinkGrid;
 
-
-
-LinkGrid *initList(LinkGrid *L);
-LinkGrid *createList(int len);
-// void insertLinkListHead(LinkList *L, Grid grid);
-
-int insertLinkList(LinkGrid *L, int pos, Grid grid);
-int deleteLinkList(LinkGrid *L, int pos);
-int deletLinkListByPoint(LinkGrid *L, Point point);
-int deletLinkListByGrid(LinkGrid *L, Grid grid);
-int deleteLinkListSave(LinkGrid *L, int pos, Grid *grid);
-void reverseLinkList(LinkGrid *L);
-LinkGrid *searchLinkList(LinkGrid *L, Grid grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-int getLen(LinkGrid *L);
-int isEmpty(LinkGrid *L);
+LinkGrid *LinkInit_Grid(LinkGrid *L);
+LinkGrid *LinkCreate_Grid(int len);
+//void LinkInsert_Head_Grid(LinkGrid *L, Parcel parcel);
+int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* Grid);
+int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
+int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point);
+int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* Grid);
+// int LinkDelete_Save_Grid(LinkGrid *L, int pos, Grid* Grid);
+int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* Grid);
+Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos);
+LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* Grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
+void LinkReverse_Grid(LinkGrid *L);
+int LinkGetLen_Grid(LinkGrid *L);
+int LinkIsEmpty_Grid(LinkGrid *L);
 void deleteLink_Grid(LinkGrid *L);
-void printLinkList(LinkGrid *L);
-LinkGrid* searchMinList(LinkGrid *L);//返回F最小(相同时G最小)的节点 返回链表
-Grid* getMinCostGrid(LinkGrid *L);
+
 #endif
