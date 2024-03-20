@@ -226,7 +226,8 @@ LinkList* findPathToBerth(Berth *berths,  Robot rob){
 			numofph++;
 		}
 		/*计算泊口价值 */
-		valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
+		// valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
+		valperdisofberth[i] = evaluateBerth(berths[i].loading_speed,0.1,berths[i].transport_time,1,numofph ,0.2);
 		numofph = 0;
 	}
 	for (int i=0; i < 3; i++){//三选一最近泊口路径 存于berthph[2]

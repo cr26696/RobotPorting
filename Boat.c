@@ -23,7 +23,7 @@ void countgoodsnum(Berth *berth,Boat *boat){//计算泊口的货物数量和船�
      berth->goodsnum=berth->goodsnum-berth->loading_speed;
 }
 
-// 定义泊位的评估函数 值越小越好（参数分别代表：第一个因素装载速度，第一个因素的系数运输速度；第二个因素，第二个因素的系数...)
+// 定义泊位的评估函数 值越大越好（参数分别代表：第一个因素装载速度，第一个因素的系数运输速度；第二个因素，第二个因素的系数...)
 float evaluateBerth(int loadSpeed,float friscoe,int transportTime,float secocoe,int pathLength ,float thricoe)
 {
     float totalScore;
@@ -31,12 +31,12 @@ float evaluateBerth(int loadSpeed,float friscoe,int transportTime,float secocoe,
     // double timeWeight = 0.3;      // 运输时间权重
     // double distanceWeight = 0.3;  // 路径长度权重
 
-    // 归一化处理，将值映射到0-1范围内（越小越好）
-    float normalizedSpeed = (5 - loadSpeed) / 4.0;
-    float normalizedTime = (transportTime - 1) / 999.0;
-    float normalizedDistance = (pathLength - 10) / 70.0;
+    // // 归一化处理，将值映射到0-1范围内（越小越好）
+    // float normalizedSpeed = (5 - loadSpeed) / 4.0;
+    // float normalizedTime = (transportTime - 1) / 999.0;
+    // float normalizedDistance = (pathLength - 10) / 70.0;
     // 综合得分
-    totalScore = (normalizedSpeed*friscoe) + (transportTime*secocoe) + (pathLength*thricoe);
+    totalScore = -(loadSpeed*friscoe) + (transportTime*secocoe)  -(pathLength*thricoe);
     return totalScore;
 }
 
@@ -45,7 +45,7 @@ void AllboatatVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
     int bestvual=0,bestvual_berth,localberth_best;//最少的运输时间和最快的装载速度对应的泊口???还要考虑装载时间到时候改
                 for (int i = 0; i < berth_num; i++)
                 {
-                    localberth_best=findBestFuction(berth[i].transport_time,0.8,berth[i].loading_speed,0.2,0,0);
+                    localberth_best=evaluateBerth(berth[i].transport_time,0.1,berth[i].loading_speed,1,0,0);
                     if (berth[i].status = 1) // 泊口空闲 ???优化的时候考虑船到泊位的时间以及泊口船驶离的时间
                     {
                         if (localberth_best>bestvual) // 找出最佳的港口
