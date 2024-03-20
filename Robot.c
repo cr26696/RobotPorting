@@ -316,34 +316,55 @@ void robotSendGoodsPrint(Robot *pRob, int id){
 int idofrob 机器人编号
 return ：1避让 0不避让
 */
-int judgeCoincidentGrids(Robot* rob, LinkList pathsofrobot[], int pathnum, int idofrob){//机器人编号请使用0-9
-    static LinkList temprobotpaths[10] = {0};
-
-    for(int i=0; i < 10; i++){
-        if(temprobotpaths[0].grid.loc.x != pathsofrobot[0].grid.loc.x){//传入新path时重新赋值
-                temprobotpaths[i] = pathsofrobot[i];
-                temprobotpaths[i] = *temprobotpaths[i].next;
-        }
-    }
-
-    if(rob[idofrob].current_status != VOIDING){
-        for(int i=0; i < 10; i++){
-            if(i != idofrob){
-                if(temprobotpaths[i].next == NULL /*|| rob[i].current_status != */ ){//其他机器人没有下一步了 或<------需要添加其他条件
-                    break;
-                }
-                /*自身下一步与别人下一步是否重合
-                  自身下一步与别人当前是否重合*/ 
-                else if((temprobotpaths[idofrob].next->grid.loc.x == temprobotpaths[i].next->grid.loc.x && temprobotpaths[idofrob].grid.loc.y == temprobotpaths[i].next->grid.loc.y) ||
-                        (temprobotpaths[idofrob].next->grid.loc.x == temprobotpaths[i].grid.loc.x && temprobotpaths[idofrob].next->grid.loc.y == temprobotpaths[i].grid.loc.y)){
-                        rob[idofrob].current_status = VOIDING;
-                        return 1;
-                }
-            }
-        }
-    }
-    else{
-        return 0;
-    }
-		return 0;
+void judgeCoincidentGrids(Robot* rob, LinkList *robotpaths){//机器人编号请使用0-9
+	Point robpos[20] = {0};
+	int index = 0;//robpos[]中元素个数
+	Point temppos;
+	for(int i=0; i < 2; i++){//前十格记录机器人当前位置
+		robpos[i] = rob->pos;
+		index++;
+	}
+	for(int i=0; i < 10; i++){
+		int j = index;
+		while(j--){
+			if(robotpaths[i].next->grid.loc.x == robpos[j].x && robotpaths[i].next->grid.loc.y == robpos[j].y){
+				rob->next_status = VOIDING;//与robpos[]中坐标相同，改变机器人状态
+			}
+			else{
+				robpos[index++] = robotpaths[i].grid.loc;//未与robpos[]中元素坐标相同，记录进robpos[]中
+			}
+		}
+	}
 }
+//void judgeCoincidentGrids(Robot* rob, LinkList *robotpaths){//机器人编号请使用0-9
+    // static LinkList temprobotpaths[10] = {0};
+
+    // // for(int i=0; i < 10; i++){
+    // //     if(temprobotpaths[0].grid.loc.x != pathsofrobot[0].grid.loc.x){//传入新path时重新赋值
+    // //             temprobotpaths[i] = pathsofrobot[i];
+    // //             temprobotpaths[i] = *temprobotpaths[i].next;
+    // //     }
+    // // }
+
+    // if(rob[idofrob].current_status != VOIDING){
+    //     for(int i=0; i < 10; i++){
+    //         if(i != idofrob){
+    //             if(pathsofrobot[i].next == NULL /*|| rob[i].current_status != */ ){//其他机器人没有下一步了 或<------需要添加其他条件
+    //                 break;
+    //             }
+    //             /*自身下一步与别人下一步是否重合
+    //               自身下一步与别人当前是否重合*/
+    //             else if((pathsofrobot[idofrob].next->grid.loc.x == pathsofrobot[i].next->grid.loc.x && pathsofrobot[idofrob].grid.loc.y == pathsofrobot[i].next->grid.loc.y) ||
+    //                     (pathsofrobot[idofrob].next->grid.loc.x == pathsofrobot[i].grid.loc.x && pathsofrobot[idofrob].next->grid.loc.y == pathsofrobot[i].grid.loc.y)){
+    //                     rob[idofrob].current_status = VOIDING;
+    //                     return 1;
+    //             }
+    //         }
+    //     }
+    // }
+    // else{
+    //     return 0;
+    // }
+	// return 0;
+//}
+

@@ -15,7 +15,6 @@
 
 #include "InitAll.h"
 
-
 #define n 200
 #define robot_num 10
 #define berth_num 10
@@ -23,7 +22,6 @@
 #define N 200
 
 int numofgds = 0;
-
 
 // struct Robot
 // {
@@ -54,7 +52,6 @@ LinkParcel LinkParcels;
 LinkParcel LockedParcels;
 
 LinkList paths_robot[robot_num];
-
 
 int money, boat_capacity, frame;
 char ch[N][N];//地图 
