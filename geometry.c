@@ -1,7 +1,5 @@
 #include "geometry.h"
 
-#include<math.h>
-
 #define MOVE_LEFT 1
 #define MOVE_RIGHT 2
 #define MOVE_UP 3
@@ -36,28 +34,28 @@ int isNeighbor(Point A, Point B){
 int getDistance_Manhattan(Point start, Point end){
     int hdistance;
     hdistance = abs(start.x - end.x) + abs(start.y - end.y);
-    return hdistance;
+    return hdistance * 10;
 }
 //输入两相邻Point,返回下一步方向 左1 右2 上3 下4 输入点有误-1 也可用于判断两点是否相邻
 int getStepDirect(Point Pstart, Point Pnext){
   int direct;
-  if(Pstart.x==Pnext.x){//将相邻两格坐标转化为移动方向
+  if(Pstart.y==Pnext.y){//将相邻两格坐标转化为移动方向
     switch (Pstart.x-Pnext.x)
     {
     case -1:
       direct = MOVE_DOWN;break;
     case 1:
       direct = MOVE_UP;break;
-    default:break;
+    default:direct=-1;break;
     }
-  }else if(Pstart.y==Pnext.y){
+  }else if(Pstart.x==Pnext.x){
     switch (Pstart.y-Pnext.y)
       {
       case -1:
         direct = MOVE_RIGHT;break;
       case 1:
         direct = MOVE_LEFT;break;
-      default:break;
+      default:direct=-1;break;
       }
   }else{
     direct = -1;//不应该出现这种情况(即两个格子不相邻)

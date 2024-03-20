@@ -29,7 +29,7 @@ void InitRobot(Map map,Berth berths[],int berthCount,Robot robots[],int robotCou
 	}
 	LinkList *hasPath;
 	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
-		for(int berthId;berthId<berthCount;berthId++){//遍历泊口看能不能到
+		for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到
 			hasPath = aStarSearch(&map,robots[robotId].pos,berths[berthId].pos);
 			if(hasPath){break;}
 		}

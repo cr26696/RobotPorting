@@ -75,10 +75,11 @@ int deleteLinkList(LinkList *L, int pos)
 //输入Point将对应位置链表元素删除,成功返回1,错误返回0
 int deletLinkListByPoint(LinkList *L, Point point){
 	LinkList *r = L, *d;
-	r = r->next;
-	while(r)//r != NULL 
-		if(isSamePosition(r->grid.loc,point)){
-			free(r);//释放链表节点和对应的Grid
+	while(r->next)//r != NULL 
+		if(isSamePosition(r->next->grid.loc,point)){
+			d = r->next;
+			r->next = d->next;
+			free(d);//释放链表节点和对应的Grid
 			return 1;//找到，跳出循环
 		}else{
 			r = r->next;

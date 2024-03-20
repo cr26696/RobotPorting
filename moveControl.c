@@ -9,3 +9,8 @@ void updateRobotDirect(Robot *robot, LinkList *path)
 
   robot->direct = getStepDirect(Pstart,Pnext);
 }
+
+// Point getRobotNextPathPoint(Robot *rob, LinkList *path){
+//   LinkList *temppath = path;
+//   temppath->next->grid.loc;
+// }

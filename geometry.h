@@ -1,7 +1,7 @@
 #ifndef GEOMETRY_H//预定义避免重复引入
 #define GEOMETRY_H
 
-// #include <math.h>
+#include <math.h>
 //int型内含x,y
 typedef struct Point
 {

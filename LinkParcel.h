@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <malloc.h>
 
 #include "struct_Parcel.h"
 
@@ -17,7 +17,6 @@ typedef struct LinkParcel
 LinkParcel *LinkInit_Parcel(LinkParcel *L);
 LinkParcel *LinkCreate_Parcel(int len);
 //void LinkInsert_Head_Parcel(LinkParcel *L, Parcel parcel);
-
 int LinkInsert_ByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel);
 int LinkDelete_ByIndex_Parcel(LinkParcel *L, int pos);
 int LinkDelete_ByPoint_Parcel(LinkParcel *L, Point point);
@@ -29,9 +28,9 @@ LinkParcel *LinksearchLink_ByObj_Parcel(LinkParcel *L, Parcel parcel);//查找�
 void LinkReverse_Parcel(LinkParcel *L);
 int LinkGetLen_Parcel(LinkParcel *L);
 int LinkIsEmpty_Parcel(LinkParcel *L);
-Parcel LinksearchParcelByPos(LinkParcel *L, int pos);
+Parcel LinksearchObj_ByPos_Parcel(LinkParcel *L, int pos);
 void deleteLink_Parcel(LinkParcel *L);
+
 Parcel createParcel(int x,int y, int time, int value);
 void ParcelTimedDelete(LinkParcel *Link,int frame);
-
 #endif

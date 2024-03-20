@@ -16,7 +16,7 @@
 //传入地图，目标点，返回1可走 0不可走
 int isValidGrid(Map *map, Point point){
   char target = map->data[point.x][point.y];
-  if (target=='.' || target=='A'){return 1;}
+  if (target=='.' || target=='A' || target=='B'){return 1;}
   else{return 0;}
 }
 //输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL 注意调用后需要清理不用的链表!
@@ -48,11 +48,11 @@ LinkList* aStarSearch(Map *map, Point Psrc, Point Pdest){
     current = getMinCostGrid(openList);//取当前openlist中代价最小格
     if(isSamePosition(current->loc,dest.loc))//当前格就是目标格，返回目标格链表
     {
-      path = generatePath(dest);//生成路径并将地址传给path
+      path = generatePath(&dest);//生成路径并将地址传给path
       break;//准备输出path
     }else if(getStepDirect(current->loc,Pdest)!=-1){
       dest.father = current;//让目标格指向当前格
-      path = generatePath(dest);//生成路径并将地址传给path
+      path = generatePath(&dest);//生成路径并将地址传给path
       break;//准备输出path
     }
 
@@ -161,14 +161,14 @@ LinkList* getGrids_minF(LinkList *L){
     return minnode;
 }
 //默认current已经是到目标点上了，迭代father,返回一条新的路径，此函数只在astar.c使用
-LinkList* generatePath(Grid temp){//传入current的拷贝
+LinkList* generatePath(Grid *temp){//传入current的拷贝
   LinkList *path = initList(path);
   do
   {
-    insertLinkList(path,1,temp);
-    if(temp.father != NULL)temp = *temp.father;
+    insertLinkList(path,1,*temp);
+    if(temp->father)temp = temp->father;
     else break;
   }while(1);
-  reverseLinkList(path);
+  //reverseLinkList(path);
   return path;//起点到终点的路径，包含起点与终点
 }
