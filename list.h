@@ -24,13 +24,13 @@ int insertLinkList(LinkList *L, int pos, Grid grid);
 int deleteLinkList(LinkList *L, int pos);
 int deletLinkListByPoint(LinkList *L, Point point);
 int deletLinkListByGrid(LinkList *L, Grid grid);
-int deleteLinkListSave(LinkList *L, int pos, Grid *grid);
-void reverseLinkList(LinkList *L);
+int deleteLinkListSave(LinkList *L, int pos, Grid *grid);//
+void reverseLinkList(LinkList *L);//444
 LinkList *searchLinkList(LinkList *L, Grid grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-int getLen(LinkList *L);
-int isEmpty(LinkList *L);
-void deleteLink_Grid(LinkList *L);
-void printLinkList(LinkList *L);
-LinkList* searchMinList(LinkList *L);//返回F最小(相同时G最小)的节点 返回链表
-Grid* getMinCostGrid(LinkList *L);
+int getLen(LinkList *L);//111
+int isEmpty(LinkList *L);//222
+void deleteLink_Grid(LinkList *L);//333
+void printLinkList(LinkList *L);//差
+LinkList* searchMinList(LinkList *L);//返回F最小(相同时G最小)的节点 返回链表???
+Grid* getMinCostGrid(LinkList *L);//???
 #endif

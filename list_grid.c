@@ -2,7 +2,7 @@
 
 #include <malloc.h>
 //分配内存，创建链表头结点,下一节点为NULL
-LinkGrid *initList(LinkGrid *L)
+LinkGrid *LinkInit_Grid(LinkGrid *L)
 {
 	L = (LinkGrid *) malloc(sizeof(LinkGrid));//为头结点分配空间
 	L->next = NULL;//头结点指针域置空
@@ -10,7 +10,7 @@ LinkGrid *initList(LinkGrid *L)
 }
 
 //创建指定个数的单链表
-LinkGrid *createList(int len)
+LinkGrid *LinkCreate_Grid(int len)
 {
 	int i;
 	int x,y;
@@ -43,7 +43,7 @@ LinkGrid *createList(int len)
 // }
 
 //输入表头，位置，格点拷贝，插入位置后并返回1成功 0失败
-int insertLinkList(LinkGrid *L, int pos, Grid *grid)//???改
+int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid)//???改
 {
 	if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
 	LinkGrid *r = L, *n;
@@ -59,7 +59,7 @@ int insertLinkList(LinkGrid *L, int pos, Grid *grid)//???改
 	return 1;
 }
 //删除指定位置处链表元素,成功返回1,错误返回0
-int deleteLinkList(LinkGrid *L, int pos)
+int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos)
 {
 	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
 	LinkGrid *r = L, *d;
@@ -73,7 +73,7 @@ int deleteLinkList(LinkGrid *L, int pos)
 	return 1;
 }
 //输入Point将对应位置链表元素删除,成功返回1,错误返回0
-int deletLinkListByPoint(LinkGrid *L, Point point){
+int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point){
 	LinkGrid *r = L, *d;
 	while(r->next)//r != NULL 
 		if(isSamePosition(r->next->grid->loc,point)){
@@ -86,7 +86,7 @@ int deletLinkListByPoint(LinkGrid *L, Point point){
 		}
 	return 0;
 }
-int deletLinkListByGrid(LinkGrid *L, Grid *grid){
+int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid){
 	LinkGrid *r = L, *d;
 	do{
 		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y){
@@ -98,22 +98,24 @@ int deletLinkListByGrid(LinkGrid *L, Grid *grid){
 	}while(r->next);
 	return 0;
 }
-int deleteLinkListSave(LinkGrid *L, int pos, Grid *grid)
-{
-	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
-	LinkGrid *r = L, *d;
-	while(--pos > 0)
-	{
-		r = r->next;//将尾指针移动到删除位置
-	}
-	d = r->next;//删除元素节点
-	grid = d->grid;//保存删除元素值
-	r->next = d->next;//将尾指针跳过删除节点链入下一个节点
-	free(d);//释放删除节点
-	return 1;
-}
+
+// int LinkDelete_Save_Grid(LinkGrid *L, int pos, Grid* grid)
+// {
+// 	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+// 	LinkGrid *r = L, *d;
+// 	while(--pos > 0)
+// 	{
+// 		r = r->next;//将尾指针移动到删除位置
+// 	}
+// 	d = r->next;//删除元素节点
+// 	grid = d->grid;//保存删除元素值
+// 	r->next = d->next;//将尾指针跳过删除节点链入下一个节点
+// 	free(d);//释放删除节点
+// 	return 1;
+// }
+
 //转置单链表：采用头插法
-void reverseLinkList(LinkGrid *L)
+void LinkReverse_Grid(LinkGrid *L)
 {
 	LinkGrid *r, *p, *q;//定义尾指针（紧贴头指针）、欲插入指针、遍历指针
 	r = L->next;//尾指针紧贴头指针
@@ -129,7 +131,7 @@ void reverseLinkList(LinkGrid *L)
 	}
 }
 //查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-LinkGrid *searchLinkList(LinkGrid *L, Grid *grid)
+LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* grid)
 {
 	if(isEmpty(L)) return NULL;
 	int pos = 1;//位序从1开始、下标从零开始
@@ -142,7 +144,7 @@ LinkGrid *searchLinkList(LinkGrid *L, Grid *grid)
 	}
 	return NULL;
 }
-int searchLinkListPos(LinkGrid *L, Grid *grid)
+int searchLinkListPos(LinkGrid *L, Grid *grid)//???
 {
 	if(isEmpty(L)) return -1;
 	int pos = 1;//位序从1开始、下标从零开始
@@ -156,7 +158,7 @@ int searchLinkListPos(LinkGrid *L, Grid *grid)
 	return -1;
 }
 //返回尾部链表长度
-int getLen(LinkGrid *L)
+int LinkGetLen_Grid(LinkGrid *L)
 {
 	if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
 	int len = 0;
@@ -169,7 +171,7 @@ int getLen(LinkGrid *L)
 	return len;
 }
 //空返回1 非空返回0
-int isEmpty(LinkGrid *L)
+int LinkIsEmpty_Grid(LinkGrid *L)
 {
 	return !L->next;//L->next == NULL亦可
 }
@@ -190,28 +192,28 @@ void deleteLink_Grid(LinkGrid *L){
 	return;
 }
 //输出
-void printLinkList(LinkGrid *L)
-{
-	LinkGrid *p;
-	p = L->next;
-	while(p)
-	{
-		printf("[%d %d]\n\r",p->grid.loc.x, p->grid.loc.y);
-		p = p->next;
-	}
-}
+// void printLinkList(LinkGrid *L)
+// {
+// 	LinkGrid *p;
+// 	p = L->next;
+// 	while(p)
+// 	{
+// 		printf("[%d %d]\n\r",p->grid.loc.x, p->grid.loc.y);
+// 		p = p->next;
+// 	}
+// }
 //传入链表头
-LinkGrid* searchMinList(LinkGrid *L){
+LinkGrid* ListsearchMin_Grid(LinkGrid *L){
 	LinkGrid *r = L, *minnode = NULL;//
-	int currentminF = r->grid.F;
-	int currentminG = r->grid.G;
+	int currentminF = r->grid->F;
+	int currentminG = r->grid->G;
 	while(r->next != NULL){
-		if((r->grid.F < currentminF) || (r->grid.F == currentminF && r->grid.G < currentminG)){
-			currentminF = r->grid.F;
-			currentminG = r->grid.G;
+		if((r->grid->F < currentminF) || (r->grid->F == currentminF && r->grid->G < currentminG)){
+			currentminF = r->grid->F;
+			currentminG = r->grid->G;
 			minnode = r;
 		}
-		else if(r->grid.F == currentminF && r->grid.G == currentminG){
+		else if(r->grid->F == currentminF && r->grid->G == currentminG){
 			LinkGrid *newnode;
 			newnode->grid = r->grid;
 			if(minnode == NULL){
@@ -230,7 +232,7 @@ LinkGrid* searchMinList(LinkGrid *L){
 	return minnode;
 }
 //传入表头，返回一个最小F，G值的Grid的地址
-Grid* getMinCostGrid(LinkGrid *L){
+Grid* ListgetMinCostGrid_Grid(LinkGrid *L){
 	LinkGrid *r = L;
 	Grid *grid;
 	int minF,minG;

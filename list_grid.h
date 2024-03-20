@@ -25,13 +25,13 @@ int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
 int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point);
 int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid);
 // int LinkDelete_Save_Grid(LinkGrid *L, int pos, Grid* grid);
-
-int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid);
-Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos);
+int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid);//???
+Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos);//???
 LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
-void LinkReverse_Grid(LinkGrid *L);
-int LinkGetLen_Grid(LinkGrid *L);
-int LinkIsEmpty_Grid(LinkGrid *L);
-
-Grid* getMinCostGrid(LinkGrid *L);
+void LinkReverse_Grid(LinkGrid *L);//444
+int LinkGetLen_Grid(LinkGrid *L);//111
+int LinkIsEmpty_Grid(LinkGrid *L);//222
+void deleteLink_Grid(LinkGrid *L);//333
+LinkGrid* ListsearchMin_Grid(LinkGrid *L);
+Grid* ListgetMinCostGrid_Grid(LinkGrid *L);
 #endif
