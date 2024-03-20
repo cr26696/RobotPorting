@@ -109,9 +109,9 @@ int Input()
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
-				int carry,stun;//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
-				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &stun);
-				robotstatusupdate(carry,stun,&robot[i]);//机器人状态处理函数
+				int carry,awake;//carry：0表示未携带物品；awake:0表示恢复状态(晕眩)
+				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &awake);
+				robotstatusupdate(carry,awake,&robot[i]);//机器人状态处理函数
 				
 		}
 		for(int i = 0; i < 5; i ++)

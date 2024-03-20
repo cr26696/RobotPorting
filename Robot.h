@@ -18,7 +18,7 @@
 #define LOADING_FACTOR  15
 #define TRANS_FACTOR    5
 
-void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
+void robotstatusupdate(int carry,int awake ,Robot *robot);//机器人状态处理函数
 
 LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap);
 LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap);

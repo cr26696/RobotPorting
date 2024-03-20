@@ -19,28 +19,33 @@ LinkParcel* lockedParcelList;
 /*状态机分状态的转移维护
 以及根据状态进行活动
 */
-//carry：0表示未携带物品；stun:0表示恢复状态(晕眩)
+//carry：0表示未携带物品；awake:0表示恢复状态(晕眩)
 
 extern int numofgds;
 extern Map map;
 extern Berth berth[];
 extern Map parcelMap;
 
-//机器人状态处理函数
-void robotstatusupdate(int carry,int stun ,Robot *robot)
+//机器人状态处理函数 处理判题器输入
+void robotstatusupdate(int carry,int awake ,Robot *robot)
 {
-	if (carry == 0 && robot->current_status != CRASHING && robot->current_status != STUCK) // 当前状态眩晕
+	if (!awake) // 传入眩晕
 	{
-		robot->tempstatus = robot->current_status;
-		robot->current_status=CRASHING;
-		robot->next_status=CRASHING;
+		//刚晕
+		if(robot->current_status!=CRASHING){
+			robot->tempstatus = robot->current_status;
+			robot->current_status=CRASHING;
+			robot->next_status=CRASHING;
+		}
+	}else{
+		//传入清醒
+		if(robot->current_status == CRASHING){//没醒 给喊醒
+			robot->current_status = robot->tempstatus;
+			robot->next_status = robot->tempstatus;//这帧和下帧应该要进行之前的工作
+		}//else 还在继续晕
 	}
-	if (carry != 0 && robot->current_status == CRASHING ) // 上一个状态眩晕
-	{
-		robot->current_status=robot->tempstatus;
-	}
-	if(carry==1 && stun==1)
-	{robot->current_status=SENDING;}
+	// if(carry==1 && awake==1)
+	// {robot->current_status=SENDING;}
 }
 //判断某点是否为货物 不在main中调用
 int isParcelGrid(Parcel pos){
