@@ -24,7 +24,7 @@ LinkParcel* lockedParcelList;
 extern int numofgds;
 extern Map map;
 extern Berth berth[];
-extern Map ParcelMap;
+extern Map parcelMap;
 
 //机器人状态处理函数
 void robotstatusupdate(int carry,int stun ,Robot *robot)
@@ -248,7 +248,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
 void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
 	for(int i=0; i < num; i++){
 		LinkPath* path, *nextpath;
-		path = findPathToGoods(rob[i], ParcelMap, gridmap);
+		path = findPathToGoods(rob[i], parcelMap, gridmap);
 		nextpath = path->next;
 
 		if(nextpath->next != NULL && rob[i].current_status == GETTING){
@@ -264,7 +264,7 @@ void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
 //控制单个机器人取货并进行控制台输出
 void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 	LinkPath* path, *nextpath;
-	path = findPathToGoods(*pRob,ParcelMap, gridmap);
+	path = findPathToGoods(*pRob,parcelMap, gridmap);
 	nextpath = path->next;
 
 	if(nextpath->next != NULL && pRob->current_status == GETTING){

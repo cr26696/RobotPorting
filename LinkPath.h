@@ -20,7 +20,7 @@ void linkDelete_Path(LinkPath *L);
 int deletListPathByPoint(LinkPath *L, Point point);
 void reverseListPath(LinkPath *L);
 LinkPath *searchListPath(LinkPath *L, Point point);
-int getLen(LinkPath *L);
+int LinkGetLen_Path(LinkPath *L);
 int isEmpty(LinkPath *L);
 void freeWholeListPath(LinkPath *L);
 void printLinkList(LinkPath *L);

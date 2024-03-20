@@ -7,7 +7,7 @@ LinkPath *initList_Path(LinkPath *L){
 }
 
 int insertListPath(LinkPath *L, int pos, Point point){
-	if(pos < 1 || pos > getLen(L)+1) return 0;//插入位置错误
+	if(pos < 1 || pos > LinkGetLen_Path(L)+1) return 0;//插入位置错误
 	LinkPath *r = L, *n;
 	n = (LinkPath *) malloc(sizeof(LinkPath));
 	n->pos = point;
@@ -38,7 +38,7 @@ void linkDelete_Path(LinkPath *L){
 }
 
 int deleteListPath(LinkPath *L, int pos){
-	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+	if(pos < 1 || pos > LinkGetLen_Path(L)) return 0;//删除位置错误
 	LinkPath *r = L, *d;
 	while(--pos > 0)
 	{
@@ -92,7 +92,7 @@ LinkPath *searchListPath(LinkPath *L, Point point){//返回无头节点的链表
 	return NULL;    
 }
 
-int LinkGetLen_Grid(LinkPath *L){
+int LinkGetLen_Path(LinkPath *L){
 	if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
 	int len = 0;
 	LinkPath *r = L->next;
