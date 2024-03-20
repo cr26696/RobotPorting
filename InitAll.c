@@ -7,7 +7,11 @@ void Inittotal(Map map,Robot robots[],int robotCount,Boat boats[],int boatCount,
 {
 	InitBerth(berths,berthCount);
 	InitBoat(boats,boatCount);
-	controlBoat(boats,boatCount,berths,berthCount,boat_capacity);
+	for (int i=0;1<boatCount;i++)
+	{
+		AllboatatVIRTUAL(&boats[i],boatCount,berths,berthCount);
+		printf("ship %d %d\n", i, boats[i].aimId);
+	}
 	InitRobot(map,berths,berthCount,robots,robotCount);
 }
 

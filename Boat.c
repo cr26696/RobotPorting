@@ -23,6 +23,45 @@ void countgoodsnum(Berth *berth,Boat *boat){//计算泊口的货物数量和船�
      berth->goodsnum=berth->goodsnum-berth->loading_speed;
 }
 
+// 定义泊位的评估函数 值越小越好（参数分别代表：第一个因素装载速度，第一个因素的系数运输速度；第二个因素，第二个因素的系数...)
+float evaluateBerth(int loadSpeed,float friscoe,int transportTime,float secocoe,int pathLength ,float thricoe)
+{
+    float totalScore;
+    // double speedWeight = 0.4;     // 装载速度权重
+    // double timeWeight = 0.3;      // 运输时间权重
+    // double distanceWeight = 0.3;  // 路径长度权重
+
+    // 归一化处理，将值映射到0-1范围内（越小越好）
+    float normalizedSpeed = (5 - loadSpeed) / 4.0;
+    float normalizedTime = (transportTime - 1) / 999.0;
+    float normalizedDistance = (pathLength - 10) / 70.0;
+    // 综合得分
+    totalScore = (normalizedSpeed*friscoe) + (transportTime*secocoe) + (pathLength*thricoe);
+    return totalScore;
+}
+
+void AllboatatVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
+{
+    int bestvual=0,bestvual_berth,localberth_best;//最少的运输时间和最快的装载速度对应的泊口???还要考虑装载时间到时候改
+                for (int i = 0; i < berth_num; i++)
+                {
+                    localberth_best=findBestFuction(berth[i].transport_time,0.8,berth[i].loading_speed,0.2,0,0);
+                    if (berth[i].status = 1) // 泊口空闲 ???优化的时候考虑船到泊位的时间以及泊口船驶离的时间
+                    {
+                        if (localberth_best>bestvual) // 找出最佳的港口
+                    {
+                        bestvual = localberth_best;
+                        bestvual_berth = berth[i].id;
+                    }
+                    }
+                }
+                boat->aimId = bestvual;
+                // printf("ship %d %d\n", i, boat[i].aimId);
+                boat->status = GOBACKBERTH;
+                berth[bestvual_berth].status = 0; // 对应港口锁定
+}
+       
+
 void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_capacity) //结构体数组调用 
 {
     for (int i = 0; i < boat_num; i++)
@@ -54,22 +93,25 @@ void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_c
             }
             else
             {
-                int mintastime,mintastime_berth;//最少的运输时间和对应的泊口???还要考虑装载时间到时候改
-                for (int i = 0; i < berth_num; i++)
-                {
-                    if (berth[i].status = 1) // 泊口空闲 ???优化的时候考虑船到泊位的时间以及泊口船驶离的时间
-                    {
-                        if (berth[i].transport_time) // 找出最多的货物
-                    {
-                        mintastime = berth[i].transport_time;
-                        mintastime_berth = berth[i].id;
-                    }
-                    }
-                }
-                boat[i].aimId = mintastime;
+                AllboatatVIRTUAL(&boat[i],boat_num,berth,berth_num);
                 printf("ship %d %d\n", i, boat[i].aimId);
-                boat[i].status = GOBACKBERTH;
-                berth[mintastime_berth].status = 0; // 对应港口锁定
+                
+                // int mintastime,mintastime_berth;//最少的运输时间和对应的泊口???还要考虑装载时间到时候改
+                // for (int i = 0; i < berth_num; i++)
+                // {
+                //     if (berth[i].status = 1) // 泊口空闲 ???优化的时候考虑船到泊位的时间以及泊口船驶离的时间
+                //     {
+                //         if (berth[i].transport_time) // 找出最多的货物
+                //     {
+                //         mintastime = berth[i].transport_time;
+                //         mintastime_berth = berth[i].id;
+                //     }
+                //     }
+                // }
+                // boat[i].aimId = mintastime;
+                
+                // boat[i].status = GOBACKBERTH;
+                // berth[mintastime_berth].status = 0; // 对应港口锁定
             }
         }
         
