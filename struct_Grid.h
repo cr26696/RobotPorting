@@ -1,5 +1,5 @@
-#ifndef STRUCT_MAP_H//预定义避免重复引入
-#define STRUCT_MAP_H
+#ifndef STRUCT_GRID_H//预定义避免重复引入
+#define STRUCT_GRID_H
 
 #include "geometry.h"
 

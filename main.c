@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "list.h"
+
 #include "moveControl.h"
 #include "astar.h"
 
@@ -9,13 +9,14 @@
 #include "struct_Robot.h"
 #include "struct_Berth.h"
 #include "struct_Boat.h"
+#include "struct_Grid.h"
 
 #include "Robot.h"
 #include "Boat.h"
 
 #include "InitAll.h"
 
-#define n 200
+#define MAPSIZE 200
 #define robot_num 10
 #define berth_num 10
 #define boat_num 5
@@ -42,7 +43,8 @@ int numofgds = 0;
 // }boat[boat_num];
 
 Map map;//内有200x200 char数组
-Map ParcelMap;//同上
+Map parcelMap;//同上
+Grid gridMap[MAPSIZE][MAPSIZE];
 
 Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
 Berth berth[berth_num];
@@ -60,7 +62,7 @@ char ch[N][N];//地图
 void Init()
 {
 	char tempC;
-		for(int i = 0; i < n; i ++)
+		for(int i = 0; i < MAPSIZE; i ++)
 		{
 			scanf("%s",map.data[i]);
 		}
@@ -80,10 +82,13 @@ void Init()
 
 		scanf("%s", okk);
 		//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
+
+
+		//
 		InitBerth(berth,berth_num);
 		InitBoat(boat,boat_num);
 		InitRobot(map,berth,berth_num,robot,robot_num);
-		InitParcel(&ParcelMap, &LinkParcels, &LockedParcels);
+		InitParcel(&parcelMap, &LinkParcels, &LockedParcels);
 		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
@@ -99,7 +104,7 @@ int Input()
 				int x, y, val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				ParcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
+				parcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
 				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),createParcel(x,y,frame,val));\
 		}
 		for(int i = 0; i < robot_num; i ++)
