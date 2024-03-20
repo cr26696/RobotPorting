@@ -136,14 +136,14 @@ int main()
 			switch (robot[i].current_status)
 			{
 			case IDLE:
-				robotGetGoodsPrint(&robot[i],i);
+				robotGetGoodsPrint(&robot[i],i,(Grid**)gridMap);
 				robot[i].next_status = GETTING;
 				break;
 			case GETTING:
-				robotGetGoodsPrint(&robot[i],i);
+				robotGetGoodsPrint(&robot[i],i,(Grid**)gridMap);
 				break;
 			case SENDING:
-				robotSendGoodsPrint(&robot[i],i);
+				robotSendGoodsPrint(&robot[i],i,(Grid**)gridMap);
 				break;
 			default:break;
 			}
