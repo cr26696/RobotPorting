@@ -262,3 +262,24 @@ Grid* ListgetMinCostGrid_Grid(LinkGrid *L){
 	//遍历链表后，返回最小格点地址。
 	return grid;
 }
+
+int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid){
+	LinkGrid *r = L;
+	int pos;
+	while(r != NULL){
+		r = r->next;
+		pos++;
+		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y){
+			return pos;
+		}
+	}
+	return -1;
+}
+
+Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos){
+	LinkGrid *r = L;
+	while(pos--){
+		r = r->next;
+	}
+	return r->grid;
+}
