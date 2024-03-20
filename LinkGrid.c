@@ -18,7 +18,6 @@ LinkGrid *LinkCreate_Grid(int len)
 	r = L;//尾指针初始化为头指针
 	for(i = 0;i < len;i ++)
 	{   
-		scanf("%d %d", &x, &y);
 		n = (LinkGrid *) malloc(sizeof(LinkGrid));//申请空间
 		n->grid->loc.x = x;
 		n->grid->loc.y = y;

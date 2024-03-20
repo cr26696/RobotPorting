@@ -18,7 +18,6 @@ LinkParcel *LinkCreate_Parcel(int len)
     r = L;//尾指针初始化为头指针
     for(i = 0;i < len;i ++)
     {   
-        scanf("%d %d", &x, &y);
         n = (LinkParcel *) malloc(sizeof(LinkParcel));//申请空间
         n->parcel.loc.x = x;
         n->parcel.loc.y = y;
