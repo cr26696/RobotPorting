@@ -12,6 +12,7 @@
 #include <math.h>
 
 #include "LinkPath.h"
+#include "LinkGrid.h"
 
 #define PATH_FACTOR     80
 #define LOADING_FACTOR  15
@@ -19,15 +20,15 @@
 
 void robotstatusupdate(int carry,int stun ,Robot *robot);//机器人状态处理函数
 
-LinkPath* findPathToGoods(Robot rob, Map MapOfParcels);
-LinkList* findPathToBerth(Berth* berths, Robot rob);
-int* pathToDirection(LinkList* path);
+LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap);
+LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap);
+//int* pathToDirection(LinkList* path);
 int isParcelGrid(Parcel pos);
 //下方为实际机器人进行动作的函数
 
-void robotsGetGoodsPrint(Robot rob[], int num);
-void robotGetGoodsPrint(Robot *pRob, int id);
-void robotsSendGoodsPrint(Robot rob[], int num);
-void robotSendGoodsPrint(Robot *pRob, int id);
+void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap);
+void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap);
+void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap);
+void robotSendGoodsPrint(Robot *pRob, int id, Grid **gridmap);
 
 #endif

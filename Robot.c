@@ -66,7 +66,7 @@ int isParcelGrid(Parcel pos){
 // }
 
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
+LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 	Parcel curgrid;
 	Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
 	int n = 0;//附近货物个数
@@ -150,7 +150,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 		Point temppoint;
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
 		temppoint = finalgdsloca[i].loc;//aStarSearch()中要传入Point类型 需要temppoint保存 或请修改aStarSearch()形参
-		temppath[i] = aStarSearch(&map, rob.pos, temppoint);//根据A*算法计算路径长度
+		temppath[i] = aStarSearch(&map, gridmap, rob.pos, temppoint);//根据A*算法计算路径长度
 		while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，<----没有
 			temppath[i] = temppath[i]->next;
 			numofph++;
@@ -169,37 +169,37 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 		}
 	}
 	finalpath = temppath[2];//???2?  <-------最大下标为2
-	deleteLink_Grid(temppath[0]);
-	deleteLink_Grid(temppath[1]);
+	freeWholeListPath(temppath[0]);
+	freeWholeListPath(temppath[1]);
 	return finalpath;
 }
-//将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
-int* pathToDirection(LinkPath* path){
-	LinkPath* temp;
-	int *direction;
-	temp = path->next;
-	while(temp->next != NULL){
-		temp = temp->next;
-		path = path->next;
-		if(temp->grid.loc.x > path->grid.loc.x){
-			*direction++ = MOVE_DOWN;
-		}
-		else if(temp->grid.loc.x < path->grid.loc.x){
-			*direction++ = MOVE_UP;
-		}
-		else if(temp->grid.loc.y > path->grid.loc.y){
-			*direction++ = MOVE_RIGHT;
-		}
-		else if(temp->grid.loc.y < path->grid.loc.y){
-			*direction++ = MOVE_LEFT;
-		}
-	}
-	*direction = -1;
-	return direction;
-}
+// //将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
+// int* pathToDirection(LinkPath* path){
+// 	LinkPath* temp;
+// 	int *direction;
+// 	temp = path->next;
+// 	while(temp->next != NULL){
+// 		temp = temp->next;
+// 		path = path->next;
+// 		if(temp->grid.loc.x > path->grid.loc.x){
+// 			*direction++ = MOVE_DOWN;
+// 		}
+// 		else if(temp->grid.loc.x < path->grid.loc.x){
+// 			*direction++ = MOVE_UP;
+// 		}
+// 		else if(temp->grid.loc.y > path->grid.loc.y){
+// 			*direction++ = MOVE_RIGHT;
+// 		}
+// 		else if(temp->grid.loc.y < path->grid.loc.y){
+// 			*direction++ = MOVE_LEFT;
+// 		}
+// 	}
+// 	*direction = -1;
+// 	return direction;
+// }
 
 //返回机器人到泊口的路径 不在main中调用
-LinkPath* findPathToBerth(Berth *berths,  Robot rob){
+LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
 	int disofber[10];
 	Berth temp;
 	LinkPath* berthph[3], *tempber;
@@ -220,7 +220,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 		}
 	}
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
-		berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
+		berthph[i] = aStarSearch(&map, girdmap, rob.pos, berths[i].pos);
 		while(berthph[i]->next != NULL){
 			berthph[i] = berthph[i]->next;
 			numofph++;
@@ -239,16 +239,16 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 		}
 	}
 	finalberth = berthph[2];
-	deleteLink_Grid(berthph[0]);
-	deleteLink_Grid(berthph[1]);
+	freeWholeListPath(berthph[0]);
+	freeWholeListPath(berthph[1]);
 	return finalberth;
 }
 
 //将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开
-void robotsGetGoodsPrint(Robot rob[], int num){
+void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
 	for(int i=0; i < num; i++){
 		LinkPath* path, *nextpath;
-		path = findPathToGoods(rob[i], ParcelMap);
+		path = findPathToGoods(rob[i], ParcelMap, gridmap);
 		nextpath = path->next;
 
 		if(nextpath->next != NULL && rob[i].current_status == GETTING){
@@ -258,13 +258,13 @@ void robotsGetGoodsPrint(Robot rob[], int num){
 		if(nextpath->next != NULL && rob[i].current_status == GETTING){
 			printf("get %d\n", i);
 		}
-		deleteLink_Grid(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+		freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 	}
 }
 //控制单个机器人取货并进行控制台输出
-void robotGetGoodsPrint(Robot *pRob, int id){
+void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 	LinkPath* path, *nextpath;
-	path = findPathToGoods(*pRob,ParcelMap);
+	path = findPathToGoods(*pRob,ParcelMap, gridmap);
 	nextpath = path->next;
 
 	if(nextpath->next != NULL && pRob->current_status == GETTING){
@@ -275,13 +275,13 @@ void robotGetGoodsPrint(Robot *pRob, int id){
 		printf("get %d\n", id);
 		pRob->next_status = SENDING;
 	}
-	deleteLink_Grid(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+	freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
 //将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
-void robotsSendGoodsPrint(Robot rob[], int num){
+void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap){
 	for(int i=0; i < num; i++){
 		LinkPath* path, *nextpath;
-		path = findPathToBerth(berth, rob[i]);
+		path = findPathToBerth(berth, rob[i], gridmap);
 		nextpath = path->next;
 
 		if(nextpath->next != NULL && rob[i].current_status == SENDING){
@@ -291,13 +291,13 @@ void robotsSendGoodsPrint(Robot rob[], int num){
 		if(nextpath->next != NULL && rob[i].current_status == SENDING){
 			printf("pull %d\n", i);
 		}
-		deleteLink_Grid(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+		freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 	}
 }
 //控制单个机器人送货并进行控制台输出
-void robotSendGoodsPrint(Robot *pRob, int id){
+void robotSendGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 	LinkPath* path, *nextpath;
-	path = findPathToBerth(berth, *pRob);
+	path = findPathToBerth(berth, *pRob, gridmap);
 	nextpath = path->next;
 
 	if(nextpath->next != NULL && pRob->current_status == SENDING){
@@ -308,7 +308,7 @@ void robotSendGoodsPrint(Robot *pRob, int id){
 		printf("pull %d\n", id);
 		pRob->next_status = SENDING;
 	}
-	deleteLink_Grid(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+	freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
 
 //机器人避让，未完成
@@ -327,11 +327,11 @@ void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请
 	for(int i=0; i < 10; i++){
 		int j = index;
 		while(j--){
-			if(robotpaths[i].next->grid.loc.x == robpos[j].x && robotpaths[i].next->grid.loc.y == robpos[j].y){
+			if(robotpaths[i].pos.x == robpos[j].x && robotpaths[i].pos.y == robpos[j].y){
 				rob->next_status = VOIDING;//与robpos[]中坐标相同，改变机器人状态
 			}
 			else{
-				robpos[index++] = robotpaths[i].grid.loc;//未与robpos[]中元素坐标相同，记录进robpos[]中
+				robpos[index++] = robotpaths[i].pos;//未与robpos[]中元素坐标相同，记录进robpos[]中
 			}
 		}
 	}
