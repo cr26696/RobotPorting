@@ -29,10 +29,10 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 	}
 	LinkPath *hasPath;
 	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
-		for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到
-			hasPath = aStarSearch(&map,robots[robotId].pos,berths[berthId].pos);
-			if(hasPath){break;}
-		}
+		// for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到 <- 扫一个就行
+		hasPath = aStarSearch(&map,robots[robotId].pos,berths[0].pos);
+		// if(hasPath){break;}
+		
 		if(hasPath){//机器人不受困
 			linkDelete_Path(hasPath);
 			robots[robotId].current_status=IDLE;
@@ -43,7 +43,6 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 			robots[robotId].current_status=STUCK;
 			robots[robotId].next_status=STUCK;
 		}
-		linkDelete_Path(hasPath);
 	}
 }
 

@@ -62,27 +62,29 @@ int LinkDelete_ByIndex_Parcel(LinkParcel *L, int pos)
 //输入Point将对应位置链表元素删除,成功返回1,错误返回0
 int LinkDelete_ByPoint_Parcel(LinkParcel *L, Point point){
     LinkParcel *r = L, *d;
-    do{
-        if(r->parcel.loc.x == point.x && r->parcel.loc.y == point.y){
-            d = r;//r坐标位置完全对应
-            r->next = d->next;
-            free(d);
-            return 1;//找到，跳出循环
-        }
-    }while(r->next);
+	while(r->next)//r != NULL 
+		if(isSamePosition(L->parcel.loc,point)){
+			d = r->next;
+			r->next = d->next;
+			free(d);//释放链表节点和对应的Grid
+			return 1;//找到，跳出循环
+		}else{
+			r = r->next;
+		}
     return 0;
 }
 //传入货物链表指针，货物拷贝，删除链表中对应的货物。
 int LinkDelete_ByObj_Parcel(LinkParcel *L, Parcel parcel){
     LinkParcel *r = L, *d;
-    do{
-        if(r->parcel.loc.x == parcel.loc.x && r->parcel.loc.y == parcel.loc.y){
-            d = r;//r坐标位置完全对应
-            r->next = d->next;
-            free(d);
-            return 1;//找到，跳出循环
-        }
-    }while(r->next);
+	while(r->next)//r != NULL 
+		if(isSamePosition(L->parcel.loc,parcel.loc)){
+			d = r->next;
+			r->next = d->next;
+			free(d);//释放链表节点和对应的Grid
+			return 1;//找到，跳出循环
+		}else{
+			r = r->next;
+		}
     return 0;
 }
 //删除链表内指定位次货物，并将删除的元素存下来。

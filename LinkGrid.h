@@ -18,12 +18,14 @@ typedef struct LinkGrid
 LinkGrid *LinkInit_Grid(LinkGrid *L);
 LinkGrid *LinkCreate_Grid(int len);
 void LinkDelete_Grid(LinkGrid *L);
+void LinkSoftDelete_Grid(LinkGrid *L);
 //void LinkInsert_Head_Grid(LinkGrid *L, Parcel parcel);
 
 int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid);
 int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
 int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point);
 int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid);
+int LinkSoftDelete_ByObj_Grid(LinkGrid *L, Grid* grid);
 // int LinkDelete_Save_Grid(LinkGrid *L, int pos, Grid* grid);
 int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid);//???
 Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos);//???

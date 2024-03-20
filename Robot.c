@@ -169,8 +169,8 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 		}
 	}
 	finalpath = temppath[2];//???2?  <-------最大下标为2
-	freeWholeListPath(temppath[0]);
-	freeWholeListPath(temppath[1]);
+	linkDelete_Path(temppath[0]);
+	linkDelete_Path(temppath[1]);
 	return finalpath;
 }
 // //将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
@@ -239,8 +239,8 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
 		}
 	}
 	finalberth = berthph[2];
-	freeWholeListPath(berthph[0]);
-	freeWholeListPath(berthph[1]);
+	linkDelete_Path(berthph[0]);
+	linkDelete_Path(berthph[1]);
 	return finalberth;
 }
 
@@ -258,7 +258,7 @@ void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
 		if(nextpath->next != NULL && rob[i].current_status == GETTING){
 			printf("get %d\n", i);
 		}
-		freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+		linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 	}
 }
 //控制单个机器人取货并进行控制台输出
@@ -275,7 +275,7 @@ void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 		printf("get %d\n", id);
 		pRob->next_status = SENDING;
 	}
-	freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
 //将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
 void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap){
@@ -291,7 +291,7 @@ void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap){
 		if(nextpath->next != NULL && rob[i].current_status == SENDING){
 			printf("pull %d\n", i);
 		}
-		freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+		linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 	}
 }
 //控制单个机器人送货并进行控制台输出
@@ -308,7 +308,7 @@ void robotSendGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 		printf("pull %d\n", id);
 		pRob->next_status = SENDING;
 	}
-	freeWholeListPath(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
 
 //机器人避让，未完成

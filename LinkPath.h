@@ -14,19 +14,16 @@ typedef struct LinkPath
     struct LinkPath *next; //下一个链表节点的地址
 } LinkPath;
 
-LinkPath *initList_Path(LinkPath *L);
-int insertListPath(LinkPath *L, int pos, Point point);
+LinkPath* linkInit_Path(LinkPath *L);
+int linkInsert_byPos_Path(LinkPath *L, int pos, Point point);
 void linkDelete_Path(LinkPath *L);
-int deletListPathByPoint(LinkPath *L, Point point);
-void reverseListPath(LinkPath *L);
-LinkPath *searchListPath(LinkPath *L, Point point);
-int LinkGetLen_Path(LinkPath *L);
-int isEmpty(LinkPath *L);
-void freeWholeListPath(LinkPath *L);
-void printLinkList(LinkPath *L);
-int deleteListPath(LinkPath *L, int pos);
-
-int LinkInsertEnd_Path(LinkPath *endNode, Point point);//输入尾链表，在其后新建并插入点 返回值1成功0失败
+int linkDelete_byPoint_Path(LinkPath *L, Point point);
+int linkDelete_byPos_Path(LinkPath *L, int pos);
+void linkReverse_Path(LinkPath *L);
+LinkPath *linkSearch_byPos_Path(LinkPath *L, Point point);
+int linkGetLen_Path(LinkPath *L);
+int linkIsEmpty_Path(LinkPath *L);
+// void linkfreeWhole_Path(LinkPath *L);
 
 #endif
 

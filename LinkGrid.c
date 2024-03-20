@@ -46,6 +46,12 @@ void LinkDelete_Grid(LinkGrid *L){
 	return;
 }
 
+//软 释放链表
+void LinkSoftDelete_Grid(LinkGrid *L){
+	L->next = NULL;
+	return;
+}
+
 // //输入链表头，格子的拷贝，在对应链表头插入格子 暂时不要用
 // void insertLinkListHead(LinkGrid *L, Grid grid)
 // {
@@ -109,6 +115,19 @@ int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid){
 			d = r->next;
 			r->next = d->next;
 			free(d);//释放链表节点和对应的Grid
+			return 1;//找到，跳出循环
+		}else{
+			r = r->next;
+		}
+	return 0;
+}
+int LinkSoftDelete_ByObj_Grid(LinkGrid *L, Grid* grid){
+	LinkGrid *r = L, *d;
+	while(r->next)//r != NULL 
+		if(isSamePosition(r->next->grid->loc,grid->loc)){
+			d = r->next;
+			r->next = d->next;
+			// free(d);//softdelete
 			return 1;//找到，跳出循环
 		}else{
 			r = r->next;
