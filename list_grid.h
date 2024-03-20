@@ -19,11 +19,13 @@ LinkGrid *LinkInit_Grid(LinkGrid *L);
 LinkGrid *LinkCreate_Grid(int len);
 void LinkDelete_Grid(LinkGrid *L);
 //void LinkInsert_Head_Grid(LinkGrid *L, Parcel parcel);
+
 int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid);
 int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos);
 int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point);
 int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid);
 // int LinkDelete_Save_Grid(LinkGrid *L, int pos, Grid* grid);
+
 int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid);
 Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos);
 LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* grid);//查找其实是按grid的xy匹配查找的，返回位置链头，否则返回NULL
