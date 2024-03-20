@@ -8,14 +8,15 @@ typedef struct Point
   int x;
   int y;
 }Point;
+
 //寻路算法所用格点，内含坐标Pos,父格点指针
-typedef struct Grid {
-    Point loc;
-    struct Grid* father;//父格点地址
-    int G, F, H;
-    // int inOpen,inClose;
-    // int typeOfgrid;//格子类型？
-}Grid;
+// typedef struct Grid {
+//     Point loc;
+//     struct Grid* father;//父格点地址
+//     int G, F, H;
+//     // int inOpen,inClose;
+//     // int typeOfgrid;//格子类型？
+// }Grid;
 
 Point createPoint(int x,int y);
 
