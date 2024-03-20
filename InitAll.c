@@ -3,7 +3,7 @@
 #include "astar.h"
 #include "Boat.h"
 
-void Inittotal(Map map,Robot robots[],int robotCount,Boat boats[],int boatCount,Berth berths[],int berthCount,int boat_capacity )
+void Inittotal(Map map,Grid** gridMap,Robot robots[],int robotCount,Boat boats[],int boatCount,Berth berths[],int berthCount,int boat_capacity )
 {
 	InitBerth(berths,berthCount);
 	InitBoat(boats,boatCount);
@@ -12,10 +12,10 @@ void Inittotal(Map map,Robot robots[],int robotCount,Boat boats[],int boatCount,
 		AllboatatVIRTUAL(&boats[i],boatCount,berths,berthCount);
 		printf("ship %d %d\n", i, boats[i].aimId);
 	}
-	InitRobot(map,berths,berthCount,robots,robotCount);
+	InitRobot(map,gridMap,berths,berthCount,robots,robotCount);
 }
 
-void InitRobot(Map map,Berth berths[],int berthCount,Robot robots[],int robotCount)//机器人状态初始化???判断是否受困
+void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robots[],int robotCount)//机器人状态初始化???判断是否受困
 {//默认地图大小200;
 	int tRobotID=0;//读地图机器人序号
 	for(int mx=0;mx<200 && tRobotID<10;mx++){
@@ -30,11 +30,11 @@ void InitRobot(Map map,Berth berths[],int berthCount,Robot robots[],int robotCou
 	LinkPath *hasPath;
 	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
 		for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到
-			hasPath = aStarSearch(&map,robots[robotId].pos,berths[berthId].pos);
+			hasPath = aStarSearch(&map,gridMap,robots[robotId].pos,berths[berthId].pos);
 			if(hasPath){break;}
 		}
 		if(hasPath){//机器人不受困
-			deleteLink_Grid(hasPath);
+			linkDelete_Path(hasPath);
 			robots[robotId].current_status=IDLE;
 			robots[robotId].next_status=IDLE;
 			robots[robotId].direct=ROBOT_WAITING;
@@ -43,7 +43,7 @@ void InitRobot(Map map,Berth berths[],int berthCount,Robot robots[],int robotCou
 			robots[robotId].current_status=STUCK;
 			robots[robotId].next_status=STUCK;
 		}
-		deleteLink_Grid(hasPath);
+		linkDelete_Path(hasPath);
 	}
 }
 

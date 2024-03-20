@@ -77,7 +77,7 @@ int LinkInsert_ByIndex_Grid(LinkGrid *L, int pos, Grid* grid)//???改
 //删除指定位置处链表元素,成功返回1,错误返回0
 int LinkDelete_ByIndex_Grid(LinkGrid *L, int pos)
 {
-	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
+	if(pos < 1 || pos > LinkGetLen_Grid(L)) return 0;//删除位置错误
 	LinkGrid *r = L, *d;
 	while(--pos > 0)
 	{
@@ -262,19 +262,6 @@ Grid* ListgetMinCostGrid_Grid(LinkGrid *L){
 	}
 	//遍历链表后，返回最小格点地址。
 	return grid;
-}
-
-int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid* grid){
-	LinkGrid *r = L;
-	int pos;
-	while(r != NULL){
-		r = r->next;
-		pos++;
-		if(r->grid->loc.x == grid->loc.x && r->grid->loc.y == grid->loc.y){
-			return pos;
-		}
-	}
-	return -1;
 }
 
 Grid* LinksearchObj_ByPos_Grid(LinkGrid *L, int pos){

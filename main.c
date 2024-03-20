@@ -87,7 +87,7 @@ void Init()
 		//
 		InitBerth(berth,berth_num);
 		InitBoat(boat,boat_num);
-		InitRobot(map,berth,berth_num,robot,robot_num);
+		InitRobot(map,(Grid**)gridMap,berth,berth_num,robot,robot_num);
 		InitParcel(&parcelMap, &LinkParcels, &LockedParcels);
 		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束

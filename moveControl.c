@@ -3,14 +3,14 @@
 void updateRobotDirect(Robot *robot, LinkPath *path)
 {
   //当前点，下一步点
-  Point Pstart = path->grid.loc;
+  Point Pstart = path->pos;
   path = path->next;//path链表位置移动到next
-  Point Pnext = path->grid.loc;
+  Point Pnext = path->pos;
 
   robot->direct = getStepDirect(Pstart,Pnext);
 }
 
 // Point getRobotNextPathPoint(Robot *rob, LinkPath *path){
 //   LinkPath *temppath = path;
-//   temppath->next->grid.loc;
+//   temppath->next->pos;
 // }

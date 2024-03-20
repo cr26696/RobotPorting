@@ -8,6 +8,7 @@
 #include "struct_Berth.h"
 #include "struct_Boat.h"
 #include "struct_Map.h"
+#include "struct_Grid.h"
 
 #include "LinkParcel.h"
 /*
@@ -15,6 +16,7 @@
 */
 void InitBerth(Berth berths[],int berth_num);
 void InitBoat(Boat boats[],int boatCount);
-void InitRobot(Map map,Berth berth[],int berthCount,Robot robots[],int robotCount);
+void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robots[],int robotCount);//机器人状态初始化???判断是否受困
 void InitParcel(Map *ParcelMap, LinkParcel *pLinkParcel, LinkParcel *pLockedParcels);
 
+#endif
