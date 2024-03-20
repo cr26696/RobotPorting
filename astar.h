@@ -10,8 +10,8 @@
 #include "struct_Map.h"
 
 int isValidGrid(Map *map, Point point);//返回1表示空地
-LinkList* aStarSearch( struct Map *map, Point Psrc, Point Pdest);//返回一个path
+Path* aStarSearch(Map *map, Grid** gridMap, Point Psrc, Point Pdest);//返回一个path
 
-LinkList* generatePath(Grid *temp);//传入current的拷贝
+Path* generatePath(Grid *temp);//传入current的拷贝
 
 #endif
