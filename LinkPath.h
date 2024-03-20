@@ -16,7 +16,7 @@ typedef struct LinkPath
 
 LinkPath *initList_Path(LinkPath *L);
 int insertListPath(LinkPath *L, int pos, Point point);
-int deleteListPath(LinkPath *L, int pos);
+void linkDelete_Path(LinkPath *L);
 int deletListPathByPoint(LinkPath *L, Point point);
 void reverseListPath(LinkPath *L);
 LinkPath *searchListPath(LinkPath *L, Point point);
@@ -24,6 +24,7 @@ int getLen(LinkPath *L);
 int isEmpty(LinkPath *L);
 void freeWholeListPath(LinkPath *L);
 void printLinkList(LinkPath *L);
+int deleteListPath(LinkPath *L, int pos);
 
 int LinkInsertEnd_Path(LinkPath *endNode, Point point);//输入尾链表，在其后新建并插入点 返回值1成功0失败
 

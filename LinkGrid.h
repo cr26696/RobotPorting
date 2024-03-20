@@ -31,7 +31,6 @@ LinkGrid *LinksearchLink_ByObj_Grid(LinkGrid *L, Grid* grid);//查找其实是�
 void LinkReverse_Grid(LinkGrid *L);//444
 int LinkGetLen_Grid(LinkGrid *L);//111
 int LinkIsEmpty_Grid(LinkGrid *L);//222
-void deleteLink_Grid(LinkGrid *L);//333
 
 int LinkGetLen_Grid(LinkGrid* L);
 LinkGrid* ListsearchMin_Grid(LinkGrid *L);

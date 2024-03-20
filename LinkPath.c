@@ -21,6 +21,22 @@ int insertListPath(LinkPath *L, int pos, Point point){
 	return 1;
 }
 
+void linkDelete_Path(LinkPath *L){
+	LinkPath* r = L;
+	LinkPath* t;
+	r = r->next;
+	if(r!=NULL){
+		do
+		{
+			t = r;
+			r = r->next;
+			free(t);
+		} while (r!=NULL);
+	}
+	free(L);
+	return;
+}
+
 int deleteListPath(LinkPath *L, int pos){
 	if(pos < 1 || pos > getLen(L)) return 0;//删除位置错误
 	LinkPath *r = L, *d;
