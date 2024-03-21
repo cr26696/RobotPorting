@@ -34,7 +34,7 @@ Boat boat[boat_num];
 LinkParcel LinkParcels;
 LinkParcel LockedParcels;
 
-LinkPath paths_robot[robot_num];
+LinkPath paths_robot[robot_num];//调用起来
 
 int money, boat_capacity, frame;
 int numofgds = 0;
@@ -88,8 +88,8 @@ int Input()
 		{
 				int carry,awake;//carry：0表示未携带物品；awake:0表示恢复状态(晕眩)
 				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &awake);
-				robotstatusupdate(carry,awake,&robot[i]);//机器人状态处理函数
-				
+				robotUpdate_sysInput(carry,awake,&robot[i]);//机器人状态处理函数
+				robot[i].current_status = robot[i].next_status;
 		}
 		for(int i = 0; i < 5; i ++)
 		{
@@ -105,30 +105,18 @@ int Input()
 int main()
 {
 	Init();
-	for(int zhen = 1; zhen <= 15000; zhen ++)
+	for(int frame = 1; frame <= 15000; frame ++)
 	{
-		int frame = Input();//返回当前帧数
+		frame = Input();//返回当前帧数
 		for(int i = 0; i < robot_num; i ++)//机器人控制
 		{
-			switch (robot[i].current_status)
-			{
-			case IDLE:
-				robotGetGoodsPrint(&robot[i],i);
-				robot[i].next_status = GETTING;
-				break;
-			case GETTING:
-				robotGetGoodsPrint(&robot[i],i);
-				break;
-			case SENDING:
-				robotSendGoodsPrint(&robot[i],i);
-				break;
-			default:break;
-			}
+			robotUpdate_Action(&robot[i]);
+			robotAction(&robot[i]);
 			robot[i].current_status = robot[i].next_status;
 		}
 		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
 		//消失货物列表维护
-		if(frame>1000)ParcelTimedDelete(&LockedParcels,frame);
+		if(frame>1000)ParcelTimedDelete(&LinkParcels,frame);
 		puts("OK");
 		fflush(stdout);
 	}

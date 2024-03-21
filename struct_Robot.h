@@ -16,6 +16,7 @@
 #define ROBOT_WAITING 4
 
 #include "geometry.h"
+#include "LinkPath.h"
 
 typedef enum {
     STUCK = -1,//困住
@@ -24,17 +25,37 @@ typedef enum {
     SENDING = 2,//送货路上
     CRASHING = 3,//碰撞
     VOIDING = 4,//避让
-    GET = 5,//下一步移动取货
-    SEND = 6//下一步移动送货
+    SearchBerth = 5,//准备找泊口
+    SearchParcel = 6,//准备找货物
+    GET = 7,//拿货
+    PULL = 8//放货
 }robot_state;
+
+// typedef enum {
+//     MOVE_RIGHT = 0,
+//     MOVE_LEFT = 1,
+//     MOVE_UP = 2,
+//     MOVE_DOWN = 3,
+//     ROBOT_WAITING = 4,
+//     GETTING = 5,//取货路上
+//     SENDING = 6,//送货路上
+//     VOIDING = 7,//避让
+//     SearchBerth = 5,//准备找泊口
+//     SearchParcel = 6,//准备找货物
+//     GET = 7,//拿货
+//     PULL = 8//放货
+// }robot_action;
 
 typedef struct Robot
 {
+    int id;
     Point pos;//目前位置
+    Point aim;//最终目标地点
+    LinkPath* curPath;
     robot_state current_status;//当前状态
     robot_state next_status;//下一帧状态
     robot_state tempstatus;//碰撞前的状态暂存
-    int direct;//下一步方向
+    int action;//机器人行动
 }Robot;
 
 #endif

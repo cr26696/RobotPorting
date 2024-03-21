@@ -1,9 +1,9 @@
 #include "geometry.h"
 
-#define MOVE_LEFT 1
-#define MOVE_RIGHT 2
-#define MOVE_UP 3
-#define MOVE_DOWN 4
+#define MOVE_LEFT 0
+#define MOVE_RIGHT 1
+#define MOVE_UP 2
+#define MOVE_DOWN 3
 
 //返回一个Point类型引用
 Point createPoint(int x,int y){

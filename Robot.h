@@ -18,17 +18,20 @@
 #define LOADING_FACTOR  15
 #define TRANS_FACTOR    5
 
-void robotstatusupdate(int carry,int awake ,Robot *robot);//机器人状态处理函数
+void robotUpdate_sysInput(int carry,int awake ,Robot *robot);//机器人状态处理函数
 
-LinkPath* findPathToGoods(Robot rob, Map MapOfParcels);
-LinkPath* findPathToBerth(Berth *berths,  Robot rob);
+LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob);
+LinkPath* findPathToBerth(Berth *berths, Robot* rob);
 //int* pathToDirection(LinkList* path);
 int isParcelGrid(Parcel pos);
 //下方为实际机器人进行动作的函数
 
-void robotsGetGoodsPrint(Robot rob[], int num);
-void robotGetGoodsPrint(Robot *pRob, int id);
-void robotsSendGoodsPrint(Robot rob[], int num);
-void robotSendGoodsPrint(Robot *pRob, int id);
+// void robotGetGoodsPrint(Robot *pRob, int id);
+// void robotSendGoodsPrint(Robot *pRob, int id);
+
+void robotGetParcelPath(Robot* pRob);
+void robotGetBerthPath(Robot* pRob);
+void robotUpdate_Action(Robot *pRob);
+void robotAction(Robot* pRob);
 
 #endif

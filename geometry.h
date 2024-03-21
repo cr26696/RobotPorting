@@ -9,6 +9,11 @@ typedef struct Point
   int y;
 }Point;
 
+typedef struct Area
+{
+  Point start;//start是左上角
+  Point end;//end 是右下角
+}Area;
 //寻路算法所用格点，内含坐标Pos,父格点指针
 // typedef struct Grid {
 //     Point loc;
@@ -30,5 +35,5 @@ int getDistance_Manhattan(Point start, Point end);
 
 int getStepDirect(Point start,Point next);
 
-
+Area getAreaInMap(Point center, int radius);
 #endif

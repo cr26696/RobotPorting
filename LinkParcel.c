@@ -175,6 +175,7 @@ void LinkReverse_Parcel(LinkParcel *L)
 //返回尾部链表长度
 int LinkGetLen_Parcel(LinkParcel *L)
 {
+    if(L==NULL) return 0;
     if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
     int len = 0;
     LinkParcel *r = L->next;

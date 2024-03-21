@@ -7,7 +7,7 @@ void updateRobotDirect(Robot *robot, LinkPath *path)
   //path链表位置移动到next
   Point Pnext = path->next->pos;
 
-  robot->direct = getStepDirect(Pstart,Pnext);
+  robot->action = getStepDirect(Pstart,Pnext);
 }
 
 // Point getRobotNextPathPoint(Robot *rob, LinkPath *path){

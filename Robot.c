@@ -10,39 +10,39 @@ extern LinkParcel LinkParcels;
 extern LinkParcel LockedParcels;
 
 //机器人状态处理函数 处理判题器输入
-void robotstatusupdate(int carry,int awake ,Robot *robot)
+void robotUpdate_sysInput(int carry,int awake ,Robot *robot)
 {
 	if (!awake) // 传入眩晕
 	{
-		//刚晕
-		if(robot->current_status!=CRASHING){
+		if(robot->current_status!=CRASHING){//之前没晕
 			robot->tempstatus = robot->current_status;
 			robot->current_status=CRASHING;
 			robot->next_status=CRASHING;
 		}
 	}else{//传入清醒
-		if(robot->current_status == IDLE){//闲着 该干活了
-			robot->current_status = GETTING;
-			robot->next_status = GETTING;//这帧和下帧应该要进行之前的工作
-		}
-		else if(robot->current_status == CRASHING){//没醒 给喊醒
+		// if(robot->current_status == IDLE){//闲着 该干活了
+		// 	robot->current_status = SearchParcel;
+		// 	robot->next_status = SearchParcel;//这帧和下帧应该要进行之前的工作
+		// }
+		// else 
+		if(robot->current_status == CRASHING){//没醒 给喊醒
 			robot->current_status = robot->tempstatus;
-			robot->next_status = robot->tempstatus;//这帧和下帧应该要进行之前的工作
+			// robot->next_status = robot->tempstatus;//这帧和下帧应该要进行之前的工作
 		}//else 还在继续晕
+	
 		if(carry){//传入清醒 且传入拿货
 			if(robot->current_status == GETTING){//捡到货了家人们
-				robot->current_status = SENDING;
-				robot->current_status = SENDING;
+				robot->current_status = SearchBerth;
 			}
 		}else{//传入清醒 且传入没在拿货
 				if(robot->current_status == SENDING){//没捡到货就想送货？ 如捡
-					robot->current_status = GETTING;
-					robot->current_status = GETTING;
+					robot->current_status = SearchParcel;
 				}
-			}
+		}
 	}
-	// if(carry==1 && awake==1)
-	// {robot->current_status=SENDING;}
+	if(robot->curPath!=NULL && isSamePosition(robot->pos,robot->curPath->next->next->pos)){
+		linkDelete_byPos_Path(robot->curPath,1);
+	}
 }
 //判断某点是否为货物 不在main中调用
 int isParcelGrid(Parcel pos){
@@ -58,8 +58,9 @@ int isParcelGrid(Parcel pos){
 	return 0;
 }
 
+
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
+LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob){
 	Parcel curgrid;
 	Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
 	int n = 0;//附近货物个数
@@ -78,20 +79,21 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 
 	int numofph = 0;
 	float valofudis[3];
-
+	//输入机器人坐标 返回合理的搜索范围
 	for(int i = -5; i < 5; i++){//在机器人附近的格子搜索
 		for(int j = -5; j < 5; j++){
-			curgrid.loc.x = rob.pos.x + i;
-			curgrid.loc.y = rob.pos.y + j;
+			curgrid.loc.x = rob->pos.x + i;
+			curgrid.loc.y = rob->pos.y + j;
 			if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!=0){
 				tempparcel.loc.x = curgrid.loc.x;
 				tempparcel.loc.y = curgrid.loc.y;
 				LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
+				n++;
 				//goodsloca[n++] = curgrid;
 			}
 		}
 	}
-	n = LinkGetLen_Parcel(nearParcels);
+	// n = LinkGetLen_Parcel(nearParcels);上面用n++
 	if(n < 3){
 		int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
 		Parcel rangds;
@@ -118,7 +120,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 
 	templist = nearParcels->next;//现在temp near Link 包含随机+附近的货物了
 	for(int i=0;!(templist == NULL);templist = templist->next){//算机器人到物品的折线距离
-		disofgds[i++] = getDistance_Manhattan(rob.pos,templist->parcel.loc);
+		disofgds[i++] = getDistance_Manhattan(rob->pos,templist->parcel.loc);
 	}
 	n = LinkGetLen_Parcel(nearParcels);//更新需要被计算货物数量
 
@@ -138,61 +140,38 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 			}
 		}
 	}
+
 	for(int i=0; i < 3; i++){
 		Point temppoint;
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
 		temppoint = finalgdsloca[i].loc;//
-		temppath[i] = aStarSearch(&map, rob.pos, temppoint);//根据A*算法计算路径长度
+		temppath[i] = aStarSearch(&map, rob->pos, temppoint);//根据A*算法计算路径长度
 		numofph = linkGetLen_Path(temppath[i]);
 
 		valofudis[i] = parcelMap.data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / (float)numofph;//单位格价值
 		numofph = 0;
 	}
-	if(valofudis[0]>valofudis[1]){
-		if(valofudis[0]>valofudis[2]){ //0 最好
-			finalpath = temppath[0];
-			linkDelete_Path(temppath[1]);
-			linkDelete_Path(temppath[2]);
-		}else {//2 最好
-			finalpath = temppath[2];
-			linkDelete_Path(temppath[0]);
-			linkDelete_Path(temppath[1]);
-		}
-	}else if(valofudis[1]>valofudis[2]){//1最好
-		finalpath = temppath[1];
-		linkDelete_Path(temppath[0]);
-		linkDelete_Path(temppath[2]);
-	}
 
+	int bestIndex = 0;//暂存最佳值 //返回最佳路径
+	float bestPathValue=valofudis[0];
+	for(int i=1;i<3;i++){
+		if(valofudis[i]>bestPathValue){
+			bestPathValue = valofudis[i];
+			bestIndex = i;
+		}
+	}
+	finalpath = temppath[bestIndex];
+	for(int i=0;i<3;i++){
+		if(i==bestIndex)continue;
+		if(temppath[i])linkDelete_Path(temppath[i]);
+	}
+	rob->aim = finalgdsloca[bestIndex].loc;
 	return finalpath;
 }
-// //将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
-// int* pathToDirection(LinkPath* path){
-// 	LinkPath* temp;
-// 	int *direction;
-// 	temp = path->next;
-// 	while(temp->next != NULL){
-// 		temp = temp->next;
-// 		path = path->next;
-// 		if(temp->grid.loc.x > path->grid.loc.x){
-// 			*direction++ = MOVE_DOWN;
-// 		}
-// 		else if(temp->grid.loc.x < path->grid.loc.x){
-// 			*direction++ = MOVE_UP;
-// 		}
-// 		else if(temp->grid.loc.y > path->grid.loc.y){
-// 			*direction++ = MOVE_RIGHT;
-// 		}
-// 		else if(temp->grid.loc.y < path->grid.loc.y){
-// 			*direction++ = MOVE_LEFT;
-// 		}
-// 	}
-// 	*direction = -1;
-// 	return direction;
-// }
+
 
 //返回机器人到泊口的路径 不在main中调用
-LinkPath* findPathToBerth(Berth *berths,  Robot rob){
+LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 	int disofber[10];
 	Berth temp;
 	LinkPath* berthph[3], *tempber;
@@ -201,7 +180,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 	LinkPath* finalberth;
 
 	for(int i=0; i <10; i++){
-		disofber[i] = abs(berths[i].pos.x - rob.pos.x) + abs(berths[i].pos.y - rob.pos.y);//计算机器人到泊口的折线距离
+		disofber[i] = abs(berths[i].pos.x - rob->pos.x) + abs(berths[i].pos.y - rob->pos.y);//计算机器人到泊口的折线距离
 	}
 	for (int i=0; i < 10; i++){//按照disofber[]离泊口步数排序berths[]，粗略距离
 		for (int j=0; j < 10 - 1 - i; j++){
@@ -213,7 +192,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 		}
 	}
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
-		berthph[i] = aStarSearch(&map, rob.pos, berths[i].pos);
+		berthph[i] = aStarSearch(&map, rob->pos, berths[i].pos);
 		while(berthph[i]->next != NULL){
 			berthph[i] = berthph[i]->next;
 			numofph++;
@@ -237,71 +216,111 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 	return finalberth;
 }
 
-//将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开
-void robotsGetGoodsPrint(Robot rob[], int num){
-	for(int i=0; i < num; i++){
-		LinkPath* path, *nextpath;
-		path = findPathToGoods(rob[i], parcelMap);
-		nextpath = path->next;
-
-		if(nextpath->next != NULL && rob[i].current_status == GETTING){
-			updateRobotDirect(&rob[i], path);
-			printf("move %d %d\n", i, rob->direct);
-		}
-		if(nextpath->next != NULL && rob[i].current_status == GETTING){
-			printf("get %d\n", i);
-		}
-		linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
-	}
+//
+void robotGetParcelPath(Robot* pRob){
+	LinkPath* tempPath = findPathToGoods(parcelMap,pRob);
+	free(pRob->curPath);
+	pRob->curPath = tempPath;
 }
-//控制单个机器人取货并进行控制台输出
-void robotGetGoodsPrint(Robot *pRob, int id){
-	LinkPath* path;
-	path = findPathToGoods(*pRob,parcelMap)->next;//path直接跳过表头，从内容结点开始（为机器人当前位置）
-
-	if(pRob->current_status == GETTING){
-		updateRobotDirect(pRob, path);
-		printf("move %d %d\n", id, pRob->direct);
-	}
-	if(path->next->next == NULL && pRob->current_status == GETTING){//当前节点为机器人目前点，下结点为下步点，下步点无后继==终点
-		printf("get %d\n", id);
+void robotGetBerthPath(Robot* pRob){
+	LinkPath* tempPath = findPathToBerth(berth,pRob);
+	free(pRob->curPath);
+	pRob->curPath = tempPath;
+}
+void robotUpdate_Action(Robot *pRob)
+{
+	switch (pRob->current_status)
+	{
+	case IDLE:
+		pRob->current_status = SearchParcel;
+		pRob->next_status = GETTING;
+	break;
+	case GETTING:
+		if(isSamePosition(pRob->curPath->next->pos,pRob->aim)){
+			pRob->current_status = GET;
+			pRob->next_status = SearchBerth;
+		}
+		pRob->action = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+	break;
+	case SENDING:
+		if(isSamePosition(pRob->curPath->next->pos,pRob->aim)){
+			pRob->current_status = PULL;
+			pRob->next_status = SearchParcel;
+		}
+		pRob->action = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+	break;
+	case SearchParcel:
+		pRob->next_status = GETTING;
+	break;
+	case SearchBerth:
 		pRob->next_status = SENDING;
+	break;
+	default:break;
 	}
-	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
-//将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
-void robotsSendGoodsPrint(Robot rob[], int num){
-	for(int i=0; i < num; i++){
-		LinkPath* path, *nextpath;
-		path = findPathToBerth(berth, rob[i]);
-		nextpath = path->next;
 
-		if(nextpath->next != NULL && rob[i].current_status == SENDING){
-			updateRobotDirect(&rob[i], path);
-			printf("move %d %d\n", i, rob->direct);
-		}
-		if(nextpath->next != NULL && rob[i].current_status == SENDING){
-			printf("pull %d\n", i);
-		}
-		linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+void robotAction(Robot* pRob){
+	switch (pRob->current_status)
+	{
+		case GETTING:
+			printf("move %d %d\n", pRob->id, pRob->action);
+			break;
+		case GET:
+			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("get %d\n", pRob->id);
+		break;
+		case SENDING:
+			printf("move %d %d\n", pRob->id, pRob->action);
+			break;
+		case PULL:
+			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("pull %d\n", pRob->id);
+		break;
+		case SearchBerth:
+			robotGetBerthPath(pRob);
+			if (pRob->curPath==NULL)pRob->next_status=SearchBerth;
+		break;
+		case SearchParcel:
+			robotGetParcelPath(pRob);
+			if (pRob->curPath==NULL)pRob->next_status=SearchParcel;
+		break;
+		case VOIDING:
+			//还没写
+		break;
+		default:break;
 	}
 }
+// void (Robot *pRob, int id){
+// 	LinkPath* path;
+// 	path = findPathToGoods(*pRob,parcelMap);
+// 	path = path->next;//path直接跳过表头，从内容结点开始（为机器人当前位置）
+// 	if(pRob->current_status == GETTING){
+// 		updateRobotDirect(pRob, path);
+// 		printf("move %d %d\n", id, pRob->action);
+// 	}
+// 	if(path->next->next == NULL && pRob->current_status == GETTING){//当前节点为机器人目前点，下结点为下步点，下步点无后继==终点
+// 		printf("get %d\n", id);
+// 		pRob->next_status = SENDING;
+// 	}
+// 	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+// }
+
 //控制单个机器人送货并进行控制台输出
-void robotSendGoodsPrint(Robot *pRob, int id){
-	LinkPath* path, *nextpath;
-	path = findPathToBerth(berth, *pRob);
-	nextpath = path->next;
+// void robotSendGoodsPrint(Robot *pRob, int id){
+// 	LinkPath* path, *nextpath;
+// 	path = findPathToBerth(berth, *pRob);
+// 	nextpath = path->next;
 
-	if(nextpath->next != NULL && pRob->current_status == SENDING){
-		updateRobotDirect(pRob, path);
-		printf("move %d %d\n", id, pRob->direct);
-	}
-	if(nextpath->next != NULL && pRob->current_status == SENDING){
-		printf("pull %d\n", id);
-		pRob->next_status = SENDING;
-	}
-	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
-}
+// 	if(nextpath->next != NULL && pRob->current_status == SENDING){
+// 		updateRobotDirect(pRob, path);
+// 		printf("move %d %d\n", id, pRob->action);
+// 	}
+// 	if(nextpath->next != NULL && pRob->current_status == SENDING){
+// 		printf("pull %d\n", id);
+// 		pRob->next_status = SENDING;
+// 	}
+// 	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
+// }
 
 //机器人避让，未完成
 /*
@@ -309,7 +328,7 @@ int idofrob 机器人编号
 return ：1避让 0不避让
 */
 void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请使用0-9
-	Point robpos[20] = {0};
+	Point robpos[20] = {0};//使用点数组 存储可能发生碰撞的点
 	int index = 0;//robpos[]中元素个数
 	Point temppos;
 	for(int i=0; i < 2; i++){//前十格记录机器人当前位置

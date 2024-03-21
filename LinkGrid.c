@@ -195,6 +195,7 @@ int LinksearchPos_ByObj_Grid(LinkGrid *L, Grid *grid)//???
 //返回尾部链表长度
 int LinkGetLen_Grid(LinkGrid *L)
 {
+	if(L==NULL) return 0;
 	if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
 	int len = 0;
 	LinkGrid *r = L->next;

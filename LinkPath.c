@@ -22,6 +22,7 @@ int linkInsert_byPos_Path(LinkPath *L, int pos, Point point){
 }
 
 void linkDelete_Path(LinkPath *L){
+	
 	LinkPath* r = L;
 	LinkPath* t;
 	r = r->next;
@@ -51,6 +52,7 @@ int linkDelete_byPoint_Path(LinkPath *L, Point point){
 	return 0;
 }
 
+//传坐标 
 int linkDelete_byPos_Path(LinkPath *L, int pos){
 	if(pos < 1 || pos > linkGetLen_Path(L)) return 0;//删除位置错误
 	LinkPath *r = L, *d;
@@ -93,6 +95,7 @@ LinkPath *linkSearch_byPos_Path(LinkPath *L, Point point){//返回无头节点�
 }
 
 int linkGetLen_Path(LinkPath *L){
+	if(L==NULL) return 0;
 	if(L->next == NULL) return 0;//头指针指针域为空，说明单链表不含任何元素
 	int len = 0;
 	LinkPath *r = L->next;
