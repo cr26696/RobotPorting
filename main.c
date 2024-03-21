@@ -22,25 +22,6 @@
 #define boat_num 5
 #define N 200
 
-int numofgds = 0;
-
-// struct Robot
-// {
-//     int x, y, goods;
-//     int status;
-//     int mbx, mby;
-// }robot[robot_num];
-// struct Berth
-// {
-		// int x;a
-		// int y;
-		// int transport_time;
-		// int loading_speed;
-// }berth[berth_num];
-// struct Boat
-// {
-//     int num, pos, status;
-// }boat[boat_num];
 
 Map map;//内有200x200 char数组
 Map parcelMap;//同上
@@ -56,20 +37,16 @@ LinkParcel LockedParcels;
 LinkPath paths_robot[robot_num];
 
 int money, boat_capacity, frame;
-char ch[N][N];//地图 
-//int gds[N][N];
+int numofgds = 0;
 
 void Init()
 {
-	char tempC;
+		numofgds = 0;
 		for(int i = 0; i < MAPSIZE; i ++)
 		{
 			scanf("%s",map.data[i]);
 		}
-		// for(int i = 0; i < n; i ++)
-		// {
-		// 	scanf("%s",ch[i]);
-		// }
+
 		for(int i = 0; i < berth_num; i ++)
 		{
 				int id;
@@ -77,14 +54,13 @@ void Init()
 						berth[id].id=id;
 				scanf("%d%d%d%d", &berth[id].pos.x, &berth[id].pos.y, &berth[id].transport_time, &berth[id].loading_speed);
 		}
+
 		scanf("%d", &boat_capacity);//???
 		char okk[100];
 
 		scanf("%s", okk);
 		//???我们定义的初始化数据(机器人状态，船、泊口初始化，让船到泊口)
 
-
-		//
 		InitBerth(berth,berth_num);
 		InitBoat(boat,boat_num);
 		InitRobot(map,(Grid**)gridMap,berth,berth_num,robot,robot_num);
@@ -104,8 +80,9 @@ int Input()
 				int x, y, val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
+				numofgds ++;
 				parcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
-				LinkInsert_ByIndex_Parcel(&LinkParcels,LinkGetLen_Parcel(&LinkParcels),createParcel(x,y,frame,val));\
+				LinkInsertEnd_Parcel(&LinkParcels,createParcel(x,y,frame,val));
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
@@ -136,14 +113,14 @@ int main()
 			switch (robot[i].current_status)
 			{
 			case IDLE:
-				robotGetGoodsPrint(&robot[i],i,(Grid**)gridMap);
+				robotGetGoodsPrint(&robot[i],i);
 				robot[i].next_status = GETTING;
 				break;
 			case GETTING:
-				robotGetGoodsPrint(&robot[i],i,(Grid**)gridMap);
+				robotGetGoodsPrint(&robot[i],i);
 				break;
 			case SENDING:
-				robotSendGoodsPrint(&robot[i],i,(Grid**)gridMap);
+				robotSendGoodsPrint(&robot[i],i);
 				break;
 			default:break;
 			}

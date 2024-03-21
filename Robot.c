@@ -1,30 +1,13 @@
 #include "Robot.h"
 
-// #define num 10
-// Robot robot[num];
-
-Map *goodsmap;
-LinkParcel* aLLParcelList;
-LinkParcel* lockedParcelList;
-/**************************************************/
-
-
-// #define STUCK -1//困住// 已更换为枚举变量在 robot.h中
-// #define FREE 0 //空闲
-// #define GETTING 1//取货
-// #define SENDING 2//送货
-// #define CRASHING 3//碰撞
-// #define VOIDING 4//避让
-
-/*状态机分状态的转移维护
-以及根据状态进行活动
-*/
-//carry：0表示未携带物品；awake:0表示恢复状态(晕眩)
-
-extern int numofgds;
 extern Map map;
 extern Berth berth[];
 extern Map parcelMap;
+extern Grid gridMap[][200];
+
+extern int numofgds;
+extern LinkParcel LinkParcels;
+extern LinkParcel LockedParcels;
 
 //机器人状态处理函数 处理判题器输入
 void robotstatusupdate(int carry,int awake ,Robot *robot)
@@ -53,7 +36,7 @@ int isParcelGrid(Parcel pos){
 		//界外
 	}
 	else{
-		if(goodsmap->data[pos.loc.x][pos.loc.y] != '0'){
+		if(parcelMap.data[pos.loc.x][pos.loc.y] != '0'){
 			//货物非空 不为'0'
 			return 1;
 		}
@@ -61,22 +44,13 @@ int isParcelGrid(Parcel pos){
 	return 0;
 }
 
-// int isGoodsExists(Point* gdsloc, Point gds){
-//     while(gdsloc++ != NULL){
-//         if(gdsloc == gds){
-//             return 0;
-//         }
-//     }
-//     return 1;
-// }
-
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
+LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 	Parcel curgrid;
 	Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
 	int n = 0;//附近货物个数
 
-	int disofgds[120];//11*11 - 1 减去机器人所在位置
+	int disofgds[120]={0};//11*11 - 1 减去机器人所在位置
 	Parcel temp;
 	Parcel finalgdsloca[3];
 
@@ -86,7 +60,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 	LinkPath* temppath[3];
 	LinkPath* tempph;
 	LinkPath* finalpath;
-	LinkParcel* nearParcels;
+	LinkParcel* nearParcels = LinkInit_Parcel(nearParcels);
 
 	int numofph = 0;
 	float valofudis[3];
@@ -95,7 +69,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 		for(int j = -5; j < 5; j++){
 			curgrid.loc.x = rob.pos.x + i;
 			curgrid.loc.y = rob.pos.y + j;
-			if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!='0'){
+			if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!=0){
 				tempparcel.loc.x = curgrid.loc.x;
 				tempparcel.loc.y = curgrid.loc.y;
 				LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
@@ -107,14 +81,14 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 	if(n < 3){
 		int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
 		Parcel rangds;
-		for(n; n <= 3; ){
-			rangds = LinksearchObj_ByPos_Parcel(aLLParcelList, rand() % LinkGetLen_Parcel(aLLParcelList));
+		for(n; n <= 3;){
+			rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
 			//rangds.x = goodsmap[rand() % numofgds];
 			templist = nearParcels;
-			while(templist->next != NULL){
+			while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
 				templist = templist->next;
-				if(templist->parcel.loc.x == rangds.loc.x && templist->parcel.loc.y == rangds.loc.y){
-					exflag = 1;
+				if(isSamePosition(templist->parcel.loc,rangds.loc)){
+					exflag = 1;//重复
 					break;
 				}
 			}
@@ -132,7 +106,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 	while(templist->next != NULL){//算机器人到物品的折线距离
 		int i = 0;
 		templist = templist->next;
-		disofgds[i++] = abs(rob.pos.x - templist->parcel.loc.x) + abs(rob.pos.y - templist->parcel.loc.y);
+		disofgds[i++] = getDistance_Manhattan(rob.pos,templist->parcel.loc);
 	}
 	n = LinkGetLen_Parcel(nearParcels);//更新需要被计算货物数量
 
@@ -161,7 +135,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 			numofph++;
 		}
         //判断numofph是否为0(是否被困) 为0则valofudis = 0
-		valofudis[i] = numofph==0? 0: goodsmap->data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;//单位格价值
+		valofudis[i] = numofph==0? 0: parcelMap.data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;//单位格价值
 		numofph = 0;
 	}
 	for (int i=0; i < 3 - 1; i++){//3选一最大单位价值 放在temppath[2]
@@ -204,7 +178,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels, Grid **gridmap){
 // }
 
 //返回机器人到泊口的路径 不在main中调用
-LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
+LinkPath* findPathToBerth(Berth *berths,  Robot rob){
 	int disofber[10];
 	Berth temp;
 	LinkPath* berthph[3], *tempber;
@@ -250,10 +224,10 @@ LinkPath* findPathToBerth(Berth *berths,  Robot rob, Grid **girdmap){
 }
 
 //将路径转化为机器人控制，获取货物 ???之后将这个函数拆分开
-void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
+void robotsGetGoodsPrint(Robot rob[], int num){
 	for(int i=0; i < num; i++){
 		LinkPath* path, *nextpath;
-		path = findPathToGoods(rob[i], parcelMap, gridmap);
+		path = findPathToGoods(rob[i], parcelMap);
 		nextpath = path->next;
 
 		if(nextpath->next != NULL && rob[i].current_status == GETTING){
@@ -267,9 +241,9 @@ void robotsGetGoodsPrint(Robot rob[], int num, Grid **gridmap){
 	}
 }
 //控制单个机器人取货并进行控制台输出
-void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap){
+void robotGetGoodsPrint(Robot *pRob, int id){
 	LinkPath* path, *nextpath;
-	path = findPathToGoods(*pRob,parcelMap, gridmap);
+	path = findPathToGoods(*pRob,parcelMap);
 	nextpath = path->next;
 
 	if(nextpath->next != NULL && pRob->current_status == GETTING){
@@ -283,10 +257,10 @@ void robotGetGoodsPrint(Robot *pRob, int id, Grid **gridmap){
 	linkDelete_Path(path);//现在为了避免溢出，只能在任何新建路径之后调用delete!!!
 }
 //将路径转化为机器人控制，运送货物 ???之后将这个函数拆分开 num为路径长？
-void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap){
+void robotsSendGoodsPrint(Robot rob[], int num){
 	for(int i=0; i < num; i++){
 		LinkPath* path, *nextpath;
-		path = findPathToBerth(berth, rob[i], gridmap);
+		path = findPathToBerth(berth, rob[i]);
 		nextpath = path->next;
 
 		if(nextpath->next != NULL && rob[i].current_status == SENDING){
@@ -300,9 +274,9 @@ void robotsSendGoodsPrint(Robot rob[], int num, Grid **gridmap){
 	}
 }
 //控制单个机器人送货并进行控制台输出
-void robotSendGoodsPrint(Robot *pRob, int id, Grid **gridmap){
+void robotSendGoodsPrint(Robot *pRob, int id){
 	LinkPath* path, *nextpath;
-	path = findPathToBerth(berth, *pRob, gridmap);
+	path = findPathToBerth(berth, *pRob);
 	nextpath = path->next;
 
 	if(nextpath->next != NULL && pRob->current_status == SENDING){

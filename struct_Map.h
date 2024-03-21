@@ -5,7 +5,7 @@
 #define MAP_COLS  200
 
 typedef struct Map{
-    char data[MAP_ROWS][MAP_COLS];
+    unsigned char data[MAP_ROWS][MAP_COLS];
 }Map;
 
 #endif

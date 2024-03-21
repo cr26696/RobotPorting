@@ -16,8 +16,9 @@ typedef struct LinkParcel
 
 LinkParcel *LinkInit_Parcel(LinkParcel *L);
 LinkParcel *LinkCreate_Parcel(int len);
-//void LinkInsert_Head_Parcel(LinkParcel *L, Parcel parcel);
+
 int LinkInsert_ByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel);
+void LinkInsertEnd_Parcel(LinkParcel *L, Parcel parcel);
 int LinkDelete_ByIndex_Parcel(LinkParcel *L, int pos);
 int LinkDelete_ByPoint_Parcel(LinkParcel *L, Point point);
 int LinkDelete_ByObj_Parcel(LinkParcel *L, Parcel parcel);

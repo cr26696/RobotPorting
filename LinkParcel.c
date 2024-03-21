@@ -44,6 +44,22 @@ int LinkInsert_ByIndex_Parcel(LinkParcel *L, int pos, Parcel parcel)
     r->next = n;//再把新指针（插入值）链入尾指针之后
     return 1;
 }
+
+//输入表头，货物拷贝，插入尾部 返回1成功 0失败
+void LinkInsertEnd_Parcel(LinkParcel *L, Parcel parcel)
+{
+    LinkParcel *r = L, *n;
+    n = (LinkParcel *) malloc(sizeof(LinkParcel));
+    n->parcel = parcel;
+    n->next = NULL;
+    while(r->next)//从头开始，有下个节点
+    {
+        r = r->next;//指针移动到下一位
+    }
+    //当前r为最后节点
+    r->next = n;//再把新指针（插入值）链入尾指针之后
+}
+
 //删除指定位置处链表元素,成功返回1,错误返回0
 int LinkDelete_ByIndex_Parcel(LinkParcel *L, int pos)
 {
@@ -118,9 +134,9 @@ int LinksearchPos_ByObj_Parcel(LinkParcel *L, Parcel parcel)
 }
 //按位置查找货物链表，返回货物对象
 Parcel LinksearchObj_ByPos_Parcel(LinkParcel *L, int pos){
-    LinkParcel *r;
+    LinkParcel *r = L;
     r = r->next;
-    while(--pos){
+    while(--pos>0){
         r = r->next;
     }
     return r->parcel;
@@ -196,6 +212,7 @@ Parcel createParcel(int x,int y, int time, int value){
   Parcel obj;
   obj.loc.x = x;
   obj.loc.y = y;
+  obj.value = value;
   obj.addedFrame = time;
   //obj->locked = 0;
   return obj;
