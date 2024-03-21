@@ -20,12 +20,26 @@ void robotstatusupdate(int carry,int awake ,Robot *robot)
 			robot->current_status=CRASHING;
 			robot->next_status=CRASHING;
 		}
-	}else{
-		//传入清醒
-		if(robot->current_status == CRASHING){//没醒 给喊醒
+	}else{//传入清醒
+		if(robot->current_status == IDLE){//闲着 该干活了
+			robot->current_status = GETTING;
+			robot->next_status = GETTING;//这帧和下帧应该要进行之前的工作
+		}
+		else if(robot->current_status == CRASHING){//没醒 给喊醒
 			robot->current_status = robot->tempstatus;
 			robot->next_status = robot->tempstatus;//这帧和下帧应该要进行之前的工作
 		}//else 还在继续晕
+		if(carry){//传入清醒 且传入拿货
+			if(robot->current_status == GETTING){//捡到货了家人们
+				robot->current_status = SENDING;
+				robot->current_status = SENDING;
+			}
+		}else{//传入清醒 且传入没在拿货
+				if(robot->current_status == SENDING){//没捡到货就想送货？ 如捡
+					robot->current_status = GETTING;
+					robot->current_status = GETTING;
+				}
+			}
 	}
 	// if(carry==1 && awake==1)
 	// {robot->current_status=SENDING;}
@@ -81,7 +95,7 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 	if(n < 3){
 		int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
 		Parcel rangds;
-		for(n; n <= 3;){
+		for(n; n < 3;){
 			rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
 			//rangds.x = goodsmap[rand() % numofgds];
 			templist = nearParcels;
@@ -102,23 +116,22 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 		}
 	}
 
-	templist = nearParcels;
-	while(templist->next != NULL){//算机器人到物品的折线距离
-		int i = 0;
-		templist = templist->next;
+	templist = nearParcels->next;//现在temp near Link 包含随机+附近的货物了
+	for(int i=0;!(templist == NULL);templist = templist->next){//算机器人到物品的折线距离
 		disofgds[i++] = getDistance_Manhattan(rob.pos,templist->parcel.loc);
 	}
 	n = LinkGetLen_Parcel(nearParcels);//更新需要被计算货物数量
 
-	templist = nearParcels;
-	while(templist->next != NULL){//将节点存入数组便于排序 或请写一个链表排序
-		int i = 0;
-		templist = templist->next;
+	templist = nearParcels->next;
+	for(int i=0;!(templist == NULL);templist = templist->next){//将节点存入数组便于排序 或请写一个链表排序
 		tempparcelarry[i++] = templist->parcel;
-	}
+	}//tempParcelarray赋值？
 	for (int i=0; i < n - 1; i++){//根据估计出来的粗略距离，对货物数进行排序，距离小的排前面
-		for (int j=0; j < n - 1 - i; j++){
+		for (int j=0,t; j < n - 1 - i; j++){
 			if (disofgds[j] > disofgds[j + 1]) {
+					t = disofgds[j];
+					disofgds[j] = disofgds[j + 1];
+					disofgds[j+1] = t;
 					temp = tempparcelarry[j];
 					tempparcelarry[j] = tempparcelarry[j + 1];
 					tempparcelarry[j + 1] = temp;
@@ -128,28 +141,29 @@ LinkPath* findPathToGoods(Robot rob, Map MapOfParcels){
 	for(int i=0; i < 3; i++){
 		Point temppoint;
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
-		temppoint = finalgdsloca[i].loc;//aStarSearch()中要传入Point类型 需要temppoint保存 或请修改aStarSearch()形参
+		temppoint = finalgdsloca[i].loc;//
 		temppath[i] = aStarSearch(&map, rob.pos, temppoint);//根据A*算法计算路径长度
-		while(temppath[i]->next != NULL){//???没有考虑当前机器人能不能到三个货物的情况，<----没有
-			temppath[i] = temppath[i]->next;
-			numofph++;
-		}
-        //判断numofph是否为0(是否被困) 为0则valofudis = 0
-		valofudis[i] = numofph==0? 0: parcelMap.data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / numofph;//单位格价值
+		numofph = linkGetLen_Path(temppath[i]);
+
+		valofudis[i] = parcelMap.data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / (float)numofph;//单位格价值
 		numofph = 0;
 	}
-	for (int i=0; i < 3 - 1; i++){//3选一最大单位价值 放在temppath[2]
-		for (int j=0; j < 3 - 1 - i; j++){
-			if (valofudis[j] > valofudis[j + 1]) {
-					tempph = temppath[j];
-					temppath[j] = temppath[j + 1];
-					temppath[j + 1] = tempph;
-			}
+	if(valofudis[0]>valofudis[1]){
+		if(valofudis[0]>valofudis[2]){ //0 最好
+			finalpath = temppath[0];
+			linkDelete_Path(temppath[1]);
+			linkDelete_Path(temppath[2]);
+		}else {//2 最好
+			finalpath = temppath[2];
+			linkDelete_Path(temppath[0]);
+			linkDelete_Path(temppath[1]);
 		}
+	}else if(valofudis[1]>valofudis[2]){//1最好
+		finalpath = temppath[1];
+		linkDelete_Path(temppath[0]);
+		linkDelete_Path(temppath[2]);
 	}
-	finalpath = temppath[2];//???2?  <-------最大下标为2
-	linkDelete_Path(temppath[0]);
-	linkDelete_Path(temppath[1]);
+
 	return finalpath;
 }
 // //将路径转为direction （int指针 不在main中调用,出错返回-1   <-----不用 直接用geometry.c
@@ -242,15 +256,14 @@ void robotsGetGoodsPrint(Robot rob[], int num){
 }
 //控制单个机器人取货并进行控制台输出
 void robotGetGoodsPrint(Robot *pRob, int id){
-	LinkPath* path, *nextpath;
-	path = findPathToGoods(*pRob,parcelMap);
-	nextpath = path->next;
+	LinkPath* path;
+	path = findPathToGoods(*pRob,parcelMap)->next;//path直接跳过表头，从内容结点开始（为机器人当前位置）
 
-	if(nextpath->next != NULL && pRob->current_status == GETTING){
+	if(pRob->current_status == GETTING){
 		updateRobotDirect(pRob, path);
 		printf("move %d %d\n", id, pRob->direct);
 	}
-	if(nextpath->next != NULL && pRob->current_status == GETTING){
+	if(path->next->next == NULL && pRob->current_status == GETTING){//当前节点为机器人目前点，下结点为下步点，下步点无后继==终点
 		printf("get %d\n", id);
 		pRob->next_status = SENDING;
 	}

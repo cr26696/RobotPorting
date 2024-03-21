@@ -80,9 +80,9 @@ int Input()
 				int x, y, val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				numofgds ++;
 				parcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
 				LinkInsertEnd_Parcel(&LinkParcels,createParcel(x,y,frame,val));
+				numofgds ++;
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
