@@ -24,7 +24,7 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *robot);//机器人状态�
 LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob);
 LinkPath* findPathToBerth(Berth *berths, Robot* rob);
 //int* pathToDirection(LinkList* path);
-int isParcelGrid(Parcel pos);
+//int isParcelGrid(Parcel pos);
 //下方为实际机器人进行动作的函数
 
 // void robotGetGoodsPrint(Robot *pRob, int id);

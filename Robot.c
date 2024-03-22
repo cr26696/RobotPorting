@@ -2,8 +2,8 @@
 
 extern Map map;
 extern Berth berth[];
-extern Map parcelMap;
-extern Grid gridMap[][200];
+extern Parcel parcelMap[200][200];
+extern Grid gridMap[][200]; 
 
 extern int numofgds;
 extern LinkParcel LinkParcels;
@@ -54,22 +54,22 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 	}
 }
 //判断某点是否为货物 不在main中调用
-int isParcelGrid(Parcel pos){
-	if(pos.loc.x < 0 || pos.loc.x > 200 || pos.loc.y < 0 || pos.loc.y > 200){
-		//界外
-	}
-	else{
-		if(parcelMap.data[pos.loc.x][pos.loc.y] != '0'){
-			//货物非空 不为'0'
-			return 1;
-		}
-	}
-	return 0;
-}
+// int isParcelGrid(Parcel pos){
+// 	if(pos.loc.x < 0 || pos.loc.x > 200 || pos.loc.y < 0 || pos.loc.y > 200){
+// 		//界外
+// 	}
+// 	else{
+// 		if(parcelMap.data[pos.loc.x][pos.loc.y] != '0'){
+// 			//货物非空 不为'0'
+// 			return 1;
+// 		}
+// 	}
+// 	return 0;
+// }
 
 
 //根据计算返回可能是目前去往货物最优的路径 不在main中调用
-LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob){
+LinkPath* findPathToGoods(Robot* rob){
 	Parcel curgrid;
 	Parcel tempparcelarry[120] = {0};//11*11 - 1 减去机器人所在位置???机器人要找的货物列表只存坐标
 	int n = 0;//附近货物个数
@@ -91,23 +91,33 @@ LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob){
 	//输入机器人坐标 返回合理的搜索范围
 	for(int i = -5; i < 5; i++){//在机器人附近的格子搜索
 		for(int j = -5; j < 5; j++){
-			curgrid.loc.x = rob->pos.x + i;
-			curgrid.loc.y = rob->pos.y + j;
-			if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!=0){
-				tempparcel.loc.x = curgrid.loc.x;
-				tempparcel.loc.y = curgrid.loc.y;
-				LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
-				n++;
-				//goodsloca[n++] = curgrid;
+			if(rob->pos.x + i < 0 || rob->pos.y + j < 0 ||
+			   rob->pos.x + i > 199 || rob->pos.y + j > 199){
+				continue;
+			}
+			else{
+				curgrid.loc.x = rob->pos.x + i;
+				curgrid.loc.y = rob->pos.y + j;
+				if(!parcelMap[curgrid.loc.x][curgrid.loc.y].locked){
+				// if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!=0){
+					tempparcel.loc.x = curgrid.loc.x;
+					tempparcel.loc.y = curgrid.loc.y;
+					parcelMap[curgrid.loc.x][curgrid.loc.y].locked = 1;
+					LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
+					n++;
+					//goodsloca[n++] = curgrid;
+				}				
 			}
 		}
 	}
 	// n = LinkGetLen_Parcel(nearParcels);上面用n++
 	if(n < 3){
 		int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
-		Parcel rangds;
+		Parcel rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
 		for(n; n < 3;){
-			rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
+			while(rangds.locked){
+				rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
+			}
 			//rangds.x = goodsmap[rand() % numofgds];
 			templist = nearParcels;
 			while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
@@ -157,7 +167,7 @@ LinkPath* findPathToGoods(Map MapOfParcels, Robot* rob){
 		temppath[i] = aStarSearch(&map, rob->pos, temppoint);//根据A*算法计算路径长度
 		numofph = linkGetLen_Path(temppath[i]);
 
-		valofudis[i] = parcelMap.data[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y] / (float)numofph;//单位格价值
+		valofudis[i] = parcelMap[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y].value / (float)numofph;//单位格价值
 		numofph = 0;
 	}
 
@@ -245,7 +255,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 
 //
 void robotGetParcelPath(Robot* pRob){
-	LinkPath* tempPath = findPathToGoods(parcelMap,pRob);
+	LinkPath* tempPath = findPathToGoods(pRob);
 	free(pRob->curPath);
 	pRob->curPath = tempPath;
 }

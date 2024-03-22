@@ -24,7 +24,7 @@
 
 
 Map map;//内有200x200 char数组
-Map parcelMap;//同上
+Parcel parcelMap[200][200] = {0};//同上
 Grid gridMap[200][200];
 
 Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
