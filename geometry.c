@@ -29,7 +29,7 @@ int getDistance_Manhattan(Point start, Point end){
     return hdistance;
 }
 //输入两相邻Point,返回下一步方向  枚举类型direction 左1 右2 上3 下4 输入点有误返回int -1 也可用于判断两点是否相邻
-int getStepDirect(Point Pstart, Point Pnext){
+direction getStepDirect(Point Pstart, Point Pnext){
   direction direct;
   if(Pstart.y==Pnext.y){//将相邻两格坐标转化为移动方向
     switch (Pstart.x-Pnext.x)
@@ -51,6 +51,6 @@ int getStepDirect(Point Pstart, Point Pnext){
       }
   // }else{
   //   direct = wait;//不应该出现这种情况(即两个格子不相邻)
-  }else return -1;
+  }
   return direct;
 }
