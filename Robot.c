@@ -43,7 +43,10 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 	if(pRob->curPath!=NULL){//链表有空结点表头
 		if(pRob->curPath->next!=NULL){//链表第一个内容节点不为空(上步走了-上步点) （上步没走-当前点）
 			if(pRob->curPath->next->next!=NULL){//链表第二个内容节点不为空 (上步走了-当前点) （上步没走-下个点
-				if(isSamePosition(pRob->pos,pRob->curPath->next->next->pos))linkDelete_byPos_Path(pRob->curPath,1); //删除走过的点（上个点）
+				if(isSamePosition(pRob->pos,pRob->curPath->next->next->pos))
+				linkDelete_byPos_Path(pRob->curPath,1); //删除走过的点（上个点）
+
+				//需要free掉已经走完的路径
 			}else{//链表第二个内容节点为空
 
 			}
@@ -184,27 +187,43 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 	int numofph = 0;
 	int valperdisofberth[3];
 	LinkPath* finalberth;
+	int tempIndex[3];
+	int tempVal[3] = {999,999,999};
 
-	for(int i=0; i <10; i++){
-		disofber[i] = abs(berths[i].pos.x - rob->pos.x) + abs(berths[i].pos.y - rob->pos.y);//计算机器人到泊口的折线距离
+
+	for(int i=0;i<10;i++){
+		disofber[i] =	getDistance_Manhattan(berths[i].pos,rob->pos);
 	}
-	for (int i=0; i < 10; i++){//按照disofber[]离泊口步数排序berths[]，粗略距离
-		for (int j=0,t; j < 10 - 1 - i; j++){
-			if (disofber[j] > disofber[j + 1]) {
-					t = disofber[j];
-					disofber[j] = disofber[j + 1];
-					disofber[j+1] = t;
-					temp = berths[j];
-					berths[j] = berths[j + 1];
-					berths[j + 1] = temp;
-			}
+
+	tempIndex[0] = 0;
+
+	for(int i=0;i<10;i++){
+		if(disofber[i]<tempVal[0]){
+			tempVal[0] = disofber[i];
+			tempIndex[0] = i;
 		}
 	}
-	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
-		berthph[i] = aStarSearch(&map, rob->pos, berths[i].pos);
+	
+	for(int i=0;i<10;i++){
+		if(i==tempIndex[0])continue;
+		if(disofber[i]<tempVal[1]){
+			tempVal[1] = disofber[i];
+			tempIndex[1] = i;
+		}
+	}
+	for(int i=0;i<10;i++){
+		if(i==tempIndex[0] ||i==tempIndex[1])continue;
+		if(disofber[i]<tempVal[2]){
+			tempVal[2] = disofber[i];
+			tempIndex[2] = i;
+		}
+	}//找出前三个最小曼哈顿距离 将序号放在tempIndex[]
+
+	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数s
+		berthph[i] = aStarSearch(&map, rob->pos, berths[tempIndex[i]].pos);
 		numofph = linkGetLen_Path(berthph[i]);
 		/*计算泊口价值 */
-		valperdisofberth[i] = evaluateBerth(berths[i].loading_speed,0.1,berths[i].transport_time,0.6,numofph,1);
+		valperdisofberth[i] = evaluateBerth(berths[tempIndex[i]].loading_speed,0.1,berths[tempIndex[i]].transport_time,0.6,numofph,1);
 		// valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
 	}
 	int bestIndex = 0;//暂存最佳值 //返回最佳路径
@@ -220,7 +239,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		if(i==bestIndex)continue;
 		if(berthph[i])linkDelete_Path(berthph[i]);
 	}
-	rob->aim = berths[bestIndex].pos;
+	rob->aim = berths[tempIndex[bestIndex]].pos;
 	return finalberth;
 }
 

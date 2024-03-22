@@ -41,7 +41,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
   src->father = src->loc;
 //  src->father.y = src->loc.y;
   src->G = 0;
-  src->H = getDistance_Manhattan(src->loc,dest->loc)*9;
+  src->H = getDistance_Manhattan(src->loc,dest->loc)*20;
   src->F = src->G + src->H;
 
   LinkInsert_ByIndex_Grid(openList,1,src);//open链表放入起始点
@@ -54,13 +54,13 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
       path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
     }
-    else if(getStepDirect(current->loc,Pdest)!=-1){
-      dest->father = current->loc;//让目标格指向当前格
-      dest->father.x = current->loc.x;//让目标格指向当前格
-      dest->father.y = current->loc.y;//让目标格指向当前格
-      path = generatePath(dest);//生成路径并将地址传给path
-      break;//准备输出path
-    }
+    // else if(getStepDirect(current->loc,Pdest)!=-1){
+    //   dest->father = current->loc;//让目标格指向当前格
+    //   dest->father.x = current->loc.x;//让目标格指向当前格
+    //   dest->father.y = current->loc.y;//让目标格指向当前格
+    //   path = generatePath(dest);//生成路径并将地址传给path
+    //   break;//准备输出path
+    // }
 
     //tempMinCost = *searchMinGrid(openList);
 
@@ -100,7 +100,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
             pTempGrid = &gridMap[tempGrid.loc.x][tempGrid.loc.y];
             pTempGrid->loc = tempGrid.loc;
             pTempGrid->G = current->G + MOVE_COST;
-            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest)*9;
+            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest)*20;
             pTempGrid->F = pTempGrid->G + pTempGrid->H;
             pTempGrid->father = current->loc;
             LinkInsert_ByIndex_Grid(openList,1,pTempGrid);//加入新邻居到open
