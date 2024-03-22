@@ -278,7 +278,8 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 //
 void robotGetParcelPath(Robot* pRob){
 	LinkPath* tempPath = findPathToGoods(pRob);
-	free(pRob->curPath);
+	if(pRob->curPath)linkDelete_Path(pRob->curPath);
+	// free(pRob->curPath);
 	pRob->curPath = tempPath;
 }
 void robotGetBerthPath(Robot* pRob){

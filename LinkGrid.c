@@ -45,7 +45,7 @@ void LinkDelete_Grid(LinkGrid *L){
 	return;
 }
 
-//软 释放链表
+//软 释放链表 即置空链表头
 void LinkSoftDelete_Grid(LinkGrid *L){
 	L->next = NULL;
 	return;

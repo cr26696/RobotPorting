@@ -4,7 +4,7 @@
 #include "geometry.h"
 #include "LinkPath.h"
 
-#define TimeLimit 20
+#define TimeLimit 10
 
 typedef enum {
     STUCK = -1,//困住
