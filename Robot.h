@@ -26,6 +26,8 @@ void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths);
 // void robotGetGoodsPrint(Robot *pRob, int id);
 // void robotSendGoodsPrint(Robot *pRob, int id);
 
+int AvoidPossibleCollide(Robot rob);
+
 void robotGetParcelPath(Robot* pRob);
 void robotGetBerthPath(Robot* pRob);
 void robotUpdate_Action(Robot *pRob);

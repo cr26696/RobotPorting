@@ -33,6 +33,9 @@ Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
 Berth berth[berth_num];
 Boat boat[boat_num];
 
+Point toAvoid[20];//需要避让的点 最多20
+int toAvoidLen;
+
 LinkParcel LinkParcels;
 LinkParcel LockedParcels;
 
@@ -99,6 +102,14 @@ int Input()
 			boatStatusupdate(backstatus,aimId,&boat[i]);//船状态处理函数
 		}
 		char okk[100];
+
+		//避让点初始化
+		toAvoidLen = 10;
+		for(int i=0;i<robot_num;i++){
+			toAvoid[i].x = robot[i].pos.x;
+			toAvoid[i].y = robot[i].pos.y;
+		}
+
 		scanf("%s", okk);
 		return frame;
 }
