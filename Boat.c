@@ -52,17 +52,17 @@ void BoatAtVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
     //         cmArrLen++;
     //     }
     //将空闲泊口序号存入数组
-    bestvual = -999;//初值，评价函数返回结果应该都会优于这个值
+    bestvual = -9999;//初值，评价函数返回结果应该都会优于这个值
         for (int i = 0; i < 10; i++)
         {
             if(berth[i].status){
-              tempBerthId = berth[i].id;
-            localberth_best=evaluateBerth(berth[tempBerthId].loading_speed,0.1,berth[tempBerthId].transport_time,1,0,0);
-            if (localberth_best>bestvual) // 找出最佳的港口
-            {
-                bestvual = localberth_best;
-                bestvual_berth = berth[tempBerthId].id;
-            }  
+                tempBerthId = berth[i].id;
+                localberth_best=evaluateBerth(berth[tempBerthId].loading_speed,0.1,berth[tempBerthId].transport_time,1,0,0);
+                if (localberth_best>bestvual) // 找出最佳的港口
+                {
+                    bestvual = localberth_best;
+                    bestvual_berth = berth[tempBerthId].id;
+                }
             }
         }
         boat->aimId = bestvual_berth;
