@@ -121,29 +121,37 @@ LinkPath* findPathToGoods(Robot* rob){
 		return NULL;
 	}
 	// n = LinkGetLen_Parcel(nearParcels);上面用n++
-	// if(n < 3){
-	// 	int exflag = 0;//是否和之前的周围货物重复标志
-	// 	Parcel rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
-	// 	for(n; n < 3;){
-
-	// 		//rangds.x = goodsmap[rand() % numofgds];
-	// 		templist = nearParcels;
-	// 		while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
-	// 			templist = templist->next;
-	// 			if(isSamePosition(templist->parcel.loc,rangds.loc)){
-	// 				exflag = 1;//重复
-	// 				break;
-	// 			}
-	// 		}
-	// 		if(exflag){
-	// 			exflag = 0;
-	// 		}
-	// 		else{
-	// 			LinkInsert_ByIndex_Parcel(nearParcels, 1, rangds);
-	// 			n++;
-	// 		}
-	// 	}
-	// }
+	if(!n){
+		templist = &LinkParcels;
+		//int exflag = 0;//是否和之前的周围货物重复标志
+		while(templist->next != NULL){
+			templist = templist->next;
+			if(!templist->parcel.locked){
+				nearParcels->next = &templist->parcel;
+				n++;
+				break;
+			}
+		}
+		//Parcel rangds;
+		//for(n; n < 3;){
+			//rangds.x = goodsmap[rand() % numofgds];
+			// templist = nearParcels;
+			// while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
+			// 	templist = templist->next;
+			// 	if(isSamePosition(templist->parcel.loc,rangds.loc)){
+			// 		exflag = 1;//重复
+			// 		break;
+			// 	}
+			// }
+			// if(exflag){
+			// 	exflag = 0;
+			// }
+			// else{
+			// 	LinkInsert_ByIndex_Parcel(nearParcels, 1, rangds);
+			// 	n++;
+			// }
+		//}
+	}
 
 	templist = nearParcels->next;//现在temp near Link 包含随机+附近的货物了
 	for(int i=0;!(templist == NULL);templist = templist->next){//算机器人到物品的折线距离
