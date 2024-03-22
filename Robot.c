@@ -255,8 +255,12 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		}
 	}//找出前三个最小曼哈顿距离 将序号放在tempIndex[]
 
+	Point closeBerthPoint[3];
+	for(int i=0;i<3;i++){
+		closeBerthPoint[i] = getBerthNearPos(berths[tempIndex[i]].pos,rob->pos);
+	}
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数s
-		berthph[i] = aStarSearch(&map, rob->pos, getBerthNearPos(berths[tempIndex[i]].pos,rob->pos));
+		berthph[i] = aStarSearch(&map, rob->pos, closeBerthPoint[i]);
 		numofph = linkGetLen_Path(berthph[i]);
 		/*计算泊口价值 */
 		valperdisofberth[i] = evaluateBerth(berths[tempIndex[i]].loading_speed,0.1,berths[tempIndex[i]].transport_time,0.6,numofph,1);
@@ -276,7 +280,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		if(berthph[i])linkDelete_Path(berthph[i]);
 	}
 	rob->aimBerth = tempIndex[bestIndex];
-	rob->aim = getBerthNearPos(berths[tempIndex[bestIndex]].pos,rob->pos);
+	rob->aim = closeBerthPoint[bestIndex];
 	return finalberth;
 }
 
@@ -385,8 +389,7 @@ void robotAction(Robot* pRob){
 			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			}else{
-				pRob->next_status = pRob->current_status;
-				pRob->current_status = VOIDING;
+				pRob->next_status = VOIDING;
 			}
 		break;
 		case PULL:
@@ -394,6 +397,7 @@ void robotAction(Robot* pRob){
 			berth[pRob->aimBerth].goodsnum++;//放下货物，泊口货物数++
 		break;
 		case VOIDING:
+			pRob->next_status = pRob->tempstatus;
 			//还没写
 		break;
 		default:break;
