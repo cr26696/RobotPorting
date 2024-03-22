@@ -115,7 +115,12 @@ int main()
 			robotAction(&robot[i]);
 			robot[i].current_status = robot[i].next_status;
 		}
-		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作
+		if(frame==1){
+			for(int i=0;i<boat_num;i++){
+			BoatAtVIRTUAL(&boat[i],boat_num,berth,berth_num);
+			printf("ship %d %d\n", i, boat[i].aimId);
+			}
+		}else controlBoat(boat,boat_num,berth,berth_num,boat_capacity);//对船进行操作	
 		//消失货物列表维护
 		if(frame>1000)ParcelTimedDelete(&LinkParcels,frame);
 		puts("OK");

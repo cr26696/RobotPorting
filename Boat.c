@@ -44,7 +44,7 @@ void BoatAtVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
 {
     int bestvual_berth;//最少的运输时间和最快的装载速度对应的泊口???还要考虑装载时间到时候改
     float bestvual,localberth_best;
-    int berth_to_calc[10]={0};//空闲泊口数组，最多10个
+    // int berth_to_calc[10]={0};//空闲泊口数组，最多10个
     int cmArrLen=0;//custom Array Length
     int tempBerthId;//暂存id,随berth_to_calc变
     for(int i=0;i<berth_num;i++){

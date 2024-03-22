@@ -6,7 +6,7 @@ void Inittotal(Map map,Grid** gridMap,Robot robots[],int robotCount,Boat boats[]
 	InitBoat(boats,boatCount);
 	for (int i=0;1<boatCount;i++)
 	{
-		AllboatatVIRTUAL(&boats[i],boatCount,berths,berthCount);
+		BoatAtVIRTUAL(&boats[i],boatCount,berths,berthCount);
 		printf("ship %d %d\n", i, boats[i].aimId);
 	}
 	InitRobot(map,gridMap,berths,berthCount,robots,robotCount);
@@ -37,7 +37,7 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 			linkDelete_Path(hasPath);
 			robots[robotId].current_status=IDLE;
 			robots[robotId].next_status=SearchParcel;
-			robots[robotId].moveDirect=-1;
+			// robots[robotId].moveDirect=-1;
 		}
 		else{//机器人受困，设置状态
 			robots[robotId].current_status=STUCK;
