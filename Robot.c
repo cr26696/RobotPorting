@@ -105,20 +105,21 @@ LinkPath* findPathToGoods(Robot* rob){
 				curgrid.loc.x = rob->pos.x + i;
 				curgrid.loc.y = rob->pos.y + j;
 				if(!parcelMap[curgrid.loc.x][curgrid.loc.y].locked){
-				// if(MapOfParcels.data[curgrid.loc.x][curgrid.loc.y]!=0){
+					if(parcelMap[curgrid.loc.x][curgrid.loc.y].value != 0){
 					tempparcel.loc.x = curgrid.loc.x;
 					tempparcel.loc.y = curgrid.loc.y;
-					parcelMap[curgrid.loc.x][curgrid.loc.y].locked = 1;
+					//parcelMap[curgrid.loc.x][curgrid.loc.y].locked = 1;
 					LinkInsert_ByIndex_Parcel(nearParcels, 1, tempparcel);///之后换用数组存Point类型更好
 					n++;
 					//goodsloca[n++] = curgrid;
-				}				
+					}
+				}
 			}
 		}
 	}
 	// n = LinkGetLen_Parcel(nearParcels);上面用n++
 	if(n < 3){
-		int exflag = 0;//是否和之前的周围货物重复标志<-----看不懂
+		int exflag = 0;//是否和之前的周围货物重复标志
 		Parcel rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
 		for(n; n < 3;){
 			while(rangds.locked){
@@ -191,6 +192,7 @@ LinkPath* findPathToGoods(Robot* rob){
 		if(temppath[i])linkDelete_Path(temppath[i]);
 	}
 	rob->aim = finalgdsloca[bestIndex].loc;
+	parcelMap[rob->aim.x][rob->aim.y].locked = 1;
 	return finalpath;
 }
 
