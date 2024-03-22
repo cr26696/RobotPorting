@@ -12,7 +12,7 @@ typedef struct Boat
     //int num;//标号
     int aimId;//目标泊位，虚拟点是-1
     int status;//当前状态(自己维护)
-    int priorstatus;//之前的状态
+    // int priorstatus;//之前的状态
     int goodsnum;//船上货物数量
 }Boat;
 
