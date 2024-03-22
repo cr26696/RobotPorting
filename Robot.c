@@ -377,6 +377,7 @@ void robotAction(Robot* pRob){
 			if (pRob->curPath==NULL)pRob->next_status=SearchBerth;
 		break;
 		case SearchParcel:
+			parcelMap[pRob->aim.x][pRob->aim.y].locked = 0;
 			robotGetParcelPath(pRob);
 			if (pRob->curPath==NULL)pRob->next_status=SearchParcel;
 		break;
