@@ -21,6 +21,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
 
 
   int openLen,closeLen,pathLen;
+  int randNeighbor[4]={0,1,2,3};
 
   LinkGrid *openList = LinkInit_Grid(openList);
   LinkGrid *closeList = LinkInit_Grid(closeList);
@@ -63,10 +64,15 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
     // }
 
     //tempMinCost = *searchMinGrid(openList);
-
+      for (int i = 4 - 1; i > 0; i--) {
+        int j = rand() % (i + 1);//随机交换
+        int temp = randNeighbor[i];
+        randNeighbor[i] = randNeighbor[j];
+        randNeighbor[j] = temp;
+      }
       for(int i=0;i<4;i++){
         tempGrid.loc = current->loc;//临时点为邻居点
-        switch (i)
+        switch (randNeighbor[i])
         {
           case NEIGHBOR_LEFT:
             tempGrid.loc.y -= 1;break;
@@ -100,7 +106,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
             pTempGrid = &gridMap[tempGrid.loc.x][tempGrid.loc.y];
             pTempGrid->loc = tempGrid.loc;
             pTempGrid->G = current->G + MOVE_COST;
-            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest)*20;
+            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest)*30;
             pTempGrid->F = pTempGrid->G + pTempGrid->H;
             pTempGrid->father = current->loc;
             LinkInsert_ByIndex_Grid(openList,1,pTempGrid);//加入新邻居到open
