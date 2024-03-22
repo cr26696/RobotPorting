@@ -303,6 +303,11 @@ void robotUpdate_Action(Robot *pRob)
 	break;
 	case GETTING:
 		pRob->reLocCount++;
+		if(isSamePosition(pRob->pos,pRob->aim)){
+			pRob->current_status=GET;
+			pRob->next_status=SearchBerth;
+			break;
+		}
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
 			pRob->next_status = GET;
 		}else{//不为目标点，尝试重新搜索周围
@@ -318,6 +323,11 @@ void robotUpdate_Action(Robot *pRob)
 		pRob->next_status = SearchBerth;
 	break;
 	case SENDING:
+		if(isSamePosition(pRob->pos,pRob->aim)){
+			pRob->current_status=PULL;
+			pRob->next_status=SearchParcel;
+			break;
+		}
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
 			pRob->next_status = PULL;
 		}
