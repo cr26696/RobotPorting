@@ -8,6 +8,7 @@ typedef struct Parcel
   int value;//价值
   Point loc;//
   int locked;//0未锁定 1锁定
+  int cantArrive;
 }Parcel;
 //返回指向parcel的指针
 
