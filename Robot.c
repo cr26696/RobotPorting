@@ -31,11 +31,15 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 		}//else 还在继续晕
 	
 		if(carry){//传入清醒 且传入拿货
-			if(pRob->current_status == GETTING){//捡到货了家人们
+			if(pRob->current_status ==SearchBerth){//确定取到货物
+				LinkDelete_ByPoint_Parcel(&LinkParcels,pRob->pos);//从倒计时链表中删除
+				parcelMap[pRob->pos.x][pRob->pos.y].value = 0;//从二维表中删除
+			}
+			else if(pRob->current_status == GETTING){//捡到货了家人们
 				pRob->current_status = SearchBerth;
 			}
 		}else{//传入清醒 且传入没在拿货
-				if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
+				else if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
 					pRob->current_status = SearchParcel;
 				}
 		}
@@ -249,6 +253,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		if(i==bestIndex)continue;
 		if(berthph[i])linkDelete_Path(berthph[i]);
 	}
+	rob->aimBerth = tempIndex[bestIndex];
 	rob->aim = berths[tempIndex[bestIndex]].pos;
 	return finalberth;
 }
@@ -312,6 +317,7 @@ void robotAction(Robot* pRob){
 		case PULL:
 			printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			printf("pull %d\n", pRob->id);
+			berth[pRob->aimBerth].goodsnum++;
 		break;
 		case SearchBerth:
 			robotGetBerthPath(pRob);

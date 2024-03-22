@@ -15,10 +15,6 @@
 #include "astar.h"
 #include "Boat.h"
 
-#define PATH_FACTOR     80
-#define LOADING_FACTOR  15
-#define TRANS_FACTOR    5
-
 void robotUpdate_sysInput(int carry,int awake ,Robot *robot);//机器人状态处理函数
 
 LinkPath* findPathToGoods(Robot* rob);

@@ -50,8 +50,9 @@ typedef struct Robot
 {
     int id;
     Point pos;//目前位置
-    Point aim;//最终目标地点
-    LinkPath* curPath;
+    Point aim;//最终目标地点 可能是货物货泊口
+    int aimBerth;//目标泊口
+    LinkPath* curPath;//存储当前道路
     robot_state current_status;//当前状态
     robot_state next_status;//下一帧状态
     robot_state tempstatus;//碰撞前的状态暂存
