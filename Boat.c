@@ -40,7 +40,7 @@ float evaluateBerth(int loadSpeed,float friscoe,int transportTime,float secocoe,
     return totalScore;
 }
 
-void AllboatatVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
+void BoatAtVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
 {
     int bestvual_berth;//最少的运输时间和最快的装载速度对应的泊口???还要考虑装载时间到时候改
     float bestvual,localberth_best;
@@ -49,14 +49,13 @@ void AllboatatVIRTUAL(Boat *boat,int boat_num,Berth berth[],int berth_num)
     int tempBerthId;//暂存id,随berth_to_calc变
     for(int i=0;i<berth_num;i++){
         if(berth[i].status){
-            berth_to_calc[cmArrLen] = i;
             cmArrLen++;
         }
     }//将空闲泊口序号存入数组
     bestvual = -999;//初值，评价函数返回结果应该都会优于这个值
         for (int i = 0; i < cmArrLen; i++)
         {
-            tempBerthId = berth_to_calc[i];
+            tempBerthId = berth[i].id;
             localberth_best=evaluateBerth(berth[tempBerthId].loading_speed,0.1,berth[tempBerthId].transport_time,1,0,0);
             if (localberth_best>bestvual) // 找出最佳的港口
             {
@@ -100,8 +99,8 @@ void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_c
                 berth[maxberth].status = 0; // 对应港口锁定
             }
             else
-            {
-                AllboatatVIRTUAL(&boat[i],boat_num,berth,berth_num);
+            { BoatAtVIRTUAL(&boat[i],boat_num,berth,berth_num);}
+               
                 printf("ship %d %d\n", i, boat[i].aimId);
                 
                 // int mintastime,mintastime_berth;//最少的运输时间和对应的泊口???还要考虑装载时间到时候改
@@ -120,7 +119,7 @@ void controlBoat(Boat boat[],int boat_num,Berth berth[],int berth_num,int boat_c
                 
                 // boat[i].status = GOBACKBERTH;
                 // berth[mintastime_berth].status = 0; // 对应港口锁定
-            }
+            
         }
         
         //船在泊口，开始装货
