@@ -118,9 +118,7 @@ LinkPath* findPathToGoods(Robot* rob){
 			}
 		}
 	}
-	if(nearParcels->next == NULL){
-		return NULL;
-	}
+
 	// n = LinkGetLen_Parcel(nearParcels);上面用n++
 	if(!n){
 		templist = &LinkParcels;
@@ -128,10 +126,14 @@ LinkPath* findPathToGoods(Robot* rob){
 		while(templist->next != NULL){
 			templist = templist->next;
 			if(!templist->parcel.locked){
-				nearParcels->next = &templist->parcel;
+				LinkInsert_ByIndex_Parcel(nearParcels, 1, templist->parcel);
+				//nearParcels->next = &templist->parcel;
 				n++;
 				break;
 			}
+		}
+		if(nearParcels->next == NULL){
+			return NULL;
 		}
 		//Parcel rangds;
 		//for(n; n < 3;){
