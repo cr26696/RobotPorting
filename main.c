@@ -23,9 +23,11 @@
 #define N 200
 
 
+// Map parcelMap;//同上
 Map map;//内有200x200 char数组
 Parcel parcelMap[200][200] = {0};//同上
 Grid gridMap[200][200];
+//Parcel parcelMap[200][200];
 
 Robot robot[robot_num];//<----不当全局变量的话 建议写main()里面
 Berth berth[berth_num];
@@ -64,7 +66,7 @@ void Init()
 		InitBerth(berth,berth_num);
 		InitBoat(boat,boat_num);
 		InitRobot(map,(Grid**)gridMap,berth,berth_num,robot,robot_num);
-		InitParcel(&parcelMap, &LinkParcels, &LockedParcels);
+		InitParcel(&LinkParcels, &LockedParcels);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
 }
@@ -76,11 +78,11 @@ int Input()
 		scanf("%d", &newParcels);//???
 		for(int i = 1; i <= newParcels; i ++)
 		{
-				int x, y, val;
+				int x,y,val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				parcelMap.data[x][y] = (char)val;//强制将货物价值存为char,0表示无货物
-				LinkInsertEnd_Parcel(&LinkParcels,createParcel(x,y,frame,val));
+				parcelMap[x][y] = createParcel(x,y,frame,val);
+				LinkInsertEnd_Parcel(&LinkParcels,parcelMap[x][y]);
 				numofgds ++;
 		}
 		for(int i = 0; i < robot_num; i ++)

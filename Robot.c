@@ -368,7 +368,7 @@ void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请
 	Point robpos[20] = {0};//使用点数组 存储可能发生碰撞的点
 	int index = 0;//robpos[]中元素个数
 	Point temppos;
-	for(int i=0; i < 2; i++){//前十格记录机器人当前位置
+	for(int i=0; i < 10; i++){//前十格记录机器人当前位置
 		robpos[i] = rob->pos;
 		index++;
 	}

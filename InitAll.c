@@ -65,11 +65,11 @@ void InitBoat(Boat boats[],int boatCount)//船状态初试化让他从虚拟点�
 	}
 }
 //为货物地图赋值0，为货物计时链表赋值 全局只调用一次
-void InitParcel(Map *ParcelMap, LinkParcel *pLinkParcel, LinkParcel *pLockedParcels){
+void InitParcel(LinkParcel *pLinkParcel, LinkParcel *pLockedParcels){
 	//货物分布地图初始化
 	for(int i;i<200;i++){
 		for(int j;j<200;j++){
-			ParcelMap->data[i][j] = '0';
+			parcelMap[i][j].value = 0;
 		}
 	}
 	//货物计时链表初始化(分配内存空间)

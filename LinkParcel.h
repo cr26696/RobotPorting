@@ -5,7 +5,10 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+#include "struct_Map.h"
 #include "struct_Parcel.h"
+
+extern Parcel parcelMap[200][200];
 
 //链表节点，存储类型为Parcel
 typedef struct LinkParcel
