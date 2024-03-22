@@ -1,18 +1,19 @@
 #ifndef ROBOT_H//预定义避免重复引入
 #define ROBOT_H
 
-#include "struct_Robot.h"
-#include "struct_Berth.h"
-#include "astar.h"
-#include "moveControl.h"
-#include "LinkParcel.h"
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
-#include "LinkPath.h"
+#include "struct_Robot.h"
+#include "struct_Berth.h"
+
 #include "LinkGrid.h"
+#include "LinkPath.h"
+#include "LinkParcel.h"
+
+#include "moveControl.h"
+#include "astar.h"
+#include "Boat.h"
 
 #define PATH_FACTOR     80
 #define LOADING_FACTOR  15

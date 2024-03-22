@@ -10,38 +10,38 @@ extern LinkParcel LinkParcels;
 extern LinkParcel LockedParcels;
 
 //机器人状态处理函数 处理判题器输入与当前状态不一样问题
-void robotUpdate_sysInput(int carry,int awake ,Robot *robot)
+void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 {
 	if (!awake) // 传入眩晕
 	{
-		if(robot->current_status!=CRASHING){//之前没晕
-			robot->tempstatus = robot->current_status;
-			robot->current_status=CRASHING;
-			robot->next_status=CRASHING;
+		if(pRob->current_status!=CRASHING){//之前没晕
+			pRob->tempstatus = pRob->current_status;
+			pRob->current_status=CRASHING;
+			pRob->next_status=CRASHING;
 		}
 	}else{//传入清醒
-		// if(robot->current_status == IDLE){//闲着 该干活了
-		// 	robot->current_status = SearchParcel;
-		// 	robot->next_status = SearchParcel;//这帧和下帧应该要进行之前的工作
+		// if(pRob->current_status == IDLE){//闲着 该干活了
+		// 	pRob->current_status = SearchParcel;
+		// 	pRob->next_status = SearchParcel;//这帧和下帧应该要进行之前的工作
 		// }
 		// else 
-		if(robot->current_status == CRASHING){//没醒 给喊醒
-			robot->current_status = robot->tempstatus;
-			// robot->next_status = robot->tempstatus;//这帧和下帧应该要进行之前的工作
+		if(pRob->current_status == CRASHING){//没醒 给喊醒
+			pRob->current_status = pRob->tempstatus;
+			// pRob->next_status = pRob->tempstatus;//这帧和下帧应该要进行之前的工作
 		}//else 还在继续晕
 	
 		if(carry){//传入清醒 且传入拿货
-			if(robot->current_status == GETTING){//捡到货了家人们
-				robot->current_status = SearchBerth;
+			if(pRob->current_status == GETTING){//捡到货了家人们
+				pRob->current_status = SearchBerth;
 			}
 		}else{//传入清醒 且传入没在拿货
-				if(robot->current_status == SENDING){//没捡到货就想送货？ 如捡
-					robot->current_status = SearchParcel;
+				if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
+					pRob->current_status = SearchParcel;
 				}
 		}
 	}
-	if(robot->curPath!=NULL && isSamePosition(robot->pos,robot->curPath->next->next->pos)){
-		linkDelete_byPos_Path(robot->curPath,1);
+	if(pRob->curPath!=NULL && isSamePosition(pRob->pos,pRob->curPath->next->next->pos)){
+		linkDelete_byPos_Path(pRob->curPath,1);
 	}
 }
 //判断某点是否为货物 不在main中调用
@@ -183,8 +183,11 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		disofber[i] = abs(berths[i].pos.x - rob->pos.x) + abs(berths[i].pos.y - rob->pos.y);//计算机器人到泊口的折线距离
 	}
 	for (int i=0; i < 10; i++){//按照disofber[]离泊口步数排序berths[]，粗略距离
-		for (int j=0; j < 10 - 1 - i; j++){
+		for (int j=0,t; j < 10 - 1 - i; j++){
 			if (disofber[j] > disofber[j + 1]) {
+					t = disofber[j];
+					disofber[j] = disofber[j + 1];
+					disofber[j+1] = t;
 					temp = berths[j];
 					berths[j] = berths[j + 1];
 					berths[j + 1] = temp;
@@ -193,26 +196,25 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 	}
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数
 		berthph[i] = aStarSearch(&map, rob->pos, berths[i].pos);
-		while(berthph[i]->next != NULL){
-			berthph[i] = berthph[i]->next;
-			numofph++;
-		}
+		numofph = linkGetLen_Path(berthph[i]);
 		/*计算泊口价值 */
-		valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
-		numofph = 0;
+		valperdisofberth[i] = evaluateBerth(berths[i].loading_speed,0.1,berths[i].transport_time,0.6,numofph,1);
+		// valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
 	}
-	for (int i=0; i < 3; i++){//三选一最近泊口路径 存于berthph[2]
-		for (int j=0; j < 3 - 1 - i; j++){
-			if (valperdisofberth[j] > valperdisofberth[j + 1]) {
-					tempber = berthph[j];
-					berthph[j] = berthph[j + 1];
-					berthph[j + 1] = tempber;
-			}
+	int bestIndex = 0;//暂存最佳值 //返回最佳路径
+	float bestPathValue=valperdisofberth[0];
+	for(int i=1;i<3;i++){
+		if(valperdisofberth[i]>bestPathValue){
+			bestPathValue = valperdisofberth[i];
+			bestIndex = i;
 		}
 	}
-	finalberth = berthph[2];
-	linkDelete_Path(berthph[0]);
-	linkDelete_Path(berthph[1]);
+	finalberth = berthph[bestIndex];
+	for(int i=0;i<3;i++){
+		if(i==bestIndex)continue;
+		if(berthph[i])linkDelete_Path(berthph[i]);
+	}
+	rob->aim = berths[bestIndex].pos;
 	return finalberth;
 }
 
@@ -236,7 +238,7 @@ void robotUpdate_Action(Robot *pRob)
 		pRob->next_status = GETTING;
 	break;
 	case GETTING:
-		if(isSamePosition(pRob->curPath->next->pos,pRob->aim)){
+		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
 			pRob->current_status = GET;
 			pRob->next_status = SearchBerth;
 		}
