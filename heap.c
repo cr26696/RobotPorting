@@ -1,5 +1,34 @@
 #include "heap.h"
 
+typedef struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+} BiNode;
+
+int CreateTree(BiNode** root) {
+ 
+	int val;
+	scanf_s("%d", &val);
+	if (val <= 0) {
+		*root = NULL;
+		return 0;
+	}
+ 
+	*root = (struct TreeNode*)malloc(sizeof(struct TreeNode));
+	if (!root) {
+		printf("创建失败\n");
+	}
+ 
+	if (val > 0) {
+		(*root)->val = val;
+		CreateTree(&((*root)->left));
+		CreateTree(&((*root)->right));
+	}
+	return 0;
+}
+
+
 //交换
 void swap(int *a, int *b){
     int temp = *a;
