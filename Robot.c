@@ -276,7 +276,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		if(berthph[i])linkDelete_Path(berthph[i]);
 	}
 	rob->aimBerth = tempIndex[bestIndex];
-	rob->aim = berths[tempIndex[bestIndex]].pos;
+	rob->aim = getBerthNearPos(berths[tempIndex[bestIndex]].pos,rob->pos);
 	return finalberth;
 }
 
@@ -308,6 +308,10 @@ void robotUpdate_Action(Robot *pRob)
 			pRob->next_status=SearchBerth;
 			break;
 		}
+		if(pRob->curPath->next->next==NULL){
+			pRob->next_status = SearchParcel;
+			break;
+		}
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
 			pRob->next_status = GET;
 		}else{//不为目标点，尝试重新搜索周围
@@ -326,6 +330,10 @@ void robotUpdate_Action(Robot *pRob)
 		if(isSamePosition(pRob->pos,pRob->aim)){
 			pRob->current_status=PULL;
 			pRob->next_status=SearchParcel;
+			break;
+		}
+		if(pRob->curPath->next->next==NULL){
+			pRob->next_status = SearchBerth;
 			break;
 		}
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){

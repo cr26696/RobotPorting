@@ -69,4 +69,5 @@ Point getBerthNearPos(Point berth,Point start){//输入一点与泊口点左上�
   }else{//置为横向中间两点之一
     temp.x = berth.x + 1 + (rand()%1);
   }
+  return temp;
 }
