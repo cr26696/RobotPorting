@@ -43,6 +43,7 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 		}else{//传入清醒 且传入没在拿货
 				if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
 					pRob->current_status = SearchParcel;
+					pRob->reLocCount = 0;
 				}
 		}
 	}
@@ -289,13 +290,20 @@ void robotUpdate_Action(Robot *pRob)
 	case IDLE:
 		pRob->current_status = SearchParcel;
 		pRob->next_status = GETTING;
+		pRob->reLocCount = 0;
 	break;
 	case GETTING:
-		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
-			pRob->current_status = GET;
-			pRob->next_status = SearchBerth;
+		if(pRob->reLocCount>TimeLimit){
+			pRob->next_status = SearchParcel;
+			pRob->reLocCount = 0;
+		}else {
+			pRob->reLocCount++;
+			if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
+				pRob->current_status = GET;
+				pRob->next_status = SearchBerth;
+			}
+			pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动方向
 		}
-		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
 	break;
 	case SENDING:
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
@@ -306,6 +314,7 @@ void robotUpdate_Action(Robot *pRob)
 	break;
 	case SearchParcel:
 		pRob->next_status = GETTING;
+		pRob->reLocCount = 0;
 	break;
 	case SearchBerth:
 		pRob->next_status = SENDING;

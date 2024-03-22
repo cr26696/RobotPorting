@@ -215,7 +215,7 @@ Parcel createParcel(int x,int y, int time, int value){
   obj.loc.y = y;
   obj.value = value;
   obj.addedFrame = time;
-  //obj->locked = 0;
+  obj.locked = 0;
   return obj;
 }
 //删除当前帧消失的货物。
