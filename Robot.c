@@ -125,7 +125,7 @@ LinkPath* findPathToGoods(Robot* rob){
 		//int exflag = 0;//是否和之前的周围货物重复标志
 		while(templist->next != NULL){
 			templist = templist->next;
-			if(!parcelMap[templist->parcel.loc.x][templist->parcel.loc.y].locked){
+			if(!parcelMap[templist->parcel.loc.x][templist->parcel.loc.y].locked && parcelMap[templist->parcel.loc.x][templist->parcel.loc.y].value!=0){
 				LinkInsert_ByIndex_Parcel(nearParcels, 1, templist->parcel);
 				//nearParcels->next = &templist->parcel;
 				n++;
@@ -185,7 +185,12 @@ LinkPath* findPathToGoods(Robot* rob){
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
 		temppoint = finalgdsloca[i].loc;//
 		temppath[i] = aStarSearch(&map, rob->pos, temppoint);//根据A*算法计算路径长度
-		numofph = linkGetLen_Path(temppath[i]);
+		if(!temppath[i]){
+				parcelMap[temppoint.x][temppoint.y].value = 0;
+				parcelMap[temppoint.x][temppoint.y].locked = 1;
+				LinkDelete_ByPoint_Parcel(&LinkParcels,temppoint);
+				return NULL;
+		}else numofph = linkGetLen_Path(temppath[i]);
 
 		valofudis[i] = parcelMap[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y].value / (float)numofph;//单位格价值
 		numofph = 0;
