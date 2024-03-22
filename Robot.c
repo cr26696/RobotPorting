@@ -40,8 +40,14 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 				}
 		}
 	}
-	if(pRob->curPath!=NULL && isSamePosition(pRob->pos,pRob->curPath->next->next->pos)){
-		linkDelete_byPos_Path(pRob->curPath,1);
+	if(pRob->curPath!=NULL){//链表有空结点表头
+		if(pRob->curPath->next!=NULL){//链表第一个内容节点不为空(上步走了-上步点) （上步没走-当前点）
+			if(pRob->curPath->next->next!=NULL){//链表第二个内容节点不为空 (上步走了-当前点) （上步没走-下个点
+				if(isSamePosition(pRob->pos,pRob->curPath->next->next->pos))linkDelete_byPos_Path(pRob->curPath,1); //删除走过的点（上个点）
+			}else{//链表第二个内容节点为空
+
+			}
+		}
 	}
 }
 //判断某点是否为货物 不在main中调用
@@ -245,7 +251,7 @@ void robotUpdate_Action(Robot *pRob)
 		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
 	break;
 	case SENDING:
-		if(isSamePosition(pRob->curPath->next->pos,pRob->aim)){
+		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
 			pRob->current_status = PULL;
 			pRob->next_status = SearchParcel;
 		}

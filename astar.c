@@ -53,7 +53,8 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
     {
       path = generatePath(dest);//生成路径并将地址传给path
       break;//准备输出path
-    }else if(getStepDirect(current->loc,Pdest)!=-1){
+    }
+    else if(getStepDirect(current->loc,Pdest)!=-1){
       dest->father = current->loc;//让目标格指向当前格
       dest->father.x = current->loc.x;//让目标格指向当前格
       dest->father.y = current->loc.y;//让目标格指向当前格
