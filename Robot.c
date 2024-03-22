@@ -39,7 +39,7 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 				pRob->current_status = SearchBerth;
 			}
 		}else{//传入清醒 且传入没在拿货
-				else if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
+				if(pRob->current_status == SENDING){//没捡到货就想送货？ 如捡
 					pRob->current_status = SearchParcel;
 				}
 		}

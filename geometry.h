@@ -40,7 +40,7 @@ int isNeighbor(Point A, Point B);
 
 int getDistance_Manhattan(Point start, Point end);
 
-int getStepDirect(Point start,Point next);
+direction getStepDirect(Point start,Point next);
 
 Area getAreaInMap(Point center, int radius);
 #endif
