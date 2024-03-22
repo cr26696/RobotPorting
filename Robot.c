@@ -333,7 +333,7 @@ void robotUpdate_Action(Robot *pRob)
 	case SearchBerth:
 		pRob->next_status = SENDING;
 	break;
-	case VOIDING:
+	case VOIDING:pRob->next_status=pRob->tempstatus;
 	default:break;
 	}
 }
@@ -351,7 +351,8 @@ void robotAction(Robot* pRob){
 			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			}else{
-				pRob->next_status = pRob->current_status;
+				pRob->tempstatus=pRob->current_status;
+				pRob->next_status = VOIDING;
 				pRob->current_status = VOIDING;
 			}
 		break;
