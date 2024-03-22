@@ -2,6 +2,7 @@
 #define GEOMETRY_H
 
 #include <math.h>
+#include <stdlib.h>
 //int型内含x,y
 typedef struct Point
 {
@@ -43,4 +44,6 @@ int getDistance_Manhattan(Point start, Point end);
 direction getStepDirect(Point start,Point next);
 
 Area getAreaInMap(Point center, int radius);
+
+Point getBerthNearPos(Point berth,Point start);
 #endif

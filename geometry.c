@@ -54,3 +54,19 @@ direction getStepDirect(Point Pstart, Point Pnext){
   }
   return direct;
 }
+
+Point getBerthNearPos(Point berth,Point start){//输入一点与泊口点左上点 返回到泊口面积内最近的点
+  Point temp=berth;//默认为 最左侧，最上侧点
+  if(start.x<berth.x){//目标靠泊口上
+    if(start.y<berth.y){//目标靠泊口左
+    }else if(start.y>berth.y){//目标靠泊口右
+      temp.y = berth.y+3;//置为最右侧点
+    }else{//置为竖向中间两点之一
+      temp.y = berth.y + 1 + (rand()%1);
+    }
+  }else if(start.x>berth.x){//目标靠泊口下
+    temp.x = berth.x + 3;
+  }else{//置为横向中间两点之一
+    temp.x = berth.x + 1 + (rand()%1);
+  }
+}

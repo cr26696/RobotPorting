@@ -256,7 +256,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 	}//找出前三个最小曼哈顿距离 将序号放在tempIndex[]
 
 	for(int i=0; i < 3; i++){//上一步排序完成取前三 计算真实步数s
-		berthph[i] = aStarSearch(&map, rob->pos, berths[tempIndex[i]].pos);
+		berthph[i] = aStarSearch(&map, rob->pos, getBerthNearPos(berths[tempIndex[i]].pos,rob->pos));
 		numofph = linkGetLen_Path(berthph[i]);
 		/*计算泊口价值 */
 		valperdisofberth[i] = evaluateBerth(berths[tempIndex[i]].loading_speed,0.1,berths[tempIndex[i]].transport_time,0.6,numofph,1);
