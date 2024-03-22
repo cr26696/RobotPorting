@@ -26,7 +26,7 @@ LinkPath* findPathToBerth(Berth *berths, Robot* rob);
 //int* pathToDirection(LinkList* path);
 int isParcelGrid(Parcel pos);
 //下方为实际机器人进行动作的函数
-
+void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths);
 // void robotGetGoodsPrint(Robot *pRob, int id);
 // void robotSendGoodsPrint(Robot *pRob, int id);
 
