@@ -11,6 +11,4 @@ typedef struct Parcel
 }Parcel;
 //返回指向parcel的指针
 
-
-
 #endif
