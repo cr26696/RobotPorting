@@ -118,32 +118,33 @@ LinkPath* findPathToGoods(Robot* rob){
 			}
 		}
 	}
-	// n = LinkGetLen_Parcel(nearParcels);上面用n++
-	if(n < 3){
-		int exflag = 0;//是否和之前的周围货物重复标志
-		Parcel rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
-		for(n; n < 3;){
-			while(rangds.locked){
-				rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
-			}
-			//rangds.x = goodsmap[rand() % numofgds];
-			templist = nearParcels;
-			while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
-				templist = templist->next;
-				if(isSamePosition(templist->parcel.loc,rangds.loc)){
-					exflag = 1;//重复
-					break;
-				}
-			}
-			if(exflag){
-				exflag = 0;
-			}
-			else{
-				LinkInsert_ByIndex_Parcel(nearParcels, 1, rangds);
-				n++;
-			}
-		}
+	if(nearParcels->next == NULL){
+		return NULL;
 	}
+	// n = LinkGetLen_Parcel(nearParcels);上面用n++
+	// if(n < 3){
+	// 	int exflag = 0;//是否和之前的周围货物重复标志
+	// 	Parcel rangds = LinksearchObj_ByPos_Parcel(&LinkParcels, rand() % numofgds);
+	// 	for(n; n < 3;){
+
+	// 		//rangds.x = goodsmap[rand() % numofgds];
+	// 		templist = nearParcels;
+	// 		while(templist->next != NULL){//遍历判断随机货物是否与附近货物重复
+	// 			templist = templist->next;
+	// 			if(isSamePosition(templist->parcel.loc,rangds.loc)){
+	// 				exflag = 1;//重复
+	// 				break;
+	// 			}
+	// 		}
+	// 		if(exflag){
+	// 			exflag = 0;
+	// 		}
+	// 		else{
+	// 			LinkInsert_ByIndex_Parcel(nearParcels, 1, rangds);
+	// 			n++;
+	// 		}
+	// 	}
+	// }
 
 	templist = nearParcels->next;//现在temp near Link 包含随机+附近的货物了
 	for(int i=0;!(templist == NULL);templist = templist->next){//算机器人到物品的折线距离
@@ -168,7 +169,7 @@ LinkPath* findPathToGoods(Robot* rob){
 		}
 	}
 
-	for(int i=0; i < 3; i++){
+	for(int i=0; i < n; i++){
 		Point temppoint;
 		finalgdsloca[i] = tempparcelarry[i];//取出三个待选货物
 		temppoint = finalgdsloca[i].loc;//
@@ -181,14 +182,14 @@ LinkPath* findPathToGoods(Robot* rob){
 
 	int bestIndex = 0;//暂存最佳值 //返回最佳路径
 	float bestPathValue=valofudis[0];
-	for(int i=1;i<3;i++){
+	for(int i = 0; i < n; i++){
 		if(valofudis[i]>bestPathValue){
 			bestPathValue = valofudis[i];
 			bestIndex = i;
 		}
 	}
 	finalpath = temppath[bestIndex];
-	for(int i=0;i<3;i++){
+	for(int i = 0; i < n; i++){
 		if(i==bestIndex)continue;
 		if(temppath[i])linkDelete_Path(temppath[i]);
 	}
