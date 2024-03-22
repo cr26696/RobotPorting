@@ -5,6 +5,8 @@ extern Berth berth[];
 extern Parcel parcelMap[200][200];
 extern Grid gridMap[][200]; 
 
+extern int toAvoidLen;
+extern Point toAvoid[20];
 extern int numofgds;
 extern LinkParcel LinkParcels;
 extern LinkParcel LockedParcels;
@@ -300,6 +302,7 @@ void robotUpdate_Action(Robot *pRob)
 	case SearchBerth:
 		pRob->next_status = SENDING;
 	break;
+	case VOIDING:
 	default:break;
 	}
 }
@@ -308,19 +311,46 @@ void robotAction(Robot* pRob){
 	switch (pRob->current_status)
 	{
 		case GETTING:
-			printf("move %d %d\n", pRob->id, pRob->moveDirect);
+			if(AvoidPossibleCollide(*pRob)){
+				printf("move %d %d\n", pRob->id, pRob->moveDirect);
+			}else{
+				pRob->next_status = pRob->current_status;
+				pRob->current_status = VOIDING;
+			}
 			break;
 		case GET:
-			printf("move %d %d\n", pRob->id, pRob->moveDirect);
-			printf("get %d\n", pRob->id);
+			for(Point pos;;){//用来声明pos变量
+				pos =	pRob->curPath->next->next->pos;
+				if(parcelMap[pos.x][pos.y].value != 0){//货物无价值 即不存在 那么转为搜索态
+					if(AvoidPossibleCollide(*pRob)){
+						printf("move %d %d\n", pRob->id, pRob->moveDirect);
+						printf("get %d\n", pRob->id);
+					}else{//如行动路上会碰撞 避让
+						pRob->next_status = pRob->current_status;
+						pRob->current_status = VOIDING;
+					}
+				}else{//没价值 即货物不存在
+					pRob->next_status = SearchParcel;
+				}
+				break;
+			}	
 		break;
 		case SENDING:
-			printf("move %d %d\n", pRob->id, pRob->moveDirect);
-			break;
+			if(AvoidPossibleCollide(*pRob)){
+				printf("move %d %d\n", pRob->id, pRob->moveDirect);
+			}else{
+				pRob->next_status = pRob->current_status;
+				pRob->current_status = VOIDING;
+			}
 		case PULL:
-			printf("move %d %d\n", pRob->id, pRob->moveDirect);
-			printf("pull %d\n", pRob->id);
-			berth[pRob->aimBerth].goodsnum++;
+			if(AvoidPossibleCollide(*pRob)){
+				printf("move %d %d\n", pRob->id, pRob->moveDirect);
+				printf("pull %d\n", pRob->id);
+				berth[pRob->aimBerth].goodsnum++;//放下货物，泊口货物数++
+			}else{
+				pRob->next_status = pRob->current_status;
+				pRob->current_status = VOIDING;
+			}
 		break;
 		case SearchBerth:
 			robotGetBerthPath(pRob);
@@ -391,6 +421,20 @@ void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请
 				robpos[index++] = robotpaths[i].pos;//未与robpos[]中元素坐标相同，记录进robpos[]中
 			}
 		}
+	}
+}
+int AvoidPossibleCollide(Robot rob){
+	int avoidFlag = 0;
+	Point nextPos = rob.curPath->next->next->pos;
+	for(int i=0;i<toAvoidLen;i++){
+		if(isSamePosition(nextPos,toAvoid[i])){avoidFlag = 1;break;}
+	}
+	if(avoidFlag)return avoidFlag;
+	else{
+		toAvoid[toAvoidLen].x = nextPos.x;
+		toAvoid[toAvoidLen].y = nextPos.y;
+		toAvoidLen++;
+		return avoidFlag;
 	}
 }
 //void judgeCoincidentGrids(Robot* rob, LinkPath *robotpaths){//机器人编号请使用0-9
