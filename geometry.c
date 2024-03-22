@@ -1,10 +1,5 @@
 #include "geometry.h"
 
-#define MOVE_LEFT 0
-#define MOVE_RIGHT 1
-#define MOVE_UP 2
-#define MOVE_DOWN 3
-
 //返回一个Point类型引用
 Point createPoint(int x,int y){
   Point ptr;
@@ -12,10 +7,7 @@ Point createPoint(int x,int y){
   ptr.y = y;
   return ptr;
 }
-//分配内存，输入相关参数，返回一个Grid类型指针
-// Grid *createGrid(int x,int y){
-  
-// }
+
 //判断两点坐标相同，1相同，0不同
 int isSamePosition(Point A, Point B){
   if(A.x == B.x && A.y == B.y)return 1;
@@ -34,27 +26,27 @@ int isNeighbor(Point A, Point B){
 int getDistance_Manhattan(Point start, Point end){
     int hdistance;
     hdistance = abs(start.x - end.x) + abs(start.y - end.y);
-    return hdistance * 10;
+    return hdistance;
 }
 //输入两相邻Point,返回下一步方向 左1 右2 上3 下4 输入点有误-1 也可用于判断两点是否相邻
 int getStepDirect(Point Pstart, Point Pnext){
-  int direct;
+  direction direct;
   if(Pstart.y==Pnext.y){//将相邻两格坐标转化为移动方向
     switch (Pstart.x-Pnext.x)
     {
     case -1:
-      direct = MOVE_DOWN;break;
+      direct = down;break;
     case 1:
-      direct = MOVE_UP;break;
+      direct = up;break;
     default:direct=-1;break;
     }
   }else if(Pstart.x==Pnext.x){
     switch (Pstart.y-Pnext.y)
       {
       case -1:
-        direct = MOVE_RIGHT;break;
+        direct = right;break;
       case 1:
-        direct = MOVE_LEFT;break;
+        direct = left;break;
       default:direct=-1;break;
       }
   }else{

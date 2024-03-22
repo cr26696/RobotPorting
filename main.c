@@ -65,7 +65,6 @@ void Init()
 		InitBoat(boat,boat_num);
 		InitRobot(map,(Grid**)gridMap,berth,berth_num,robot,robot_num);
 		InitParcel(&parcelMap, &LinkParcels, &LockedParcels);
-		controlBoat(boat,boat_num,berth,berth_num,boat_capacity);
 		printf("OK\n");//初始化结束
 		fflush(stdout);
 }
@@ -89,12 +88,12 @@ int Input()
 				int carry,awake;//carry：0表示未携带物品；awake:0表示恢复状态(晕眩)
 				scanf("%d%d%d%d", &carry, &robot[i].pos.x, &robot[i].pos.y, &awake);
 				robotUpdate_sysInput(carry,awake,&robot[i]);//机器人状态处理函数
-				robot[i].current_status = robot[i].next_status;
+				// robot[i].current_status = robot[i].next_status;
 		}
 		for(int i = 0; i < 5; i ++)
 		{
 			int backstatus,aimId;//判决器返回状态,目标泊口
-			scanf("%d%d\n", &backstatus, &aimId);
+			scanf("%d%d", &backstatus, &aimId);
 			boatStatusupdate(backstatus,aimId,&boat[i]);//船状态处理函数
 		}
 		char okk[100];

@@ -1,8 +1,5 @@
 #include "InitAll.h"
 
-#include "astar.h"
-#include "Boat.h"
-
 void Inittotal(Map map,Grid** gridMap,Robot robots[],int robotCount,Boat boats[],int boatCount,Berth berths[],int berthCount,int boat_capacity )
 {
 	InitBerth(berths,berthCount);
@@ -27,7 +24,7 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 		}
 		if(tRobotID>=10) break;
 	}
-	LinkPath *hasPath;
+	LinkPath *hasPath = NULL;
 	for(int i=0;i<10;i++){
 		robots[i].id = i;
 	}
@@ -39,8 +36,8 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 		if(hasPath){//机器人不受困
 			linkDelete_Path(hasPath);
 			robots[robotId].current_status=IDLE;
-			robots[robotId].next_status=IDLE;
-			robots[robotId].action=ROBOT_WAITING;
+			robots[robotId].next_status=SearchParcel;
+			robots[robotId].moveDirect=-1;
 		}
 		else{//机器人受困，设置状态
 			robots[robotId].current_status=STUCK;

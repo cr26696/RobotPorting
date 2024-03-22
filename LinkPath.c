@@ -35,6 +35,7 @@ void linkDelete_Path(LinkPath *L){
 		} while (r!=NULL);
 	}
 	free(L);
+	L = NULL;
 	return;
 }
 

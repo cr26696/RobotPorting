@@ -41,7 +41,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
   src->father = src->loc;
 //  src->father.y = src->loc.y;
   src->G = 0;
-  src->H = getDistance_Manhattan(src->loc,dest->loc);
+  src->H = getDistance_Manhattan(src->loc,dest->loc)*9;
   src->F = src->G + src->H;
 
   LinkInsert_ByIndex_Grid(openList,1,src);//open链表放入起始点
@@ -99,7 +99,7 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
             pTempGrid = &gridMap[tempGrid.loc.x][tempGrid.loc.y];
             pTempGrid->loc = tempGrid.loc;
             pTempGrid->G = current->G + MOVE_COST;
-            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest);
+            pTempGrid->H = getDistance_Manhattan(pTempGrid->loc,Pdest)*9;
             pTempGrid->F = pTempGrid->G + pTempGrid->H;
             pTempGrid->father = current->loc;
             LinkInsert_ByIndex_Grid(openList,1,pTempGrid);//加入新邻居到open

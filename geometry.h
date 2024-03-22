@@ -14,6 +14,13 @@ typedef struct Area
   Point start;//start是左上角
   Point end;//end 是右下角
 }Area;
+
+typedef enum {
+  right = 0,//按顺序 右0 左1 上2 下3
+  left,
+  up,
+  down
+}direction;
 //寻路算法所用格点，内含坐标Pos,父格点指针
 // typedef struct Grid {
 //     Point loc;

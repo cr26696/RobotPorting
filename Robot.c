@@ -9,7 +9,7 @@ extern int numofgds;
 extern LinkParcel LinkParcels;
 extern LinkParcel LockedParcels;
 
-//机器人状态处理函数 处理判题器输入
+//机器人状态处理函数 处理判题器输入与当前状态不一样问题
 void robotUpdate_sysInput(int carry,int awake ,Robot *robot)
 {
 	if (!awake) // 传入眩晕
@@ -240,14 +240,14 @@ void robotUpdate_Action(Robot *pRob)
 			pRob->current_status = GET;
 			pRob->next_status = SearchBerth;
 		}
-		pRob->action = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
 	break;
 	case SENDING:
 		if(isSamePosition(pRob->curPath->next->pos,pRob->aim)){
 			pRob->current_status = PULL;
 			pRob->next_status = SearchParcel;
 		}
-		pRob->action = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
 	break;
 	case SearchParcel:
 		pRob->next_status = GETTING;
@@ -263,17 +263,17 @@ void robotAction(Robot* pRob){
 	switch (pRob->current_status)
 	{
 		case GETTING:
-			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			break;
 		case GET:
-			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			printf("get %d\n", pRob->id);
 		break;
 		case SENDING:
-			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			break;
 		case PULL:
-			printf("move %d %d\n", pRob->id, pRob->action);
+			printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			printf("pull %d\n", pRob->id);
 		break;
 		case SearchBerth:
@@ -296,7 +296,7 @@ void robotAction(Robot* pRob){
 // 	path = path->next;//path直接跳过表头，从内容结点开始（为机器人当前位置）
 // 	if(pRob->current_status == GETTING){
 // 		updateRobotDirect(pRob, path);
-// 		printf("move %d %d\n", id, pRob->action);
+// 		printf("move %d %d\n", id, pRob->moveDirect);
 // 	}
 // 	if(path->next->next == NULL && pRob->current_status == GETTING){//当前节点为机器人目前点，下结点为下步点，下步点无后继==终点
 // 		printf("get %d\n", id);
@@ -313,7 +313,7 @@ void robotAction(Robot* pRob){
 
 // 	if(nextpath->next != NULL && pRob->current_status == SENDING){
 // 		updateRobotDirect(pRob, path);
-// 		printf("move %d %d\n", id, pRob->action);
+// 		printf("move %d %d\n", id, pRob->moveDirect);
 // 	}
 // 	if(nextpath->next != NULL && pRob->current_status == SENDING){
 // 		printf("pull %d\n", id);

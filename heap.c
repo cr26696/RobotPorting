@@ -2,9 +2,9 @@
 
 //交换
 void swap(int *a, int *b){
-    int *temp = a;
-    a = b;
-    b = temp;
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
 //将以k为根结点的子树调整为大根堆
@@ -57,7 +57,7 @@ void BuildMinHeap(int A[], int len){
 void MaxHeapSort(int A[], int len){
     BuildMaxHeap(A, len);                       //初始建立大根堆
     for (int i = len; i > 1; --i) {             //len-1趟交换和建堆过程
-        swap(A[i], A[1]);                 //将对顶元素和堆底元素交换
+        swap(&A[i], &A[1]);                 //将对顶元素和堆底元素交换
         MaxHeadAdjust(A, 1, i - 1);      //调整，将剩余的i-1个元素继续整理为大根堆
     }
 }
@@ -66,7 +66,7 @@ void MaxHeapSort(int A[], int len){
 void MinHeapSort(int A[], int len){
     BuildMinHeap(A, len);                       //初始建立小根堆
     for (int i = len; i > 1; --i) {             //len-1趟交换和建堆过程
-        swap(A[i], A[1]);                 //将对顶元素和堆底元素交换
+        swap(&A[i], &A[1]);                 //将对顶元素和堆底元素交换
         MinHeadAdjust(A, 1, i - 1);      //调整，将剩余的i-1个元素继续整理为小根堆
     }
 }
