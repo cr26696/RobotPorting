@@ -125,7 +125,7 @@ LinkPath* findPathToGoods(Robot* rob){
 		//int exflag = 0;//是否和之前的周围货物重复标志
 		while(templist->next != NULL){
 			templist = templist->next;
-			if(!templist->parcel.locked){
+			if(!parcelMap[templist->parcel.loc.x][templist->parcel.loc.y].locked){
 				LinkInsert_ByIndex_Parcel(nearParcels, 1, templist->parcel);
 				//nearParcels->next = &templist->parcel;
 				n++;
@@ -331,7 +331,7 @@ void robotAction(Robot* pRob){
 	switch (pRob->current_status)
 	{
 		case GETTING:
-			if(AvoidPossibleCollide(*pRob)){
+			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			}else{
 				pRob->next_status = pRob->current_status;
@@ -342,7 +342,7 @@ void robotAction(Robot* pRob){
 			for(Point pos;;){//用来声明pos变量
 				pos =	pRob->curPath->next->next->pos;
 				if(parcelMap[pos.x][pos.y].value != 0){//货物无价值 即不存在 那么转为搜索态
-					if(AvoidPossibleCollide(*pRob)){
+					if(!AvoidPossibleCollide(*pRob)){
 						printf("move %d %d\n", pRob->id, pRob->moveDirect);
 						printf("get %d\n", pRob->id);
 					}else{//如行动路上会碰撞 避让
@@ -356,14 +356,14 @@ void robotAction(Robot* pRob){
 			}	
 		break;
 		case SENDING:
-			if(AvoidPossibleCollide(*pRob)){
+			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
 			}else{
 				pRob->next_status = pRob->current_status;
 				pRob->current_status = VOIDING;
 			}
 		case PULL:
-			if(AvoidPossibleCollide(*pRob)){
+			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
 				printf("pull %d\n", pRob->id);
 				berth[pRob->aimBerth].goodsnum++;//放下货物，泊口货物数++
