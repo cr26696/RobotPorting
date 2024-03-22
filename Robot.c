@@ -133,6 +133,7 @@ LinkPath* findPathToGoods(Robot* rob){
 			}
 		}
 		if(nearParcels->next == NULL){
+			rob->next_status = SearchBerth;
 			return NULL;
 		}
 		//Parcel rangds;
