@@ -115,7 +115,7 @@ int Input()
 }
 
 int main()
-{
+{ 
 	Init();
 	for(int frame = 1; frame <= 15000; frame ++)
 	{

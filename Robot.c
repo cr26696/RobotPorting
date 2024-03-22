@@ -302,24 +302,29 @@ void robotUpdate_Action(Robot *pRob)
 		pRob->reLocCount = 0;
 	break;
 	case GETTING:
-		if(pRob->reLocCount>TimeLimit){
-			pRob->next_status = SearchParcel;
-			pRob->reLocCount = 0;
-		}else {
-			pRob->reLocCount++;
-			if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
-				pRob->current_status = GET;
-				pRob->next_status = SearchBerth;
-			}
-			pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动方向
+		pRob->reLocCount++;
+		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
+			pRob->next_status = GET;
+		}else{//不为目标点，尝试重新搜索周围
+			if(pRob->reLocCount>TimeLimit){
+				pRob->next_status = SearchParcel;
+				pRob->reLocCount = 0;
+				break;
+			}else {}
 		}
+		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动方向
+	break;
+	case GET:
+		pRob->next_status = SearchBerth;
 	break;
 	case SENDING:
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
-			pRob->current_status = PULL;
-			pRob->next_status = SearchParcel;
+			pRob->next_status = PULL;
 		}
 		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+	break;
+	case PULL:
+		pRob->next_status = SearchParcel;
 	break;
 	case SearchParcel:
 		pRob->next_status = GETTING;
@@ -336,6 +341,12 @@ void robotUpdate_Action(Robot *pRob)
 void robotAction(Robot* pRob){
 	switch (pRob->current_status)
 	{
+		break;
+		case SearchParcel:
+			parcelMap[pRob->aim.x][pRob->aim.y].locked = 0;
+			robotGetParcelPath(pRob);
+			if (pRob->curPath==NULL)pRob->next_status=SearchParcel;
+		break;
 		case GETTING:
 			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
@@ -343,23 +354,13 @@ void robotAction(Robot* pRob){
 				pRob->next_status = pRob->current_status;
 				pRob->current_status = VOIDING;
 			}
-			break;
+		break;
 		case GET:
-			for(Point pos;;){//用来声明pos变量
-				pos =	pRob->curPath->next->next->pos;
-				if(parcelMap[pos.x][pos.y].value != 0){//货物无价值 即不存在 那么转为搜索态
-					if(!AvoidPossibleCollide(*pRob)){
-						printf("move %d %d\n", pRob->id, pRob->moveDirect);
-						printf("get %d\n", pRob->id);
-					}else{//如行动路上会碰撞 避让
-						pRob->next_status = pRob->current_status;
-						pRob->current_status = VOIDING;
-					}
-				}else{//没价值 即货物不存在
-					pRob->next_status = SearchParcel;
-				}
-				break;
-			}	
+			printf("get %d\n", pRob->id);
+		break;
+		case SearchBerth:
+			robotGetBerthPath(pRob);
+			if (pRob->curPath==NULL)pRob->next_status=SearchBerth;
 		break;
 		case SENDING:
 			if(!AvoidPossibleCollide(*pRob)){
@@ -368,24 +369,10 @@ void robotAction(Robot* pRob){
 				pRob->next_status = pRob->current_status;
 				pRob->current_status = VOIDING;
 			}
+		break;
 		case PULL:
-			if(!AvoidPossibleCollide(*pRob)){
-				printf("move %d %d\n", pRob->id, pRob->moveDirect);
-				printf("pull %d\n", pRob->id);
-				berth[pRob->aimBerth].goodsnum++;//放下货物，泊口货物数++
-			}else{
-				pRob->next_status = pRob->current_status;
-				pRob->current_status = VOIDING;
-			}
-		break;
-		case SearchBerth:
-			robotGetBerthPath(pRob);
-			if (pRob->curPath==NULL)pRob->next_status=SearchBerth;
-		break;
-		case SearchParcel:
-			parcelMap[pRob->aim.x][pRob->aim.y].locked = 0;
-			robotGetParcelPath(pRob);
-			if (pRob->curPath==NULL)pRob->next_status=SearchParcel;
+			printf("pull %d\n", pRob->id);
+			berth[pRob->aimBerth].goodsnum++;//放下货物，泊口货物数++
 		break;
 		case VOIDING:
 			//还没写

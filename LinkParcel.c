@@ -220,11 +220,11 @@ Parcel createParcel(int x,int y, int time, int value){
 }
 //删除当前帧消失的货物。
 void ParcelTimedDelete(LinkParcel *Link,int frame){
-    LinkParcel *r = Link;
-    r = r->next;
+    LinkParcel *r = Link->next;
     while(r->parcel.addedFrame+1000 <= frame){
+        Link->next = r->next;
         parcelMap[r->parcel.loc.x][r->parcel.loc.y].value = 0;//将parcelMap对应货物删除（价值置0）
-        LinkDelete_ByIndex_Parcel(r,1);//将LinkParcel对应的
+        free(r);
+        r = Link->next;
     }
-    Link = r;
 }
