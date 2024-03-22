@@ -38,7 +38,7 @@ int getStepDirect(Point Pstart, Point Pnext){
       direct = down;break;
     case 1:
       direct = up;break;
-    default:direct=-1;break;
+    default:break;
     }
   }else if(Pstart.x==Pnext.x){
     switch (Pstart.y-Pnext.y)
@@ -47,10 +47,10 @@ int getStepDirect(Point Pstart, Point Pnext){
         direct = right;break;
       case 1:
         direct = left;break;
-      default:direct=-1;break;
+      default:break;
       }
-  }else{
-    direct = -1;//不应该出现这种情况(即两个格子不相邻)
-  }
+  // }else{
+  //   direct = wait;//不应该出现这种情况(即两个格子不相邻)
+    }
   return direct;
 }
