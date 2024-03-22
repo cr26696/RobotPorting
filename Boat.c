@@ -7,7 +7,7 @@ void boatStatusupdate(int backstatu,int aimId,Boat *boat)//船的状态判断
     if(backstatu==0 && aimId!=-1){boat->status=GOBACKBERTH;}//去往泊口途中
     if(backstatu==1 && aimId!=-1 ){boat->status=ATBERTH;}//到泊口，装载
     if(backstatu==2 && aimId!=-1){boat->status=WAITING;}//到泊口等待(前面还有其他船)
-    boat->aimId=aimId;
+    boat->aimId=aimId;//目标泊位改变
     return ;
 }
 
@@ -27,16 +27,16 @@ void countgoodsnum(Berth *berth,Boat *boat){//计算泊口的货物数量和船�
 float evaluateBerth(int loadSpeed,float friscoe,int transportTime,float secocoe,int pathLength ,float thricoe)
 {
     float totalScore;
-    double speedWeight = 0.4;     // 装载速度权重
-    double timeWeight = 0.3;      // 运输时间权重
-    double distanceWeight = 0.3;  // 路径长度权重
+    // double speedWeight = 0.4;     // 装载速度权重
+    // double timeWeight = 0.3;      // 运输时间权重
+    // double distanceWeight = 0.3;  // 路径长度权重
 
-    // 归一化处理，将值映射到0-1范围内（越小越好）
-    float normalizedSpeed = (5 - loadSpeed) / 4.0;
-    float normalizedTime = (transportTime - 1) / 999.0;
-    float normalizedDistance = (pathLength - 10) / 70.0;
-    //综合得分
-    totalScore = (normalizedSpeed*friscoe) - (normalizedTime*secocoe) - (normalizedDistance*thricoe);
+    // // 归一化处理，将值映射到0-1范围内（越小越好）
+    // float normalizedSpeed = (5 - loadSpeed) / 4.0;
+    // float normalizedTime = (transportTime - 1) / 999.0;
+    // float normalizedDistance = (pathLength - 10) / 70.0;
+    // //综合得分
+    totalScore = (loadSpeed*friscoe) - (transportTime*secocoe) - (pathLength*thricoe);
     return totalScore;
 }
 
