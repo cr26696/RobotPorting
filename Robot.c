@@ -333,7 +333,8 @@ void robotUpdate_Action(Robot *pRob)
 	case SearchBerth:
 		pRob->next_status = SENDING;
 	break;
-	case VOIDING:pRob->next_status=pRob->tempstatus;
+	case VOIDING:
+		pRob->next_status = SearchBerth;//pRob->next_status=pRob->tempstatus;
 	default:break;
 	}
 }
