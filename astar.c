@@ -12,7 +12,7 @@ extern Grid gridMap[200][200];
 //传入地图，目标点，返回1可走 0不可走
 int isValidGrid(Map *map, Point point){
   char target = map->data[point.x][point.y];
-  if (target=='.' || target=='A' || target=='B'){return 1;}
+  if (target=='.' || target=='B'){return 1;}
   else{return 0;}
 }
 //输入地图，起止点，返回起点到终点的路径，包括起点与终点格，至少一格，不可达到为NULL 注意调用后需要清理不用的链表!

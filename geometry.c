@@ -71,3 +71,14 @@ Point getBerthNearPos(Point berth,Point start){//输入一点与泊口点左上�
   }
   return temp;
 }
+
+// double linearMapping(int num) {
+//     // 输入范围是1~99，输出范围是1~2
+//     double inputMin = 1.0;
+//     double inputMax = 99.0;
+//     double outputMin = 1.0;
+//     double outputMax = 2.0;
+//     // 线性映射公式  1+(3-1)*(input-1)/(50-1)
+//     double result = outputMin + (outputMax - outputMin) * (num - inputMin) / (inputMax - inputMin);
+//     return result;
+// }

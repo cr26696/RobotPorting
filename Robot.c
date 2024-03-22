@@ -51,8 +51,10 @@ void robotUpdate_sysInput(int carry,int awake ,Robot *pRob)
 		if(pRob->curPath->next!=NULL){//链表第一个内容节点不为空(上步走了-上步点) （上步没走-当前点）
 			if(pRob->curPath->next->next!=NULL){//链表第二个内容节点不为空 (上步走了-当前点) （上步没走-下个点
 				if(isSamePosition(pRob->pos,pRob->curPath->next->next->pos))
-				linkDelete_byPos_Path(pRob->curPath,1); //删除走过的点（上个点）
-
+				{
+					map.data[pRob->pos.x][pRob->pos.y] = 'A';
+					linkDelete_byPos_Path(pRob->curPath,1); //删除走过的点（上个点）
+				}
 				//需要free掉已经走完的路径
 			}else{//链表第二个内容节点为空
 
@@ -192,7 +194,7 @@ LinkPath* findPathToGoods(Robot* rob){
 				return NULL;
 		}else numofph = linkGetLen_Path(temppath[i]);
 
-		valofudis[i] = parcelMap[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y].value / (float)numofph;//单位格价值
+		valofudis[i] =1+(2-1)*(parcelMap[tempparcelarry[i].loc.x][tempparcelarry[i].loc.y].value-1)/(200-1) / 1+(3-1)*( (float)numofph-1 )/(50-1); //单位格价值
 		numofph = 0;
 	}
 
@@ -263,7 +265,7 @@ LinkPath* findPathToBerth(Berth *berths,  Robot* rob){
 		berthph[i] = aStarSearch(&map, rob->pos, closeBerthPoint[i]);
 		numofph = linkGetLen_Path(berthph[i]);
 		/*计算泊口价值 */
-		valperdisofberth[i] = evaluateBerth(berths[tempIndex[i]].loading_speed,0.1,berths[tempIndex[i]].transport_time,0.6,numofph,1);
+		valperdisofberth[i] = evaluateBerth(berths[tempIndex[i]].loading_speed,1,berths[tempIndex[i]].transport_time,0.1,numofph,10);
 		// valperdisofberth[i] = PATH_FACTOR*numofph + LOADING_FACTOR*berths[i].loading_speed + TRANS_FACTOR*berths[i].transport_time;
 	}
 	int bestIndex = 0;//暂存最佳值 //返回最佳路径
@@ -372,6 +374,7 @@ void robotAction(Robot* pRob){
 		case GETTING:
 			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
+				map.data[pRob->pos.x][pRob->pos.y] = '.';
 			}else{
 				pRob->tempstatus=pRob->current_status;
 				pRob->next_status = VOIDING;
@@ -388,6 +391,7 @@ void robotAction(Robot* pRob){
 		case SENDING:
 			if(!AvoidPossibleCollide(*pRob)){
 				printf("move %d %d\n", pRob->id, pRob->moveDirect);
+				map.data[pRob->pos.x][pRob->pos.y] = '.';
 			}else{
 				pRob->next_status = VOIDING;
 			}
