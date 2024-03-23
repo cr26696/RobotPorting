@@ -320,8 +320,8 @@ void robotUpdate_Action(Robot *pRob)
 		}
 		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){//下个点为目标点
 			pRob->next_status = GET;
-		}else{//不为目标点，尝试重新搜索周围
-			if(pRob->reLocCount>TimeLimit){
+		}else{
+			if(pRob->reLocCount>TimeLimit){//不为目标点，尝试重新搜索周围
 				pRob->next_status = SearchParcel;
 				pRob->reLocCount = 0;
 				break;

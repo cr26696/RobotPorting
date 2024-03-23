@@ -15,14 +15,15 @@ typedef struct LinkPath
 } LinkPath;
 
 LinkPath* linkInit_Path(LinkPath *L);
-int linkInsert_byPos_Path(LinkPath *L, int pos, Point point);
+int linkInsert_byIndex_Path(LinkPath *L, int pos, Point point);
 void linkDelete_Path(LinkPath *L);
-int linkDelete_byPoint_Path(LinkPath *L, Point point);
+int linkDelete_byObj_Path(LinkPath *L, Point point);
 int linkDelete_byPos_Path(LinkPath *L, int pos);
 void linkReverse_Path(LinkPath *L);
 LinkPath *linkSearch_byPos_Path(LinkPath *L, Point point);
 int linkGetLen_Path(LinkPath *L);
 int linkIsEmpty_Path(LinkPath *L);
+int linkHasObj_Path(LinkPath *L,Point point);
 // void linkfreeWhole_Path(LinkPath *L);
 
 #endif

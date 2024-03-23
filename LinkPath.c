@@ -6,7 +6,7 @@ LinkPath *linkInit_Path(LinkPath *L){
 	return L;
 }
 
-int linkInsert_byPos_Path(LinkPath *L, int pos, Point point){
+int linkInsert_byIndex_Path(LinkPath *L, int pos, Point point){
 	if(pos < 1 || pos > linkGetLen_Path(L)+1) return 0;//插入位置错误
 	LinkPath *r = L, *n;
 	n = (LinkPath *) malloc(sizeof(LinkPath));
@@ -21,6 +21,7 @@ int linkInsert_byPos_Path(LinkPath *L, int pos, Point point){
 	return 1;
 }
 
+//彻底清空整条链表
 void linkDelete_Path(LinkPath *L){
 	
 	LinkPath* r = L;
@@ -39,10 +40,10 @@ void linkDelete_Path(LinkPath *L){
 	return;
 }
 
-int linkDelete_byPoint_Path(LinkPath *L, Point point){
+int linkDelete_byObj_Path(LinkPath *L, Point point){
 	LinkPath *r = L, *d;
 	while(r->next)//r != NULL 
-		if(isSamePosition(r->pos, point)){
+		if(isSamePosition(r->next->pos, point)){
 			d = r->next;
 			r->next = d->next;
 			free(d);//释放链表节点和对应的Grid
@@ -112,6 +113,16 @@ int linkIsEmpty_Path(LinkPath *L){
     return !L->next;
 }
 
+//内部包括某点 对象 （坐标对应？
+int linkHasObj_Path(LinkPath *L,Point point){
+	if(L->next){
+		LinkPath *r =L;
+		while(r->next){
+			r = r->next;
+			if(isSamePosition(r->pos,point))return 1;
+		}
+	}else return 0;//链表为空
+}
 // void linkDelete_Path(LinkPath *L){
 // 	LinkPath* r = L;
 // 	LinkPath* t;

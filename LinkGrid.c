@@ -107,6 +107,8 @@ int LinkDelete_ByPoint_Grid(LinkGrid *L, Point point){
 		}
 	return 0;
 }
+
+//删除与传入格点坐标对应的节点（并释放内存）
 int LinkDelete_ByObj_Grid(LinkGrid *L, Grid* grid){
 	LinkGrid *r = L, *d;
 	while(r->next)//r != NULL 

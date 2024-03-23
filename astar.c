@@ -6,6 +6,7 @@
 #define NEIGHBOR_UP 2
 #define NEIGHBOR_DOWN 3
 
+extern Map map;
 extern Grid gridMap[200][200];
 
 #define MOVE_COST 10
@@ -163,12 +164,72 @@ LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
 LinkPath* generatePath(Grid *cur){
   Point tPoint;//暂存点
   LinkPath* path = linkInit_Path(path);
-  linkInsert_byPos_Path(path,1,cur->loc);
+  linkInsert_byIndex_Path(path,1,cur->loc);
   tPoint = cur->father;
   while(!isSamePosition(tPoint,cur->loc)){
     cur = &gridMap[tPoint.x][tPoint.y];
-    linkInsert_byPos_Path(path,1,tPoint);
+    linkInsert_byIndex_Path(path,1,tPoint);
     tPoint = cur->father;
   }
   return path;
+}
+
+int isStuck(Point start,int thresold){
+// LinkPath* aStarSearch(Map *map, /*Grid** gridMap,*/ Point Psrc, Point Pdest){
+//int max_nodes = map.length * map[0].length;
+  int openLen=0,closeLen=0;
+
+  LinkPath *openList = linkInit_Path(openList);
+  LinkPath *closeList = linkInit_Path(closeList);
+
+  Point current;//当前格
+  Point tempPoint;
+
+  linkInsert_byIndex_Path(openList,1,start);//open链表放入起始点
+  while (openList->next){
+    current = openList->next->pos;//取当前openlist中下一格
+      for(int i=0;i<4;i++){
+        tempPoint = current;//临时点为邻居点
+        switch (i)
+        {
+          case NEIGHBOR_LEFT:
+            tempPoint.y -= 1;break;
+          case NEIGHBOR_RIGHT:
+            tempPoint.y += 1;break;
+          case NEIGHBOR_UP:
+            tempPoint.x -= 1;break;
+          case NEIGHBOR_DOWN:
+            tempPoint.x += 1;break;
+          default:break;
+        }
+        if(isValidGrid(&map, tempPoint)){//返回1（可行走格）时
+          if(linkHasObj_Path(openList,tempPoint)) {//已经在open表
+            continue;//直接去往下一个邻居判断
+          }else{
+            if(linkHasObj_Path(closeList,tempPoint)){//已经在close表
+              continue;//也去往下一个邻居
+            }else{
+              //neighbor 是新格子:
+              linkInsert_byIndex_Path(openList,1,tempPoint);//加入新邻居到open
+              openLen++;
+              if(openLen + closeLen>thresold)return 0;//附近格数量大于阈值
+            }
+          }
+        }
+        else{
+          //该邻居不可用
+          continue;//对下一个邻居进行判断
+        }
+      }
+      
+      linkDelete_byObj_Path(openList,current);
+      openLen = linkGetLen_Path(openList);
+      linkInsert_byIndex_Path(closeList,1,current);
+      closeLen = linkGetLen_Path(closeList);
+  };//跳出循环说明已经遍历表长度大于设定阈值
+    free(openList);
+    free(closeList);//释放空表
+  // LinkDelete_Grid(openList);
+  // LinkDelete_Grid(closeList);
+  return 1;
 }

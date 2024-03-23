@@ -84,9 +84,11 @@ int Input()
 				int x,y,val;
 				scanf("%d%d%d", &x, &y, &val);
 				//读取到货物结构体
-				parcelMap[x][y] = createParcel(x,y,frame,val);
-				LinkInsertEnd_Parcel(&LinkParcels,parcelMap[x][y]);
-				numofgds ++;
+				if(!isStuck(createPoint(x,y),25)){
+					parcelMap[x][y] = createParcel(x,y,frame,val);
+					LinkInsertEnd_Parcel(&LinkParcels,parcelMap[x][y]);
+					numofgds ++;
+				}
 		}
 		for(int i = 0; i < robot_num; i ++)
 		{
