@@ -227,5 +227,6 @@ void ParcelTimedDelete(LinkParcel *Link,int frame){
         parcelMap[r->parcel.loc.x][r->parcel.loc.y].value = 0;//将parcelMap对应货物删除（价值置0）
         free(r);
         r = Link->next;
+        if(r==NULL){return;}
     }
 }

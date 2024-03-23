@@ -28,20 +28,19 @@ void InitRobot(Map map,Grid** gridMap, Berth berths[],int berthCount,Robot robot
 	for(int i=0;i<10;i++){
 		robots[i].id = i;
 	}
-	for(int robotId=0;robotId<robotCount;robotId++){//遍历机器人
+	for(int i=0;i<robotCount;i++){//遍历机器人
 		// for(int berthId=0;berthId<berthCount;berthId++){//遍历泊口看能不能到 <- 扫一个就行
-		hasPath = aStarSearch(&map,robots[robotId].pos,berths[0].pos);
+		// hasPath = aStarSearch(&map,robots[robotId].pos,berths[0].pos);
 		// if(hasPath){break;}
 		
-		if(hasPath){//机器人不受困
-			linkDelete_Path(hasPath);
-			robots[robotId].current_status=IDLE;
-			robots[robotId].next_status=SearchParcel;
+		if(!isStuck(robots[i].pos,35)){//机器人不受困
+			robots[i].current_status=IDLE;
+			robots[i].next_status=SearchParcel;
 			// robots[robotId].moveDirect=-1;
 		}
 		else{//机器人受困，设置状态
-			robots[robotId].current_status=STUCK;
-			robots[robotId].next_status=STUCK;
+			robots[i].current_status=STUCK;
+			robots[i].next_status=STUCK;
 		}
 	}
 }
