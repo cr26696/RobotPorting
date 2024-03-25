@@ -333,19 +333,17 @@ void robotUpdate_Action(Robot *pRob)
 		pRob->next_status = SearchBerth;
 	break;
 	case SENDING:
-		if(isSamePosition(pRob->pos,pRob->aim)){
-			pRob->current_status=PULL;
-			pRob->next_status=SearchParcel;
-			break;
-		}
-		if(pRob->curPath->next->next==NULL){
-			pRob->next_status = SearchBerth;
-			break;
-		}
-		if(isSamePosition(pRob->curPath->next->next->pos,pRob->aim)){
-			pRob->next_status = PULL;
-		}
-		pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+		if(pRob->curPath!=NULL){//链表有空结点表头
+				if(pRob->curPath->next!=NULL){//链表第一个内容节点不为空
+					if(pRob->curPath->next->next!=NULL){//链表第二个内容节点不为空
+						if(isSamePosition(pRob->aim,pRob->curPath->next->next->pos)){//下个点为目标点
+							pRob->current_status = PULL;//接下来拿货并找泊口
+							pRob->next_status = SearchParcel;
+						}
+						pRob->moveDirect = getStepDirect(pRob->curPath->next->pos,pRob->curPath->next->next->pos);//更新机器人行动
+					}else{}//链表第二个内容节点为空
+				}
+			}
 	break;
 	case PULL:
 		pRob->next_status = SearchParcel;
